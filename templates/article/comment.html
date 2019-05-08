@@ -1,0 +1,16 @@
+{# 使用模板函数,模板中导入存放这些模板标签的模块 #}
+{% load comment %}
+
+<div class="join-discuss">
+    <strong>
+        <span class="join-humans">{{ humans_dict.num_humans }}</span>&nbsp;人参与&nbsp;|&nbsp;
+        <span class="join-comments">{{ comments_dict.num_comments }}</span>&nbsp;条评论
+    </strong>
+</div>
+
+<div class="comments-list">
+   {% build_comment_tree comment_list %}
+
+</div>
+
+

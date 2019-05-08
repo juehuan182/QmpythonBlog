@@ -1,0 +1,96 @@
+.grid-left {
+    width: 100%;
+    text-align: center;
+    background: #fff;
+}
+
+.bind-login-title{
+    border-bottom: 1px solid #e5e5e5;
+    line-height: inherit;
+}
+
+.bind-login-title > h2{
+    display: inline-block;
+    float: left;
+    line-height: 38px;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 -1px;
+    border-bottom: solid 3px #008df3;
+}
+
+.bind-login-title > a {
+    color: #4FA1D9;
+    float: right;
+    margin-right: 0.1rem;
+    font-size: 14px;
+    margin-top: 0.2rem;
+    text-decoration: none;
+}
+
+.bind-login-fields{
+    margin: 30px auto;
+}
+
+
+.form-group {
+    max-width: 6.6rem;
+    margin: 0 auto 15px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+
+.form-control {
+    width: 100%;
+    height: 0.9rem;
+    line-height: 0.6rem;
+    padding: 5px 0 5px 40px;
+    background-color: #fff;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    outline: none;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-control:focus {
+    border: 1px solid #1890ff;
+}
+
+.form-group i {
+    line-height: 1;
+    position: absolute;
+    top: 14px;
+    left: 10px;
+    font-size: 20px;
+    color: #aaa;
+
+}
+.form-group a {
+    color: #333;
+    left: 0;
+    top: -5px;
+    font-size: 12px;
+    position: absolute;
+}
+
+.form-group a:hover{
+    color: #008df3;
+}
+
+.bind-login-btn{
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    background: #4285F4;
+    border-radius: 2px;
+    width: 6.6rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    position: relative;
+    top: 30px;
+}

@@ -1,0 +1,88 @@
+{% extends 'admin/base.html' %}
+{% load  static %}
+
+{% block title %}
+  组员管理页
+{% endblock %}
+
+{% block content_header %}
+  组员管理
+{% endblock %}
+
+{% block header_option_desc %}
+  组员管理
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+          <div class="box-header">
+                <a href="{% url 'admin:user_group_add' %}" class="btn btn-primary pull-right btn-add-userGroup">
+                   <i class="fa fa-plus"></i>
+                    添加组员
+                </a>
+            </div>
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>用户名</th>
+              <th>邮箱</th>
+              <th>最后登录时间</th>
+              <th>所属(组)角色</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {% for one_user in user_list %}
+                    <tr data-id="{{ one_user.id }}" data-name="{{ one_user.username }}">
+                        <td>{{ one_user.id }}</td>
+                        <td>{{ one_user.username }}</td>
+                        <td>{{ one_user.email }}</td>
+                        <td>{{ one_user.last_login | date:'Y-m-d H:i:s' }}</td>
+                        {% if one_user.is_superuser %}
+                           <td>超级管理员</td>
+                        {% else %}
+                            <td>{{ one_user.get_groups_name}}</td>
+                        {% endif %}
+                        <td>
+                          {% if one_user.is_superuser %}
+                              <a href="javascript:void(0);" class="btn btn-xs btn-default" disabled>
+                                <i class="fa fa-edit"></i>
+                                  &nbsp;编辑
+                              </a>
+                              <button class="btn btn-xs" disabled>
+                                      <i class="fa fa-trash-o"></i>
+                                      &nbsp;删除
+                                  </button>
+
+                        {% else %}
+                              <a href="{% url 'admin:user_group_edit' one_user.id %}" class="btn btn-xs btn-warning btn-edit">
+                                <i class="fa fa-edit"></i>
+                                  &nbsp;编辑
+                              </a>
+                              <button class="btn btn-xs btn-danger btn-del">
+                                      <i class="fa fa-trash-o"></i>
+                                      &nbsp;删除
+                                  </button>
+                         {% endif %}
+                        </td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/admin/user/user_group_manage.js' %}"></script>
+  <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+  </script>
+{% endblock %}

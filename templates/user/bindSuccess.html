@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load article_date_filter %}
+{% load static %}
+
+{% block title %}注册-全民python{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/user/bindSuccess.css' %}">
+{% endblock %}
+
+{% block banner %}
+{% endblock %}
+
+{% block grid-left %}
+    <div id="bind-success-box">
+        <div class="bind-success-title clearfix">
+            <h2>成功关联全民python账号</h2>
+        </div>
+        <div class="user">
+            <div class="item">
+                <div class="avatar">
+                <img src="{{ avatar_url }}" alt="">
+            </div>
+                <div class="name">
+                {{ nick_name }}
+            </div>
+            </div>
+            <div class="arrow">
+                <img src="{% static 'image/user/bind-arrow.png' %}" alt="">
+            </div>
+            <div class="item">
+                <div class="avatar">
+                <img src="{{ user_head_img }}" alt="">
+            </div>
+                <div class="name">
+                {{ user_nick_name }}
+            </div>
+            </div>
+            <div class="desc">
+                您已成功关联全民python账号
+            </div>
+            <div class="links">
+                <a href="{% url 'index'%}" class="btn btn-primary">进入全民python</a>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

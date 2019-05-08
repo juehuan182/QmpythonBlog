@@ -1,0 +1,88 @@
+{% extends 'admin/base.html' %}
+{% load  static %}
+
+{% block title %}
+  添加组员
+{% endblock %}
+
+{% block style %}
+  <!-- bootstrap-select -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+{% endblock %}
+{% block content_header %}
+  添加组员
+{% endblock %}
+
+{% block header_option_desc %}
+  添加组员
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <label>用户名：</label>
+                </div>
+                <div class="col-md-6">
+                        {% if user_instance %}
+                            <select name="select-user" id="select-user" class="selectpicker form-control">
+                                <option value="{{ user_instance.id }}">{{ user_instance.username}}</option>
+                            </select>
+                        {% else %}
+                            <select name="select-user" id="select-user" class="selectpicker form-control" title="请搜索选择用户"
+                                data-size="10" data-live-search="true">
+                            </select>
+                        {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label>所属角色(可多选)：</label>
+                </div>
+                <div class="col-md-6">
+                    <select id="select-group" class="selectpicker form-control show-tick " multiple data-size="10" title="请选择角色">
+{#                      <option value="0">请选择角色</option>#}
+                      {% for one_group in group_list %}
+                          {% if one_group in user_instance.groups.all %}
+                              <option value="{{ one_group.id }}" selected>{{ one_group.name }}</option>
+                          {% else %}
+                              <option value="{{ one_group.id }}">{{ one_group.name }}</option>
+                          {% endif %}
+                      {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+            <div class="row"></div>
+
+        </div>
+
+        <div class="box-footer">
+            <a href="/admin/user_group/" class="btn btn-primary pull-left" id="btn-close-group">关闭</a>
+
+          {% if user_instance %}
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-edit-groupUser"
+               data-id="{{ user_instance.id }}">更新</a>
+          {% else %}
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-add-groupUser">创建</a>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-zh_CN.min.js"></script>
+
+  <script src="{% static 'js/admin/user/user_group_add.js' %}"></script>
+  <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+  </script>
+{% endblock %}

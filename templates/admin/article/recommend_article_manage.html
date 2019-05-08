@@ -1,0 +1,73 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  推荐文章管理页面
+{% endblock %}
+
+
+{% block content_header %}
+  推荐文章管理
+{% endblock %}
+
+{% block header_option_desc %}
+  推荐文章管理
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <a href="{% url 'admin:recommend_article_add' %}" class="btn btn-primary pull-right"
+             id="btn-add-article-recommend">添加推荐</a>
+        </div>
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>文章名称</th>
+              <th>文章分类</th>
+              <th>优先级</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for recommend_article in recommend_articles %}
+              <tr data-id="{{ recommend_article.id }}" data-name="{{ recommend_article.article.title }}"
+              data-priority="{{ recommend_article.priority }}">
+                <td>
+                  <a href="{% url 'articles:article_detail' recommend_article.article_id %}" data-article-id="{{ recommend_article.article_id }}">
+                    {{ recommend_article.article.title }}
+                  </a>
+                </td>
+
+                <td>{{ recommend_article.article.category.name }}</td>
+                <td>{{ recommend_article.get_priority_display}}</td>
+                <td>
+                  <button class="btn btn-xs btn-warning btn-edit">编辑</button>
+                  <button class="btn btn-xs btn-danger btn-del">删除</button>
+
+                </td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+        <div class="box-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'js/admin/article/article_recommend.js' %}"></script>
+    <script type="text/javascript">
+      $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

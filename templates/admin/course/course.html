@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/article/article_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/article/column.css' %}">
+    <link rel="stylesheet" href="{% static 'css/course/course.css' %}">
+{% endblock %}
+
+
+{% block grid-left %}
+            <ul class="category-article-list course-list clearfix">
+                {% for course in courses %}
+                    <li class="course-item">
+                <li class="course-item">
+                    <a href="{% url 'course:detail' course_id=course.id %}">
+                        <img class="course-img" src="{{ course.cover_url }}"
+                            alt="">
+                        <div class="course-content">
+                            <p class="course-info">{{ course.title }}</p>
+                            <p class="course-author">{{ course.teacher.name }}</p>
+                            <p class="course-price free">免费</p>
+                        </div>
+                    </a>
+                </li>
+                {% empty %}
+                    <p class="empty-article">暂时无相关视频，敬请关注!</p>
+                {% endfor %}
+            </ul>
+{% endblock %}
+
+{% block grid-right %}
+{% endblock %}

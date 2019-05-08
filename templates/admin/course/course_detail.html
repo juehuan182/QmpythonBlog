@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/article/column.css' %}">
+    <link rel="stylesheet" href="{% static 'css/course/course_detail.css' %}">
+{% endblock %}
+
+
+{% block grid-left %}
+    <!-- main-contain start  -->
+    <main id="main">
+        <div class="w1200">
+            <div class="course-contain">
+                <div class="course-top-contain">
+                    <h4 class="course-title">{{ course.title }}</h4>
+                    <div class="course-other clearfix">
+                        <div class="share-list">
+                            <span>分享至:</span>
+                            <i class=""></i>
+                        </div>
+                        <div class="buy-list">
+                            <span class="price">免费</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="course-video" id="course-video">
+                    <span class="course-data" style="display: none;" data-video-url="{{ course.video_url }}"
+                          data-cover-url="{{ course.cover_url }}">
+                    </span>
+                </div>
+                <div class="course-bottom-contain">
+                    <div class="course-detail-list">
+                        <div class="course-item clearfix">
+                            <h5 class="course-title">{{ course.teacher.name }}</h5>
+                            <div class="teacher-box clearfix">
+                                <img src="{{ course.teacher.avatar_url }}" alt="{{ course.teacher.name }}"
+                                     title="{{ course.teacher.name }}" class="teacher-avatar">
+                                <div class="teacher-info">
+                                    <p class="teacher-name">{{ course.teacher.name }}</p>
+                                    <p class="teacher-identify">{{ course.teacher.positional_title }}</p>
+                                </div>
+                            </div>
+                            <div class="item-content">
+                                {{ course.teacher.profile }}
+                            </div>
+                        </div>
+                        <div class="course-item clearfix">
+                            <h5 class="course-title">课程简介</h5>
+                            <div class="item-content">
+                                {{ course.desc }}
+                            </div>
+                        </div>
+                        <div class="course-item clearfix">
+                            <h5 class="course-title">课程大纲</h5>
+                            <div class="item-content">
+                                <p>{{ course.outline|safe }}</p>
+                            </div>
+                        </div>
+                        <div class="course-item clearfix">
+                            <h5 class="course-title">帮助中心</h5>
+                            <div class="item-content">
+                                <p>1. 该视频为网上下载，如有侵权请告知，谢谢。 </p>
+                                <p>2. 欢迎分享最新有趣的视频。 </p>
+                            </div>
+                        </div>
+                        <div class="course-item clearfix">
+                            <h5 class="course-title">关于python</h5>
+                            <div class="item-content">
+                                Python是一种计算机程序设计语言。是一种动态的、面向对象的脚本语言，最初被设计用于编写自动化脚本(shell)，
+                                随着版本的不断更新和语言新功能的添加，越来越多被用于独立的、大型项目的开发。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="course-side">
+                        <h4 class="side-title">推荐课程</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- main-contain  end -->
+{% endblock %}
+
+{% block grid-right %}
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/course/videojs/video.min.js' %}"></script>
+    <script src="{% static 'js/course/videojs/videojs-contrib-hls.min.js' %}"></script>
+    <script src="{% static 'js/course/videojs/videojs-contrib-quality-levels.min.js' %}"></script>
+{#    <script src="{% static 'js/course/cyberplayer.js' %}"></script>#}
+    <script src="https://cdn.bdstatic.com/jwplayer/latest/cyberplayer.js"></script>
+    <script src="{% static 'js/course/course_detail.js' %}"></script>
+{% endblock %}

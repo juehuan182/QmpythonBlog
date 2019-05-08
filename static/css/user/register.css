@@ -1,0 +1,157 @@
+.banner{
+    display: none;
+}
+.grid-left {
+    width: 100%;
+    text-align: center;
+    background: #fff;
+}
+
+.register-title {
+    border-bottom: 1px solid #e5e5e5;
+    line-height: inherit;
+}
+
+.register-title > h2{
+    display: inline-block;
+    float: left;
+    line-height: 38px;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 -1px;
+    border-bottom: solid 3px #008df3;
+}
+
+.register-title > a {
+    color: #4FA1D9;
+    float: right;
+    margin-right: 0.1rem;
+    font-size: 14px;
+    margin-top: 0.2rem;
+    text-decoration: none;
+}
+
+.register-fields{
+    margin: 30px auto;
+}
+
+
+
+.form-group {
+    max-width: 6.6rem;
+    margin: 0 auto 15px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.form-control {
+    width: 100%;
+    height: 0.9rem;
+    line-height: 0.6rem;
+    padding: 5px 0 5px 40px;
+    background-color: #fff;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    outline: none;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-control:focus {
+    border: 1px solid #1890ff;
+}
+
+.form-group i {
+    line-height: 1;
+    position: absolute;
+    top: 14px;
+    left: 10px;
+    font-size: 20px;
+    color: #aaa;
+
+}
+
+.register-button{
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    background: #4285F4;
+    border-radius: 2px;
+    width: 6.6rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}
+
+.verifycode-box{
+    width: 4.2rem;
+}
+
+.zc_yzm {
+    box-shadow: 0 0 10px 1px #b5ceff;
+    background: #4786ff;
+    color: #fff;
+    cursor: pointer;
+    width: 2.2rem;
+    height: 0.9rem;
+    border: none;
+    border-radius: 2px;
+    margin-left: 0.1rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.form-group a i{
+    position: absolute;
+    top: 14px;
+    left: 6rem;
+    font-size: 0.42rem;
+
+}
+
+#register-success h3{
+    border: none;
+    margin-top: 0.5rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.5rem;
+
+}
+#register-success i{
+    color: rgb(72,221,114);
+    font-size: 0.5rem;
+}
+
+#register-success p{
+   color: #999;
+}
+
+#register-success p>span{
+    color:#4786ff;
+}
+
+#register-success a{
+    border: 1px solid #e4e4e4;
+    color: #333;
+    padding: 10px 15px;
+    margin-top: 0.4rem;
+    margin-bottom: 4rem;
+    display: inline-block;
+}
+
+#register-success a:hover{
+    border: 1px solid #4786ff;
+}
+
+@media screen and (max-width: 760px) {
+    .register-title > h2{
+        font-size: 0.2rem;
+        border-width: 1px;
+    }
+    .register-title > a{
+        font-size: 0.1rem;
+        margin-top: 0.5rem;
+    }
+}

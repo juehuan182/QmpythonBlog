@@ -1,0 +1,60 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  违禁词页面
+{% endblock %}
+
+{% block content_header %}
+  违禁词页面
+{% endblock %}
+
+{% block header_option_desc %}
+  违禁词设置
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+            <div class="form-group ml20 mt20">
+                 <div class="show-msg" style="margin-top: 15px;">
+                    文件内容样式如：<br/>
+                    沙雕<br/>
+                    你是大傻逼<br/>
+                    色情<br/>
+                </div>
+            </div>
+            <div class="form-group ml20 mt20">
+               <label class="btn btn-default btn-file" style="background-color: #009688; color: #fff;">
+                   <i class="fa fa-cloud-upload">上传违禁词文件</i>
+                   <input type="file" id="upload-prohibitedWords-file">
+              </label>
+        </div>
+        <div class="box-footer">
+            <div class="show-msg">
+                    <strong>使用说明</strong><br>
+                    <p>将需要过滤的敏感词汇用txt文件编辑，每一组敏感词汇占一行。编辑保存之后上传txt文件，上传的文件内容会追加到前期上传文件内容的后面。</p>
+            </div>
+            <div class="show-msg">
+                <strong>功能介绍</strong><br>
+                <p style="white-space: normal;">用于禁止屏蔽评论或者回复中出现敏感词汇，如果评论或者回复中出现文本中的词汇，则会用*代替。</p>
+            </div>
+            <div class="show-msg">
+                <strong>注意事项</strong><br>
+                <p>1、上传的文件格式为txt。</p>
+                <p>2、每一组敏感词汇占一行。</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/article/prohibitedWords_manage.js' %}"></script>
+    <script type="text/javascript">
+      $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

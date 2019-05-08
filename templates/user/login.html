@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="HandheldFriendly" content="true">
+
+    <title>登录界面</title>
+
+    <link rel="stylesheet" href="{% static 'css/user/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/loaders.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ali_iconfont/iconfont.css' %}">
+</head>
+<body>
+<div class="login">
+    <div class="login_title">
+        <span>登录界面</span>
+        <a href="{% url 'user:register' %}">前往注册</a>
+    </div>
+    <div class="login_fields">
+        <form method="post">
+            <div class="login_fields_user">
+                <div class="icon">
+                    <img src="{% static 'image/user/user_icon_copy.png' %}" alt="">
+                </div>
+                <input type="text" name="username" placeholder="用户名或邮箱" maxlength="20">
+                <div class="validation">
+                    <img src="{% static 'image/user/tick.png' %}">
+                </div>
+            </div>
+            <div class="login_fields_password">
+                <div class="icon">
+                    <img src="{% static 'image/user/lock_icon_copy.png' %}" alt="">
+                </div>
+                <input type="password" name="password" placeholder="密码" maxlength="16" autocomplete="off">
+                <div class="validation">
+                    <img src="{% static 'image/user/tick.png' %}">
+                </div>
+            </div>
+            <div class="login_fields_password">
+                <div class="icon">
+                    <img src="{% static 'image/user/key.png' %}" alt="">
+                </div>
+                <input type="text" name="graph_captcha" placeholder="验证码" maxlength="4" autocomplete="off">
+                <div class='validation' style="opacity: 1; right: 30px;top: -3px;">
+                    <img class="J_codeimg captcha-graph-img" src="" alt="验证码" title="点击刷新">
+                </div>
+            </div>
+            <div class="login_fields_remember">
+                <label for="form_remember">
+                    <input type="checkbox" name="remember" id="form_remember" >记住我
+                </label>
+            </div>
+            <div class='login_fields_submit'>
+                <input type="submit" class="login-btn" value="登录">
+                <div class="forgot">
+                  <a href="{% url 'user:resetPwd' %}">忘记密码</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class='success'></div>
+     <!--更多登录方式 -->
+    <div class="more-login" style="display: block">
+        <h6>快速登录</h6>
+        <div class="links">
+            <a href="{% url 'user:qqLogin' %}" title="QQ登录"><i class="icon-qq iconfont"></i></a>
+            <a href="" title="微信登录" style="display:none;"><i class="iconfont icon-weixin"></i></a>
+            <a href="{% url 'user:weiboLogin' %}" title="微博登录"><i class="iconfont icon-weibo"></i></a>
+            <a href="{% url 'user:githubLogin' %}" title="GitHub登录"><i class="icon-github iconfont"></i></a>
+        </div>
+
+    </div>
+</div>
+
+<div class='authent'>
+    <div class="loader" style="height: 44px;width: 44px;margin-left: 28px;">
+        <div class="loader-inner ball-clip-rotate-multiple">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <p>认证中...</p>
+</div>
+<script src="{% static 'js/base/jquery.min.js' %}"></script>
+<script src="{% static 'js/common/message.js' %}"></script>
+<script src="{% static 'js/user/login.js' %}"></script>
+<script type="text/javascript">
+    $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+</script>
+</body>
+</html>

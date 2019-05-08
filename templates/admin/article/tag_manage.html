@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  文章标签管理页
+{% endblock %}
+
+{% block content_header %}
+  文章标签管理页
+{% endblock %}
+
+{% block header_option_desc %}
+  文章标签管理页
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <button class="btn btn-primary pull-right" id="btn-add-tag">
+              <i class="fa fa-plus"></i>
+              添加标签
+          </button>
+        </div>
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>标签名称</th>
+              <th>文章数量</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {% for one_tag in tags %}
+              <tr data-id="{{ one_tag.id }}" data-name="{{ one_tag.name }}">
+                <td>{{ one_tag.id }}</td>
+                <td>{{ one_tag.name }}</td>
+                <td>{{ one_tag.num_articles }}</td>
+                <td>
+                  <button class="btn btn-xs btn-warning btn-edit">
+                      <i class="fa fa-edit"></i>
+                      &nbsp;编辑
+                  </button>
+                  <button class="btn btn-xs btn-danger btn-del">
+                      <i class="fa fa-trash-o"></i>
+                      &nbsp;删除
+                  </button>
+                </td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/admin/article/tag_manage.js' %}"></script>
+{% endblock %}

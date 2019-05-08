@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load article_date_filter %}
+{% load static %}
+
+{% block title %}忘记密码-全民python{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/user/resetpwd.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ali_iconfont/iconfont.css' %}">
+{% endblock %}
+
+
+{% block banner %}
+{% endblock %}
+
+
+{% block grid-left %}
+    <div id="forget-pw-box">
+        <div class="forget-pw-flow">
+            <ul class="clearfix">
+                <li class="active-line active-blue"><span>1</span>确认账号</li>
+                <li><span>2</span>安全验证</li>
+                <li><span>3</span>重置密码</li>
+            </ul>
+        </div>
+        <!--begin first step -->
+        <div class="step-one">
+            <ul>
+                <li>
+                    <i class="icon-yonghu1 iconfont"></i>
+                    <input type="text" name="email" class="username-email" placeholder="请填写注册的邮箱">
+                </li>
+                <li>
+                    <input type="button" class="step-one-button" value="下一步">
+                </li>
+                <li class="clearfix">
+                    <p class="fl" style="color:#c3c5c7;">记得密码，
+                        <a href="{% url 'user:login' %}" class="">直接登录</a>
+                    </p>
+                </li>
+            </ul>
+        </div>
+        <!--end first step -->
+        <!--begin two step -->
+        <div class="step-two hide">
+            <div class="step-two-01 hide">
+                <p class="p-txt-01">为了保护账号安全，需要验证邮箱的有效性</p>
+                <i class="c-gray">点击以下按钮，将会发送验证码到您的邮箱</i>
+                <br>
+                <span class="email-code"></span>
+                <input type="button" class="step-two-button01" value="发送邮件">
+            </div>
+            <div class="step-two-02 hide">
+                <p class="p-txt-02">验证码已发送到邮箱：<span class="email-code"></span></p>
+                <ul>
+                    <li>
+                        <div class="verifycode-email">
+                            <i class="icon-yanzhengma iconfont"></i>
+                            <input type="text" name="vcode" class="verify-code" placeholder="邮箱验证码">
+                        </div>
+                        <input type="button" class="zc_yzm" value="获取验证码">
+                    </li>
+                    <li>
+                        <input type="button" class="step-two-button02" value="确  定">
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <!--end two step -->
+
+        <!--begin three step -->
+        <div class="step-three hide">
+            <ul>
+                <li>
+                    <i class="icon-mima iconfont"></i>
+                    <input type="password" name="password" class="password" placeholder="请输入新密码（8~20位长度含数字和字母）">
+                </li>
+                <li>
+                    <i class="icon-mima iconfont"></i>
+                    <input type="password" name="surePassword" class="password" placeholder="请重新输入新密码">
+                </li>
+                <li>
+                    <input type="button" class="step-three-button" value="重置密码">
+                </li>
+            </ul>
+        </div>
+        <!--begin three step -->
+
+    </div>
+{% endblock %}
+
+{% block grid-right %}
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/user/resetpwd.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}
+

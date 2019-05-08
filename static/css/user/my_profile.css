@@ -1,0 +1,355 @@
+.widget-container {
+    width: 80%;
+}
+
+.banner {
+    display: none;
+}
+
+.grid-left {
+    width: 100%;
+}
+
+
+.usercenter-main{
+    background: #fff;
+    border: 1px solid #e4e5e8;
+}
+
+.usercenter-tab{
+    padding-left: 100px;
+    font-size: 16px;
+    padding-top: 16px;
+}
+
+.tabPane{
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    margin-right: 40px;
+    color: #595959;
+}
+.tabPane:hover{
+    cursor: pointer;
+    color: #108ee9;
+}
+
+.tabPaneSelected{
+    border-bottom: 2px solid #4285F4;
+    font-weight: 600;
+    color: #262626;
+}
+
+.content {
+    margin-bottom: 100px;
+}
+
+.basicinfo{
+    padding-top: 1rem;
+}
+
+.usercenter-upload {
+    overflow: hidden;
+    height: 70px;
+    line-height: 70px;
+    margin-bottom: 20px;
+}
+
+
+.upload-info,.input-info {
+    float: left;
+    margin-right: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    width: 156px;
+    text-align: right;
+    color: rgba(0,0,0,.65);
+}
+
+.upload-main {
+    width: 70px;
+    height: 70px;
+    float: left;
+    position: relative;
+}
+
+.upload-main img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    float: left;
+    border: none;
+    vertical-align: middle;
+}
+
+.upload-main .shadow {
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.usercenter-upload .upload-main:hover .shadow {
+    display: block;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/*
+
+position:absolue;与poistion:fixed区别：没有滚动条的情况下没有区别
+1.position:absolue;相对元素的宽高进行定位
+2.poistion:fixed；相对于当前浏览器视窗或可视窗口的定位
+ */
+#rc_dialog{
+    position: fixed; /*absolute只是针对一个视窗口而已，滚动条下面没遮住，遮罩层必须根据浏览器视窗固定定位，poistion:fixed*/
+    /*opacity: 0.7;*/
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: #111;
+    z-index: 8000;
+    display: none;
+}
+
+.rc-dialog-content{
+    width: 480px;
+    margin: 30px auto;
+    padding: 0.4rem;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+    position: absolute;
+    top: 10%;
+    left: 35%;
+    z-index: 8001;
+}
+
+.rc-dialog-header{
+    padding: 13px 20px 14px;
+    border-radius: 5px 5px 0 0;
+    color: #666;
+}
+.rc-dialog-title{
+    font-weight: 600;
+    font-size: 18px;
+    color: #262626;
+    letter-spacing: 0;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 30px;
+    line-height: 18px;
+}
+
+.rc-dialog-body{
+    padding: 20px;
+}
+
+#show_img {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+#show_img>img {
+    width: 100%; /*限制图像宽度以避免容器溢出*/
+    height: 100%;
+}
+
+.img-preview-box {
+    height: 180px;
+    width: 120px;
+    margin-left: 1.6rem;
+    text-align: center;
+    position: relative;
+}
+
+.img-preview{
+    height: 70px;
+    width: 70px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 0.3rem auto;
+
+}
+
+.upload-again {
+    position: absolute;
+    bottom: 0;
+    width: 120px;
+    border: 1px solid #EBEBEB;
+    border-radius: 2px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #595959;
+    letter-spacing: 0;
+    text-indent: 43px;
+    cursor: pointer;
+    background: url("../../image/user/data_image.png") no-repeat 18px center;
+    background-size: 20px;
+    background-color: #F9F9F9;
+}
+
+.upload-again:hover{
+    border: 1px solid #e87461;
+}
+
+
+#photoInput{
+    opacity: 0; /*使得input变得不可见了*/
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+.rc-dialog-footer{
+    padding:10px 20px 10px 10px;
+    text-align:right;
+}
+._1T5zd,.EMvBg{
+    width: 100px;
+    height: 34px;
+    text-align: center;
+    line-height: 34px;
+    border-radius:3px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    margin-left: 10px;
+    background: rgb(66, 133, 244);
+    color: #FFFFFF;
+}
+._1T5zd{
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.usercenter-input, .usercenter-bind{
+    line-height: 0.8rem;
+    margin-bottom: 0.3rem;
+}
+
+.input-main {
+    width: 400px;
+    font-size: 14px;
+    color: #B2B2B2;
+    letter-spacing: 0;
+    float: left;
+    position: relative;
+    box-sizing: border-box;
+
+}
+
+
+.input-main>input {
+    border: 1px solid #EBEBEB;
+    border-radius: 2px;
+    width: 100%;
+    height: 0.8rem;
+    background: #F9F9F9;
+    outline: none;
+    font-size: 14px;
+    color: #262626;
+    line-height: 26px;
+    padding-left: 15px;
+    box-sizing: border-box;
+
+}
+
+.input-main>input:focus{
+    border: 1px solid #1890ff;
+}
+
+.text-info {
+    position: absolute;
+    right: 0.2rem;
+    bottom: 0.3rem;
+    font-size: 14px;
+    color: #B2B2B2;
+    letter-spacing: 0;
+    line-height: 20px;
+}
+
+.input-main>label{
+    margin-right: 0.4rem;
+}
+
+.input-main>label>input {
+    width: 0.32rem;
+    height: 0.32rem;
+    background-clip: border-box;
+    /*appearance: none;*/
+    vertical-align: text-bottom;
+    background-color: #fff;
+    border: 1px solid #d7d7d7;
+}
+
+.textarea-main textarea{
+    width: 100%;
+    height: 2rem;
+    padding: 0.2rem 0.16rem;
+    border: 1px solid #EBEBEB;
+    border-radius: 2px;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+
+}
+
+.textarea-main textarea:focus {
+    border: 1px solid #1890ff;
+}
+
+.change-profile-button,.change-password-button {
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    background: #4285F4;
+    border-radius: 2px;
+    margin-left: 3.6rem;
+    text-align: center;
+    width: 8rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}
+
+.account-password{
+    padding-top: 1rem;
+    display: none;
+}
+
+@media screen and (max-width: 760px){
+    .usercenter-tab{
+        padding-left: 1rem;
+    }
+    .upload-info, .input-info{
+        padding-left:0.5rem;
+        width: 30%;
+        text-align: center;
+    }
+    .input-main>input{
+
+    }
+    .input-main{
+        width: 60%;
+    }
+    .change-profile-button, .change-password-button{
+        width: 100%;
+        margin-left: 0;
+    }
+}

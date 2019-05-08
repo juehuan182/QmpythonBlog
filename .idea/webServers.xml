@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ssh://root@47.107.69.21:22/root/.virtualenvs/blogenv/bin/python3" name="QmpythonBlog" url="http://www.qmpython.com:8000">
+        <fileTransfer host="47.107.69.21" port="22" accessType="SFTP">
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

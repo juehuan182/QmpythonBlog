@@ -1,0 +1,361 @@
+.banner {
+    height: 340px;
+    min-height: 340px;
+}
+
+.home-banner-left {
+    float: left;
+    overflow: hidden;
+    width: 70%;
+    height: 100%;
+    position: relative;
+    /*border-radius: 2px;*/
+}
+
+.home-banner-left ul.banner-left-list {
+    height: 6.4rem; /*因为ul下面的li设置了绝对定位absolute脱离了文档流，所以对li设置宽高或者想通过img默认大小来达到撑开外面盒子是不行的*/
+}
+
+.home-banner-left ul.banner-left-list > li.banner-left-item {
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    width: 100%;
+    display: none; /*先全部隐藏，通过下面样式来控制当前需要显示的页面*/
+}
+
+.home-banner-left ul.banner-left-list > li.banner-left-item > a {
+    display: inline-block;
+    width: 100%;
+}
+
+.banner-left-item-img {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    transition: all 1s;
+}
+
+.banner-left-item-img:hover {
+    transform: scale(1.12);
+}
+
+.home-banner-left ul.banner-left-list > li.show { /*控制需要展示的界面*/
+    display: block;
+}
+
+
+div.banner-left-item-info {
+    background-image: linear-gradient(-180deg,transparent 13%,rgba(0,0,0,.65) 97%);
+    top: 71%;
+    height: 100px;
+    padding-left: 15px;
+    padding-top: 50px;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+}
+
+div.banner-left-item-info .banner-left-item-title{
+    color: #fff;
+    font-size: 18px;
+    height: 28px;
+    letter-spacing: 0;
+    line-height: 28px;
+    text-align: justify;
+}
+
+/*左右两个耳朵*/
+.home-banner-left ul.banner-left-control-direction li {
+    width: 0.6rem;
+    height: 1rem;
+    line-height: 1rem;
+    text-align: center;
+    color: #fff;
+    font-size: 0.7rem;
+    font-family: Arial;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); /*实现元素垂直居中对齐*/
+}
+
+.home-banner-left ul.banner-left-control-direction li.prev {
+    left: 0;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+.home-banner-left ul.banner-left-control-direction li.next {
+    right: 0;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+.home-banner-left ul.banner-left-control-direction li:hover {
+    background-color: #757575;
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    cursor: pointer;
+}
+
+/*下面点*/
+.home-banner-left ul.banner-left-control-list {
+    position: absolute;
+    left: 2%;
+    /*transform: translateX(-50%); !*水平居中*!*/
+    bottom: 0.2rem;
+}
+
+.home-banner-left ul.banner-left-control-list > li {
+    float: left;
+    width: 0.6rem;
+    height: 2px;
+    background-color: hsla(0,0%,100%,.5);
+    margin-right: 4px;
+}
+
+/*控制点高亮 */
+
+.home-banner-left ul.banner-left-control-list li:hover {
+    /*transition: width 2s linear;*/
+    /*animation: pending 5s linear none;*/
+    background: #4285f4;
+}
+
+.home-banner-left ul.banner-left-control-list > li.on {
+    /*transition: width 2s linear;*/
+    /*animation: pending 5s linear none;*/
+    background: #4285f4;
+}
+
+.home-banner-right {
+    float: right;
+    width: 29%;
+    /*height: 100%;*/
+    overflow: hidden;
+    margin-left: 1%;
+}
+
+.banner-right-item {
+    float: left;
+    overflow: hidden;
+    height: 3.35rem;
+    width: 3.265rem;
+    position: relative;
+    transform: rotate(0deg); /*为了防止transform过渡时border-radius原先边界处圆角应该隐藏的地方溢了出来*/
+}
+
+/*.banner-right-item:first-child {*/
+    /*margin-bottom: 14px;*/
+/*}*/
+
+.banner-right-item:nth-child(2n) {
+    margin-left: 0.1rem;
+}
+
+.banner-right-item:nth-child(3n) {
+    margin-top: 0.1rem;
+}
+
+.banner-right-item:nth-child(4) {
+    margin-top: 0.1rem;
+}
+
+.banner-right-item-img {
+    height: 100%;
+    width: 100%;
+    transition: all 1s;
+}
+
+.banner-right-item > a.banner-right-item-article:hover > .banner-right-item-img {
+    transform: scale(1.1); /*变形*/
+}
+
+
+.banner-right-item-info{
+    background-image: linear-gradient(-180deg,hsla(0,0%,74.9%,0),rgba(0,0,0,.78) 97%);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transition: all .5s;
+}
+
+a.banner-right-item-article:hover .banner-right-item-info{
+    background: rgba(0,0,0,.4);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.banner-right-item-title {
+    bottom: 6px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 18px;
+    max-height: 36px;
+    overflow: hidden;
+    padding: 0 10px;
+    position: absolute;
+    text-align: justify;
+    transition: bottom .5s;
+}
+
+a.banner-right-item-article:hover .banner-right-item-title{
+    position: absolute;
+    bottom: 72px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 18px;
+    max-height: 72px;
+    opacity: 1;
+    overflow: hidden;
+    padding: 0 10px;
+    text-align: justify;
+    transform: translateY(50%);
+
+}
+
+
+.excerpt-minic-index{
+    display: none;
+}
+
+article.excerpt-minic-index {
+    /*border: 1px solid #ccc;*/
+    /*border-radius:0.1rem;*/
+    padding: 0.4rem;
+    margin-bottom: 0.4rem;
+    background-color: #fff;
+}
+
+.excerpt-minic-index h2 {
+    font-size: 0.36rem;
+    line-height: 0.5rem;
+    font-weight: bold;
+    margin: 0 0 0.3rem;
+}
+
+.excerpt-minic-index h2 a {
+    color: #555;
+}
+
+.excerpt-minic-index h2 a:hover {
+    color: #45B6F7;
+}
+
+.excerpt-minic-index h2 .red {
+    color: #FF5E52;
+    margin-left: -0.16rem;
+}
+
+.excerpt-minic-index .note {
+    color: #666;
+    text-indent: 0.5rem;
+    text-align: inherit;
+    margin-bottom: 0;
+}
+
+/*移动适配*/
+@media screen and (max-width: 760px){
+    div.banner {
+        height: 4rem;
+        min-height: 4rem;
+    }
+
+    div.home-banner-left {
+        width: 100%;
+        height: 100%;
+    }
+
+    a > div.banner-left-title {
+        top: 88%;
+        font-size: 0.3rem;
+        line-height: 0.5rem;
+        text-align: left;
+        padding-left: 0.3rem;
+    }
+    div.home-banner-left ul.banner-left-control-list {
+        left: 86%;
+    }
+
+    div.home-banner-left ul.banner-left-control-list > li {
+
+        margin-right: 0.1rem;
+    }
+
+    div.home-banner-left ul.banner-left-list li img {
+        height: 4rem;
+    }
+
+    /*div.home-banner-right {*/
+        /*width: 100%;*/
+        /*margin-left: 0;*/
+        /*margin-top: 5px;*/
+
+    /*}*/
+
+    .banner-right-item:first-child {
+        margin-right: 5px;
+    }
+
+    div.banner-right-item{
+        float: left;
+        width: 49.2%;
+        height: 120px;
+    }
+
+    a > div.banner-right-title {
+        top: 30%;
+        font-size: 0.29rem;
+    }
+
+
+    .article.excerpt{
+
+    }
+
+    .article-list > article.excerpt > a {
+        width: 40%;
+    }
+
+    article.excerpt > a > img {
+        height: auto!important;
+    }
+
+    article.excerpt .right-text{
+        width: 50%;
+    }
+
+    .right-text > p.note{
+        display:none;
+    }
+
+    div.meta > .auth , div.meta > .like, div.meta >.viewnum{
+        display: none;
+    }
+
+    .article-list > article.excerpt {
+        height: 100px;
+    }
+
+    div.right-text .header > a{
+        display: none;
+    }
+
+    div.right-text h2{
+        font-size: 0.3rem;
+    }
+
+    div.right-text .meta {
+        bottom: -5px;
+    }
+
+    div.loadmore a.btn-more {
+        border-radius: 2rem;
+    }
+}

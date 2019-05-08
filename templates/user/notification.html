@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/user/notification.css' %}">
+{% endblock %}
+
+{% block grid-left %}
+
+{% csrf_token %}
+    <div class="notificationcenter-main">
+        <div class="notificationcenter-tab clearfix">
+            <div class="tabPane">系统通知</div>
+            <div class="tabPane">私信</div>
+        </div>
+        <div class="content">
+            <div class="system-notification">
+                <ul class="message-ul">
+                            {% for notification in notifications %}
+                            <li class="notice-item">
+                                <a class="username">{{ notification.create_p.username }}</a>
+                                <span>在<a href="{% url 'articles:article_detail' notification.comment.article.id %}">《{{ notification.comment.article.title }}》</a>中<b>@</b>您，并评论道：</span>
+                                <div class="message-content">{{ notification.comment.content }}</div>
+                                <div class="time">{{ notification.create_time }}</div>
+                            </li>
+                            {% empty %}
+                                <div class="no-message">
+                                    <p>暂没有新消息哦~</p>
+                                </div>
+                            {% endfor %}
+                </ul>
+            </div>
+            <div class="private-message" >
+                <div class="no-message">
+                    <p>您还没有私信(此功能暂未开发，敬请期待！)~</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/user/notification.js' %}"></script>
+{% endblock %}
+

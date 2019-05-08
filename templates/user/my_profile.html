@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+{#    <link rel="stylesheet" href="https://cdn.bootcss.com/cropper/3.1.3/cropper.min.css">#}
+    <link rel="stylesheet" href="{% static 'css/user/cropper.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/my_profile.css' %}">
+{% endblock %}
+
+{% block grid-left %}
+    <div class="usercenter-main">
+        <div class="usercenter-tab clearfix">
+            <div class="tabPane">基本资料</div>
+            <div class="tabPane">修改密码</div>
+        </div>
+        <div class="content">
+            <div class="basicinfo ">
+                <div class="usercenter-upload clearfix">
+                    <div class="upload-info" data-userid="{{ request.user.id }}">头像</div>
+                        <div class="upload-main">
+                            <img id="user-photo" src="{{ request.user.avatar }}" alt="头像">
+                        <div class="shadow">修改头像</div>
+                    </div>
+                </div>
+                <!--遮盖层-->
+                <div id="rc_dialog" class="rc_dialog">
+                    <div class="rc-dialog-content">
+                        <div class="rc-dialog-header">
+                            <div class="rc-dialog-title">
+                                头像设置
+                            </div>
+                        </div>
+                        <div class="rc-dialog-body clearfix">
+                            <div id="show_img" class="fl" >
+                                <img src="{{ request.user.avatar}}" alt="" id="photo">
+                            </div>
+                            <div class="img-preview-box fl">
+                                <div>预览</div>
+                                <div class="img-preview">
+                                </div>
+                                <div class="upload-again" title="选择文件">
+                                    重新上传
+                                    <input type="file" id="photoInput" accept="image/*" onchange="selectImg(this)">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="rc-dialog-footer">
+                            <button class="btn-close _1T5zd">取消</button>
+                            <button class="btn-primary EMvBg" id="sureCut">确认</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="usercenter-input account clearfix">
+                    <div class="input-info">账号</div>
+                    <div class="input-main">
+                        <input type="text" name="username" disabled="disabled" value="{{ request.user.username }}">
+                    </div>
+                </div>
+                <div class="usercenter-input nickname clearfix">
+                    <div class="input-info">昵称</div>
+                    <div class="input-main">
+                        <input type="text" placeholder="请填写昵称" name="nickname" value="{{ request.user.nick_name }}">
+                        <span class="text-info">0/16</span>
+                    </div>
+                </div>
+                <div class="usercenter-input sex clearfix">
+                    <div class="input-info">性别</div>
+                    <div class="input-main">
+                        <label for="male">
+                            <input type="radio" name="sex" value="m" {% if request.user.sex == 'm' %} checked {% endif %}>&nbsp;男
+                        </label>
+                        <label for="female">
+                            <input type="radio" name="sex" value="f" {% if request.user.sex == 'f' %} checked {% endif %}>&nbsp;女
+                        </label>
+                    </div>
+                </div>
+                <div class="usercenter-input email clearfix">
+                    <div class="input-info">邮箱</div>
+                    <div class="input-main">
+                        <input type="email" name="email" disabled="disabled" value="{{ request.user.email }}" placeholder="请输入邮箱">
+                    </div>
+                </div>
+                <div class="usercenter-input tel clearfix">
+                    <div class="input-info">手机</div>
+                    <div class="input-main">
+                        <input type="text" name="mobile" value="{{ request.user.mobile }}" placeholder="请输入手机号码">
+                    </div>
+                </div>
+                <div class="usercenter-input qq clearfix">
+                    <div class="input-info">QQ</div>
+                    <div class="input-main">
+                        <input type="text" name="qq" value="{{ request.user.qq | default_if_none:'' }}" placeholder="请输入QQ号码">
+                        <!--利用过滤器 如果user.qq是None，那么输出将使用缺省值-->
+                    </div>
+                </div>
+                <div class="usercenter-input birthday clearfix">
+                    <div class="input-info">生日</div>
+                    <div class="input-main">
+                        <input type="text" name="birthday" id="birthday" placeholder="请选择生日" value="{{ request.user.birthday|date:'Y-m-d' }}">
+                    </div>
+                </div>
+                <div class="usercenter-input profile clearfix">
+                    <div class="input-info">个人简介</div>
+                    <div class="input-main textarea-main">
+                        <textarea name="profile" id="profile" placeholder="请填写个人简介">{{ request.user.profile|default_if_none:'' }}</textarea>
+                        <span class="text-info">0/30</span>
+                    </div>
+                </div>
+                <button class="change-profile-button">保存</button>
+            </div>
+            <div class="account-password">
+                <div class="usercenter-bind oldpwd clearfix">
+                    <div class="input-info">旧密码</div>
+                    <div class="input-main" contenteditable="true">
+                        <input type="password" name="password" placeholder="请输入旧密码">
+                    </div>
+                </div>
+                <div class="usercenter-bind newpwd clearfix">
+                    <div class="input-info">新密码</div>
+                    <div class="input-main" contenteditable="true">
+                        <input type="password" name="new_password" placeholder="请输入新密码,6~16位长度含数字和字母">
+                    </div>
+                </div>
+                <div class="usercenter-bind confirmpwd clearfix">
+                    <div class="input-info">确认密码</div>
+                    <div class="input-main" contenteditable="true">
+                        <input type="password" name="confirm_password" placeholder="请输入确认密码">
+                    </div>
+                </div>
+                <button class="change-password-button">保存</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block grid-right %}
+{% endblock %}
+{% block js %}
+{#    <script src="//cdn.bootcss.com/cropper/3.1.3/cropper.min.js"></script>#}
+    <script src="{% static 'js/user/cropper.min.js' %}"></script>
+    <script src="{% static 'css/laydate/laydate.js' %}"></script>
+    <script src="{% static 'js/user/my_profile.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  网站信息
+{% endblock %}
+
+
+{% block content_header %}
+  网站信息
+{% endblock %}
+
+{% block header_option_desc %}
+  网站信息
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+            <form class="form-horizontal">
+                  <div class="form-group">
+                    <label for="web-name" class="col-sm-2 control-label">网站名称</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="web_name" id="web-name" placeholder="网站名称" value="{{ web_name }}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="web-domainname" class="col-sm-2 control-label">网站域名</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="web_domainname" id="web-domainname" placeholder="网站域名" value="{{ web_domainname }}">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="web-logo" class="col-sm-2 control-label">网站LOGO</label>
+                    <div class="col-sm-10">
+                      <span class="btn btn-default" style="background-color: #3c8dbc;color: #fff;">
+                          <i class="fa fa-cloud-upload"></i>
+                          上传网站LOGO
+                      </span>
+                      <input type="file" class="" id="web-logo" style="opacity: 0;position: relative;right: 140px;
+                      display: inline-block;width: 135px;">
+                      <span style="margin-left: -120px">(建议尺寸 16*16 、32*32、 48*48)</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                     <label for="web-login-register-logo" class="col-sm-2 control-label">网站注册/登录LOGO</label>
+                     <div class="col-sm-10">
+                         <span class="btn btn-default" style="background-color: #3c8dbc;color: #fff;">
+                          <i class="fa fa-cloud-upload"></i>
+                          上传网站注册/登录LOGO
+                         </span>
+                         <input type="file" class="" id="web-login-register-logo" style="opacity: 0;position: relative;right: 140px;
+                      display: inline-block;width: 135px;">
+                         <span style="margin-left: -120px">(建议尺寸48*48)</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="web-logo" class="col-sm-2 control-label">地址栏ICON</label>
+                    <div class="col-sm-10">
+                      <span class="btn btn-default" style="background-color: #3c8dbc;color: #fff;">
+                          <i class="fa fa-cloud-upload"></i>
+                          地址栏ICON
+                      </span>
+                      <input type="file" class="" id="web-favicon" style="opacity: 0;position: relative;right: 140px;
+                      display: inline-block;width: 135px;">
+                      <span style="margin-left: -120px">(建议尺寸32*32、 48*48)</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="index-title" class="col-sm-2 control-label">首页标题</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="index_title" id="index-title" placeholder="首页标题" value="{{ web_title }}" style="display: inline-block;width: 500px;">
+                      <span>(不超过30个汉字)</span>
+                    </div>
+                  </div>
+                <div class="form-group">
+                    <label for="meta-keywords" class="col-sm-2 control-label">META关键词</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" id="meta-keywords" placeholder="META关键词" style="display: inline-block;width: 500px;">{{ web_keywords }}</textarea>
+                        <span>(6~8关键词)</span>
+                    </div>
+                  </div>
+                <div class="form-group">
+                    <label for="meta-desc" class="col-sm-2 control-label">META描述</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" id="meta-desc" placeholder="META描述" style="display: inline-block;width: 500px;height: 100px">{{ web_desc }}</textarea>
+                        <span>(不超过120个汉字)</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-default btn-edit">确认修改</button>
+                    </div>
+                  </div>
+                </form>
+        </div>
+        <div class="box-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'js/admin/webSite/website_info.js' %}"></script>
+    <script type="text/javascript">
+      $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

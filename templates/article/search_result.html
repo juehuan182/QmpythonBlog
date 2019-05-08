@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load article_date_filter %}
+
+{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/article/article_list.css' %}">
+    <style>
+        .banner {
+            display: none;
+        }
+        span.highlighted {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+{% block banner %}
+{% endblock %}
+
+{% block grid-left %}
+    <div class="title">
+        <h3 class="clearfix">
+            搜索结果
+            <span>系统搜索到约有<strong>{{ paginator.count }}</strong>条符合<strong>【{{ query }}】</strong>的查询结果</span>
+        </h3>
+    </div>
+
+    {# 导入自带高亮功能 #}
+    {% load search_highlight_tags %}
+    {# haystack会把搜索出来的结果传递给搜索页面，传递的上下文包括: #}
+    {# query：搜索关键字; page:当前页的page对象->遍历page对象，获取到的是SearchResult类的实例对象，对象的属性object才是模型类的对象.#}
+    {# paginator:分页paginator对象 #}
+    {# 由于 haystack 对搜索结果做了分页，传给模板的变量是一个 page 对象，所以我们从 page 中取出这一页对应的搜索结果，然后对其循环显示 #}
+    {% for item in page %}
+        <article class="excerpt clearfix">
+            <a href="{% url 'articles:article_detail' item.object.id %}">
+               <img src="{{ item.object.cover_img }}"/> {# 这里需要加个object #}
+           </a>
+            <div class="right-text">
+                <div class="header">
+                    <a href="{% url 'categories' item.object.category.id %}" title="css3" target="_blank">
+                        {{ item.object.category.name }}
+                    </a>
+                    <h2>
+                        <a href="{% url 'articles:article_detail' item.object.id %}">
+                            {% myhighlight item.object.title with query %}
+                        </a>
+                    </h2>
+                </div>
+                <p class="note">
+                    {% myhighlight item.object.description with query start_head True %}
+                    {#  #}
+                </p>
+                <div class="meta">
+                    <span class="auth"><i class="icon-yonghu1 iconfont"></i>{{ item.object.author }}</span>
+                    <span class="dtime"><i
+                            class="icon-shijian iconfont"></i>{{ item.object.create_time|date_format }}</span>
+                    <span class="viewnum"><i class="icon-liulan iconfont"></i>阅读({{ item.object.read_num }})</span>
+                    <span class="like"><i class="icon-xihuan iconfont"></i>赞({{ item.object.like_num }})</span>
+                </div>
+            </div>
+        </article>
+
+    {% empty %} {# 在for循环之前检查列表大小是常见的，当列表为空的时候给出特别提示，这是常见的，所以for支持可选empry来当为空时输出 #}
+        <div class="">没有搜索到您想要的结果！</div>
+    {% endfor %}
+    {% if page %}
+        <div class="pagination">
+            <ul>
+                {% if page.has_previous %} {# 判断是否有上一页#}
+                    <li style="color: #c8cdd2;"><a href="{% url 'articles:search' %}?q={{ query }}&page={{ page.previous_page_number }}">上一页</a></li> {# previous_page_number上一页页码#}
+                {% else %}
+                    <li style="color: #c8cdd2;"><a href="{% url 'articles:search' %}?q={{ query }}">首页</a></li>
+                {% endif %}
+
+                {% for page_num in paginator.page_range %} {# 判断剩余页面的显示方法#}
+                    {% if page_num %}
+                        {% if page_num == page.number %} {# 判断是否当前页，设置样式，number当前页的页码#}
+                            <li><a class="current-page">{{  page_num }}</a></li>
+                        {% else %}
+                            <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ page_num }}">{{ page_num }}</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="">...</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page.has_next %} {# 判断是否有下一页#}
+                    <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ page.next_page_number }}">下一页</a></li> {# next_page_number下一页的页码#}
+                {% else %}
+                    <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ paginator.num_pages }}">尾页</a></li> {# num_pages页面总数#}
+                {% endif %}
+                <li><span>共{{ paginator.num_pages }}页</span></li>
+                {# count计算集合元素个数 #}
+            </ul>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}
+
+{# query，就是我们搜索的字符串。关于page，可以看到page有object_list属性，它是一个list，里面包含了第一页所要展示的model对象集合， #}
+{# 那么list里面到底有多少个呢？由settings里面的HAYSTACK_SEARCH_RESULTS_PER_PAGE配置 #}
+{#怎么样，还行吧？眼尖的人会发现，为什么标题里的高等没有被替换成...，而段落里的数学之前的内容却被替换成了...，标题本来就很短，#}
+{#想象一下，若是高等数学被显示成了数学，是不是丢失了最重要的信息呢？高等这么重要的字眼都被省略了，很显然是不行的，毕竟我是个高等生。#}
+{#那么怎么办呢？我没有选择去看文档，可能文档的HighLight类就是用来干这个的吧，但是我选择了读highlight 标签的源码，最终还是让我实现了。#}
+{##}
+{#我们需要做的是复制粘贴源码，然后进行修改，而不是选择直接改源码，创建一个自己的标签。为大家奉上。#}
+{#添加myapp/templatetags/my_filters_and_tags.py 文件和 myapp/templatetags/highlighting.py 文件，内容如下#}
+{#（源码分别位于haystack/templatetags/lighlight.py 和 haystack/utils/lighlighting.py 中）#}

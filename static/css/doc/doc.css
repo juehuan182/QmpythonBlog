@@ -1,0 +1,129 @@
+.grid-left {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.doc-list{
+    width: 100%;
+}
+
+.doc-list-box {
+    width: 350px;
+    height: auto;
+    overflow: hidden;
+    margin: 15px 8px;
+    border: 1px solid #f0f0f0;
+    border-radius: 3px;
+    box-shadow: 0 2px 3px #ddd;
+    background-color: #f3f7fb;
+    transition: all .5s linear;
+}
+
+.doc-list-box:hover {
+    box-shadow: 0 5px 15px #B0AFAF;
+}
+
+
+
+.doc-list-box:hover .doc-head img {
+    transform: scale(1.1); /*transform是控制变形的1是调节变形大小的放大多少倍*/
+}
+
+.doc-head {
+    width: 100%;
+    height: 208px;
+    background: #ccc;
+}
+
+.doc-head a{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.doc-head img {
+    width: 100%;
+    height: 208px;
+    transition: all 1s;
+}
+
+.doc-center {
+    width: 100%;
+    padding: 10px 25px;
+}
+
+.doc-center h2 {
+    width: 100%;
+}
+
+.doc-center a {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    line-height: 28px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.doc-center a:hover {
+    color: #5079b7;
+}
+
+.doc-center p {
+    width: 100%;
+    color: #999;
+    font-size: 14px;
+    margin-top: 10px;
+    height: 40px;
+    line-height: 20px;
+    overflow: hidden;  /*多行文本显示省略号*/
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.doc-bottom {
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    border-top: 1px solid #eee;
+    background: #f3f7fb;
+}
+
+.doc-bottom span {
+    color: #999;
+    font-size: 10px;
+    display: inline-block;
+    margin-right: 0.9rem;
+}
+
+.doc-bottom span.dtime{
+    text-align: right;
+}
+
+.doc-bottom span.download {
+    margin-right: 0;
+}
+
+.doc-bottom span.download a{
+    color: indianred;
+}
+
+.doc-bottom i {
+    color: #008af5;
+    padding-right: 4px;
+}
+
+.empty-doc {
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    color: #999;
+}

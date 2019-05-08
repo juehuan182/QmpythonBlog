@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/doc/doc.css' %}">
+{% endblock %}
+
+{% block grid-left %}
+            <ul class="doc-list clearfix">
+                {% for one_doc in docs %}
+                    <li class="doc-list-box fl">
+                        <div class="doc-head">
+                            <a href="javascript:void(0);">
+                                <img src="{{ one_doc.image_url}}">
+                            </a>
+                        </div>
+                        <div class="doc-center">
+                            <h2>
+                                <a href="javascript:void(0);">{{ one_doc.title }}</a>
+                            </h2>
+                            <p>{{ one_doc.desc|safe }}</p>
+                        </div>
+
+                        <div class="doc-bottom">
+                            <span class="auth"><i class="icon-yonghu1 iconfont"></i>{{ one_doc.author.username }}</span>
+                            <span class="dtime"><i class="icon-shijian iconfont"></i>{{one_doc.create_time|date:'Y年m月d日' }}</span>
+                            <span class="download"><a href="{% url 'docs:download' one_doc.id %}?filename={{ one_doc.title }}">立即下载</a></span>
+                        </div>
+                    </li>
+                {% empty %}
+                    <p class="empty-doc">暂时无相关资料，敬请关注!</p>
+                {% endfor %}
+            </ul>
+{% endblock %}
+
+{% block grid-right %}
+{% endblock %}

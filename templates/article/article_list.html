@@ -1,0 +1,24 @@
+{% load article_date_filter %}
+
+<article class="excerpt clearfix">
+    <a href="/articles/{{ article.id }}/">
+        <img src="{{ article.cover_img }}"/>
+    </a>
+    <div class="right-text">
+        <div class="header">
+            <a href="{% url 'categories' article.category.id %}" title="css3" target="_blank">
+                {{ article.category.name }}
+            </a>
+            <h2><a href="{% url 'articles:article_detail' article.id %}">{{ article.title }}</a></h2>
+        </div>
+        <p class="note">
+            {{ article.description|safe }}...
+        </p>
+        <div class="meta">
+            <span class="auth"><i class="icon-yonghu1 iconfont"></i>{{ article.author.nick_name }}</span>
+            <span class="dtime"><i class="icon-shijian iconfont"></i>{{ article.create_time|date_format }}</span>
+            <span class="viewnum"><i class="icon-liulan iconfont"></i>阅读({{ article.read_num }})</span>
+            <span class="like"><i class="icon-xihuan iconfont"></i>赞({{ article.like_num }})</span>
+        </div>
+    </div>
+</article>

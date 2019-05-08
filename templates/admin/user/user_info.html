@@ -1,0 +1,154 @@
+{% extends 'admin/base.html' %}
+{% load  static %}
+
+{% block title %}
+  网站用户
+{% endblock %}
+
+{% block content_header %}
+  网站用户
+{% endblock %}
+
+{% block header_option_desc %}
+  网站用户
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+          <div class="box-header">
+              <form action="/admin/user_info/" method="get" class="form-inline">
+                <div class="form-group ml20 mt20">
+                    <label for="user-id">ID：</label>
+                    <input type="text" class="form-control" placeholder="请输入ID" id="user-id" name="user_id"
+                               value="{{ user_id | default:'' }}">
+                </div>
+                <div class="form-group ml20 mt20">
+                    <label for="user-name">用户名：</label>
+                        <input type="text" class="form-control" placeholder="请输入用户名" id="user-name" name="user_name"
+                               value="{{ user_name | default:'' }}">
+                </div>
+                <div class="form-group ml20 mt20">
+                    <label for="user-email">邮箱：</label>
+                        <input type="text" class="form-control" placeholder="请输入邮箱" id="user-email" name="user_email"
+                               value="{{ user_email | default:'' }}">
+                </div>
+                <div class="form-group ml20 mt20">
+                    <label for="user-sex">性别：</label>
+                    <select class="form-control" id="user-sex" name="user_sex">
+                        <option value="0">不限</option>
+                        <option value="m" {% if user_sex == 'm' %} selected {% endif %}>男</option>
+                        <option value="f" {% if user_sex == 'f' %} selected {% endif %}>女</option>
+                    </select>
+                </div>
+                <div class="form-group ml20 mt20">
+                    <button class="btn btn-primary search-user">查询</button>
+                </div>
+            </form>
+          </div>
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr class="user-info">
+              <th>ID</th>
+              <th>用户名</th>
+              <th>邮箱</th>
+              <th>手机</th>
+              <th>QQ</th>
+              <th>性别</th>
+              <th>加入时间</th>
+              <th>状态</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {% for one_user in users_info.object_list %} {# 切记：做分页获取数据要调用 .object_list #}
+                    <tr data-id="{{ one_user.id }}">
+                        <td>{{ one_user.id }}</td>
+                        <td>{{ one_user.username }}</td>
+                        <td>{{ one_user.email }}</td>
+                        <td>{{ one_user.mobile | default:'&nbsp;--&nbsp;'}}</td> {# 值不存在，使用指定值 #}
+                        <td>{{ one_user.qq | default:'&nbsp;--&nbsp;'}}</td>
+                        <td>{{ one_user.get_sex_display | default:'&nbsp;--&nbsp;'}}</td>
+                        <td>{{ one_user.date_joined | date:'Y-m-d H:i:s' }}</td>
+
+                        <td>{% if one_user.is_active %}启用{% else %}停用{% endif %}</td>
+                        <td>
+                            {% if one_user.is_active %}
+                                <button class="btn btn-sm btn-info btn-edit" data-active="0">
+                                      <i class="fa fa-lock"></i>
+                                      &nbsp;停用
+                                </button>
+                            {% else %}
+                                 <button class="btn btn-sm btn-default btn-edit" data-active="1">
+                                      <i class="fa fa-unlock-alt"></i>
+                                      &nbsp;启用
+                                </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="box-footer">
+            <span class="pull-left">第{{ users_info.number }}页/总共{{ users_info.paginator.num_pages }}页</span>
+                <!-- 分页 -->
+                <nav aria-label="Page navigation" class="pull-right">
+                  <ul class="pagination">
+                    {% if users_info.has_previous %} {# 判断是否有上一页#}
+                        <li>
+                          <a href="?page={{ users_info.previous_page_number }}&{{ other_param }}" aria-label="Previous">
+                            <span aria-hidden="true">上一页</span>
+                          </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                          <span>
+                            <span aria-hidden="true">上一页</span>
+                          </span>
+                        </li>
+                    {% endif %}
+                    {% for page in users_info.pages %} {# 判断剩余页面的显示方法 #}
+                        {% if page %}
+                            {% ifequal page users_info.number %} {# 判断是否当前页，设置样式，number当前页的页码 #}
+                                <li class="active">
+                                  <span>{{ page }}<span class="sr-only">(current)</span></span>
+                                </li>
+                            {% else %}
+                                <li><a href="?page={{ page }}&{{ other_param }}">{{ page }}</a></li>
+                            {% endifequal %}
+                        {% else %}
+                             <li class="none"><a href="">...</a> </li>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- 下一页 -->
+                    {% if users_info.has_next %} {# 判断是否有下一页 #}
+                        <li>
+                          <a href="?page={{ users_info.next_page_number }}&{{ other_param }}" aria-label="Next">
+                            <span aria-hidden="true">下一页</span>
+                          </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                          <span>
+                            <span aria-hidden="true">下一页</span>
+                          </span>
+                        </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/admin/user/user_info_manage.js' %}"></script>
+  <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+  </script>
+{% endblock %}

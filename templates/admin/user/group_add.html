@@ -1,0 +1,70 @@
+{% extends 'admin/base.html' %}
+{% load  static %}
+
+{% block title %}
+  添加角色
+{% endblock %}
+{% block style %}
+  <!-- bootstrap-select -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+{% endblock %}
+{% block content_header %}
+  添加角色
+{% endblock %}
+
+{% block header_option_desc %}
+  添加角色
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+
+          <div class="form-group" style="margin-top: 30px;">
+            <label for="group-name">角色名称</label>
+              <input type="text" class="form-control" id="group-name" name="group-name" placeholder="请输入角色名称"
+                     value="{{ group.name }}" autofocus>
+          </div>
+          <div class="form-group" style="margin-top: 20px">
+            <label for="group-permissions">权限范围</label>
+
+            <select id="group-permissions" name="group-permissions" class="selectpicker form-control show-tick " multiple data-size="10" title="请选择角色">
+              {% for one_permission in permissions %}   {# 1.将权限表里面的权限一一迭代出来 #}
+                {% if group and one_permission in group.permissions.all %}  {# 2.迭代出来是否group里面，有则选中 #}
+                  <option value="{{ one_permission.id }}" name="{{ one_permission }}" selected>
+                    {{ one_permission }}</option>
+                {% else %}
+                  <option value="{{ one_permission.id }}"
+                          name="{{ one_permission }}">{{ one_permission }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="box-footer">
+            <a href="/admin/group/" class="btn btn-primary pull-left" id="btn-close-group">关闭</a>
+          {% if group %}
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-edit-group"
+               data-id="{{ group.id }}">更新</a>
+          {% else %}
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-add-group">创建</a>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-zh_CN.min.js"></script>
+  <script src="{% static 'js/admin/user/group_manage.js' %}"></script>
+  <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+  </script>
+{% endblock %}

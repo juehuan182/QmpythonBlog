@@ -1,0 +1,109 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+    添加广告
+{% endblock %}
+
+{% block content_header %}
+    添加广告
+{% endblock %}
+
+{% block header_option_desc %}
+    添加广告
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/admin/base/bootstrap-datepicker.min.css' %}">
+
+    <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="advertising-name">广告名称(50个字以内)</label>
+                            <input type="text" class="form-control" id="advertising-name" name="advertising-name"
+                                   placeholder="请输入名称"  value="{{ advertising.name }}" autofocus>
+                    </div>
+
+                    <div class="form-group" id="container">
+                        <label for="advertising-image-url">广告图片URL地址（图片的宽度前三个大小850x340左右）</label>
+                        <div class="input-group">
+                                <input type="text" class="form-control" id="advertising-image-url" name="advertising-image-url"
+                                       placeholder="请上传广告图片或输入图片URL地址" value="{{ advertising.image_url }}">
+
+                            <div class="input-group-btn">
+                                <label class="btn btn-default btn-file">
+                                    上传至服务器 <input type="file" id="upload-image-server">
+                                </label>
+                                <button class="btn btn-info" id="upload-image-btn">上传至七牛云</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="progress" style="display: none">
+                            <div class="progress-image progress-bar progress-bar-striped progress-bar-animated" style="width: 0;">0%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="advertising-link-url">链接地址URL</label>
+                                <input type="text" class="form-control" id="advertising-link-url" name="advertising-link-url"
+                                       placeholder="请输入链接地址" value="{{ advertising.link_to }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="advertising-position">广告投放位置</label>
+                         <select name="advertising-position" id="advertising-position" class="form-control">
+                            <option value="0">-- 选择广告投放位置 --</option>
+                            {% for k,v in position_dict.items %}
+                                {% if k and k == advertising.position %}
+                                    <option value="{{ k }}" selected>{{ v }}</option>
+                                {% else %}
+                                    <option value="{{ k }}">{{ v }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="advertising-priority">优先级（1为最高级，依次类推）</label>
+                                <input type="text" class="form-control" id="advertising-priority" name="advertising-priority"
+                                       placeholder="请输入优先级" value="{{ advertising.sort }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="advertising-end-time">结束日期</label>
+                                <input type="text" class="form-control" id="advertising-end-time" name="advertising-end-time"
+                                   readonly=""    placeholder="请选择结束时间" value="{{ advertising.end_time|date:"Y-m-d"  }}">
+                    </div>
+
+                <div class="box-footer">
+                    {% if advertising %}
+                        <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-add-advertising"
+                           data-id="{{ advertising.id }}">修改 </a>
+                    {% else %}
+                        <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-add-advertising">添加 </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <!-- 七牛云 客户端 并不经过服务端 服务器需要提供 token -->
+    <script src="https://cdn.bootcss.com/plupload/2.1.9/moxie.min.js"></script>
+    <script src="https://cdn.bootcss.com/plupload/2.1.9/plupload.dev.js"></script>
+    <script src="https://cdn.bootcss.com/qiniu-js/1.0.17.1/qiniu.min.js"></script>
+    <!--一定要在下面 js 文件顺序很重要 -->
+    <script src="{% static 'js/admin/base/fqiniu.js' %}"></script>
+
+    <script src="{% static 'js/admin/base/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'js/admin/base/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    <script src="{% static 'js/admin/webSite/article_advertising_add.js' %}"></script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}
+
+

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load article_date_filter %}
+{% load static %}
+
+{% block title %}注册-全民python{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/user/bindLogin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ali_iconfont/iconfont.css' %}">
+{% endblock %}
+
+
+{% block banner %}
+{% endblock %}
+
+
+{% block grid-left %}
+    <div id="bind-login-box">
+        <div class="bind-login-title clearfix">
+            <h2>请登录你要关联的全民python账号</h2>
+            <a href="{% url 'user:register'%}?type=bind">关联新账号</a>
+        </div>
+        <div class="bind-login-fields">
+            <form method="post">
+                <div class="form-group">
+                   <i class="icon-yonghu1 iconfont"></i>
+                   <input type="text" name="username" class="form-control username-input" placeholder="用户名/邮箱">
+                </div>
+                <div class="form-group">
+                    <i class="icon-mima iconfont"></i>
+                    <input type="password" name="password" class="form-control password-input" placeholder="密码">
+                </div>
+                <div class="form-group">
+                    <a href="{% url 'user:resetPwd' %}" target="_blank">忘记密码</a>
+                </div>
+                <input type="hidden" class="hide-nickname" value="{{ nick_name }}">
+                <input type="hidden" class="hide-avatarurl" value="{{ avatar_url }}">
+                <input type="hidden" class="hide-openid" value="{{ open_id }}">
+                <input type="hidden" class="hide-logintype" value="{{ login_type }}">
+                <input type="button" class="bind-login-btn" value="立即登录">
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block grid-right %}
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/common/js_cookie.js' %}"></script>
+<script src="{% static 'js/user/bindLogin.js' %}"></script>
+{% endblock %}

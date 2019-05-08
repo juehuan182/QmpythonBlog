@@ -1,0 +1,70 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+    友情管理页
+{% endblock %}
+
+{% block content_header %}
+    友情管理
+{% endblock %}
+
+{% block header_option_desc %}
+    友情管理
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <button class="btn btn-primary pull-right" id="btn-add-friendlink">
+                        <i class="fa fa-plus"></i>
+                        添加友情链接
+                    </button>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>序列ID</th>
+                            <th>名称</th>
+                            <th>链接地址</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for one_friend_link in friend_links %}
+                                <tr data-id="{{ one_friend_link.id }}" data-name="{{ one_friend_link.name }}" data-link="{{one_friend_link.link_url}}">
+                                    <td>{{ one_friend_link.id }}</td>
+                                    <td>{{ one_friend_link.name }}</td>
+                                    <td>{{ one_friend_link.link_url }}</td>
+                                    <td>
+                                        <button class="btn btn-xs btn-warning btn-edit">
+                                            <i class="fa fa-edit"></i>
+                                            &nbsp;;编辑
+                                        </button>
+                                        <button class="btn btn-xs btn-danger btn-del">
+                                           <i class="fa fa-trash-o"></i>
+                                            &nbsp;&nbsp;删除
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/webSite/friend_link_manage.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}
+
+

@@ -1,0 +1,242 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+    文章发布页
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="/static/plugins/editor_md/css/editormd.css">
+{#    <link rel="stylesheet" href="{% static 'highlight/styles/solarized-dark.css' %}">#}
+    <style>
+        .add-tag-btn{
+            border: 1px solid #64C731;
+            background-color: #fff;
+            color: #64C731;
+            padding: 0 18px;
+            height: 35px;
+            line-height: 35px;
+            display: inline-block;
+            vertical-align: bottom;
+        }
+        .add-tag-btn:hover{
+            background-color: #64C731;
+            color: #fff;
+            border: 1px solid #64C731;
+        }
+
+        .editormd-fullscreen{
+            z-index: 9999!important;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block content_header %}
+    文章发布
+{% endblock %}
+
+{% block header_option_desc %}
+    书是人类进步的阶梯
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            <div class="box box-primary">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="article-title">文章标题：&nbsp;&nbsp;</label>
+                        {% if article %}
+                            <input type="text" class="form-control" id="article-title" name="article-title"
+                                   placeholder="请输入文章标题"
+                                   value="{{ article.title }}">
+                        {% else %}
+                            <input type="text" class="form-control" id="article-title" name="article-title"
+                                   placeholder="请输入文章标题" autofocus>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="article-keywords">关键词：（请用","分隔关键字）</label>
+                        {% if article %}
+                            <input type="text" class="form-control" id="article-keywords" name="article-keywords"
+                                   placeholder="请输入文章关键词" value="{{ article.keywords }}">
+                        {% else %}
+                            <input type="text" class="form-control" id="article-keywords" name="article-keywords"
+                                   placeholder="请输入文章关键词" autofocus>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="article-description">文章描述：&nbsp;&nbsp;</label>
+                        {% if article %}
+                            <textarea name="article-description" id="article-description" placeholder="请输入文章描述"
+                                      class="form-control" style="height: 8rem; resize: none;">{{ article.description }}</textarea>
+                        {% else %}
+                            <textarea name="article-description" id="article-description" placeholder="请输入文章描述"
+                                      class="form-control" style="height: 8rem; resize: none;"></textarea>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="article-category">所属分类：&nbsp;&nbsp;</label>
+                        <select name="article-category" id="article-category" class="form-control">
+                            <option value="0">-- 请选择所属分类 --</option>
+                            {% for one_category in categories %}
+                                <!-- 传category_id到后台 -->
+                                {% if categories and one_category == article.category %}
+                                    <option value="{{ one_category.id }}" selected>{{ one_category.name }}</option>
+                                {% else %}
+                                    <option value="{{ one_category.id }}">{{ one_category.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group" id="container">
+                        <label for="article-thumbnail-url">封面图(选填，大小约xxx)：&nbsp;&nbsp;</label>
+                        <div class="input-group">
+                            {% if article %}
+                                <input type="text" class="form-control" id="article-thumbnail-url"
+                                       name="article-thumbnail-url"
+                                       placeholder="请上传文章封面图或填写封面图引用地址" value="{{ article.cover_img }}">
+                            {% else %}
+                                <input type="text" class="form-control" id="article-thumbnail-url"
+                                       name="article-thumbnail-url"
+                                       placeholder="请上传文章封面图或填写封面图引用地址">
+                            {% endif %}
+
+                            <div class="input-group-btn">
+                                <label class="btn btn-default btn-file">
+                                    上传至服务器 <input type="file" id="upload-article-thumbnail">
+                                </label>
+                                <button class="btn btn-info" id="upload-btn">上传至七牛云</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="progress" style="display: none">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0;">0%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>文章内容：&nbsp;&nbsp;</label>
+                        {% if article %}
+                            <div id="article-content">
+                              <textarea name="content" style="display:none;">{{ article.content|safe }}</textarea> {# article-content-html-code #}
+                            </div>
+                        {% else %}
+                            <div id="article-content">
+                              <textarea name="content" style="display:none;"></textarea>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group" style="margin-top: 20px">
+                        <label for="article-tag">标签：(对于 windows：按住 Ctrl 按钮来选择多个选项；对于 Mac：按住 command 按钮来选择多个选项)</label>
+                        <select multiple class="form-control" name="article-tag" id="article-tag" style="width: 50%; height:200px; display: inline-block;">
+                            <option value="0">-- 从常用标签中选择 --</option>
+                            {% for one_tag in tags %}   {# 1.将权限表里面的权限一一迭代出来 #}
+                            {% if tags and one_tag in article.tag.all %}  {# 2.迭代出来是否group里面，有则选中 #}
+                              <option value="{{ one_tag.id }}" name="{{ one_tag.name }}" selected>
+                                {{ one_tag.name }}
+                              </option>
+                            {% else %}
+                              <option value="{{ one_tag.id }}" name="{{ one_tag.name }}">{{ one_tag.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
+                        <div style="display: inline-block;margin-left: 50px;">
+                             <span style="display: block">若左侧没有你想要的标签，则可以自定义添加标签</span>
+                            <button class="add-tag-btn">添加新标签</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    {% if article %}
+                        <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-add-article" data-article-id="{{ article.id }}">
+                            更新
+                        </a>
+                    {% else %}
+                        <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-add-article">
+                            发布
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript" src="/static/plugins/editor_md/examples/js/jquery.min.js"></script>
+
+    <script src="/static/plugins/editor_md/editormd.min.js"></script>
+    <script>
+        var testEditor;   // plugins中是如emoji表情支持、代码格式化等插件；
+        $(function () { //这个js直接写在在html中好处是，html可以用static， examples文件中是使用PHP做的所有示例(可以在文档编辑器里打开，并查看源代码
+            testEditor = editormd("article-content", { //div的值
+              placeholder : "此处开始编写您要发布的内容...",
+              width: "98%",   //编辑器大小官方默认90%
+              height: 900,
+              path: "/static/plugins/editor_md/lib/",  //lib中是editor.md所依赖的第三方js资源；
+              {#markdown: md,#}
+              codeFold: true, //ctrl+q代码折叠
+              saveHTMLToTextarea: true, // 后端要想获得textarea中的值，需要打开，设置true或false关乎后端是否可以获取到值；
+              searchReplace: true,
+              htmlDecode: "style,script,iframe|on*", // 开启 HTML 标签解析，为了安全性，默认不开启
+              emoji: true, //emoji表情，默认关闭
+              taskList: true, //  任务列表
+              tocm: true,         			// Using [TOCM]
+              tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+              flowChart: true,             // 开启流程图支持，默认关闭
+              sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+              //watch : false,  //默认预览是开启的，增加此配置则会关闭默认开启的预览
+              syncScrolling: true,
+              atLink    : true,    // disable @link
+              emailLink : true,    // disable email address auto link
+
+              {#dialogLockScreen : false,//设置弹出层对话框不锁屏，全局通用，默认为true#}
+              {#dialogShowMask : false,//设置弹出层对话框显示透明遮罩层，全局通用，默认为true#}
+              {#dialogDraggable : false,//设置弹出层对话框不可拖动，全局通用，默认为true#}
+              {#dialogMaskOpacity : 0.4, //设置透明遮罩层的透明度，全局通用，默认值为0.1#}
+              {#dialogMaskBgColor : "#000",//设置透明遮罩层的背景颜色，全局通用，默认为#fff            #}
+
+              /**上传图片相关配置如下*/
+              imageUpload: true,
+              imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+              imageUploadURL: "{% url 'admin:markdown_image_upload' %}",  // 注意你后端的上传图片服务地址
+
+              {#toolbarIcons : function() {#}
+              {#      return editormd.toolbarModes['userEdit'];#}
+              {#      // Or return editormd.toolbarModes[name]; // full, simple, mini#}
+              {#      // Using "||" set icons align right.#}
+              {#      //return ["undo", "redo", "|", "bold", "hr", "|", "preview", "watch", "|", "fullscreen", "info", "testIcon", "testIcon2", "file", "faicon", "||", "watch", "fullscreen", "preview", "testIcon"]#}
+              {#,#}
+
+              onload: function () { //上传成功之后的回调
+                {#console.log('onload', this);#}
+
+              }
+              {#/** 下面三个选项是设置风格的，每个有什么风格，请看下载插件得examples/themes.html,设置主题颜色 把这些注释去掉主题就是黑色的了*/#}
+              {#editorTheme: "pastel-on-dark",#} // 设置编辑页面风格
+              {#theme: "dark",#} // 工具栏风格
+              {#previewTheme: "dark"#} // 预览页面风格
+            });
+        });
+        //testEditor.setToolbarAutoFixed(true);
+        // 获取Markdown源码
+        //    var mdstr=testEditor.getMarkdown();
+   </script>
+
+    {# 导入七牛云需要的4个js文件 #}
+    <script src="https://cdn.bootcss.com/plupload/2.1.9/moxie.min.js"></script>
+    <script src="https://cdn.bootcss.com/plupload/2.1.9/plupload.dev.js"></script>
+    <script src="https://cdn.bootcss.com/qiniu-js/1.0.17.1/qiniu.min.js"></script>
+    {# 这3个js文件有依赖关系，fqiniu.js需要放在后面 #}
+    <script src="{% static 'js/admin/base/fqiniu.js' %}"></script>
+    <script src="{% static 'js/admin/article/add_article.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}
+

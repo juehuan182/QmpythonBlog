@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load article_date_filter %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/article/article_list.css' %}">
+{% endblock %}
+
+{% block banner %}
+    <div class="home-banner-left">
+            <ul class="banner-left-list">
+                {% for left_advertising in leftAdvertisings %}
+                   <li class="banner-left-item">
+                       <a href="{{ left_advertising.link_to }}">
+                           <img src="{{ left_advertising.image_url}}" class="banner-left-item-img">
+                           <div class="banner-left-item-info">
+                                <p class="banner-left-item-title">{{ left_advertising.name }}</p>
+                           </div>
+                       </a>
+                   </li>
+                {% empty %}
+                   <li>
+                       <a>
+                           <img src="/static/image/qmpython_banner.jpg" class="banner-left-item-img">
+                           <div class="banner-left-item-info">人生苦短，我用python</div>
+                       </a>
+                   </li>
+                {% endfor %}
+            </ul>
+            <ul class="banner-left-control-direction">
+                <li class="prev">&lt;</li>
+                <li class="next">&gt;</li>
+            </ul>
+            <ul class="banner-left-control-list">
+                {% for carouse in leftAdvertisings %}
+                    <li></li>
+                {% endfor %}
+            </ul>
+    </div>
+    <div class="home-banner-right">
+        <ul class="banner-right-list">
+            {% for right_advertising in rightAdvertisings %}
+                <li class="banner-right-item">
+                    <a href="{{ right_advertising.link_to }}" class="banner-right-item-article" target="_blank">
+                           <img class="banner-right-item-img" src="{{ right_advertising.image_url }}"/>
+                           <div class="banner-right-item-info">
+                               <p class="banner-right-item-title">{{ right_advertising.name }}</p>
+                           </div>
+                    </a>
+                </li>
+            {% empty %}
+                {% for right_item in  'x'|ljust:'4' %}
+                    <li class="banner-right-item">
+                        <a>
+                               <img class="banner-right-item-img" src="/static/image/qmpython_banner.jpg"/>
+                                <div class="shadow"></div>
+                               <div class="banner-right-title">人生苦短，我用python</div>
+                        </a>
+                    </li>
+                {% endfor %}
+
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block grid-left %}
+            <div class="title">
+                <h3>
+                    最新发布
+                </h3>
+            </div>
+            <div class="article-list">
+                {% for article in new_articles %}
+                    {% include 'article/article_list.html' %}
+                {% endfor %}
+            </div>
+
+            <div class="pagination loadmore">
+                <a href="javascript:void(0);" class="btn-more" data-page="2">点击查看更多</a>
+            </div>
+{% endblock %}
+
+{% block js %}
+{#    <script src="{% static 'js/common/js_cookie.js' %}"></script>#}
+    <script src="{% static 'js/index.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

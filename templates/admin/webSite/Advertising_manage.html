@@ -1,0 +1,111 @@
+{% extends 'admin/base.html' %}
+{% load advertising_filter %}
+{% load static %}
+
+{% block title %}
+  添加广告
+{% endblock %}
+
+{% block content_header %}
+  添加广告
+{% endblock %}
+
+{% block header_option_desc %}
+  添加广告
+{% endblock %}
+
+
+{% block content %}
+  <style>
+    .advertising-img {
+      width: 550px;
+      height: 220px;
+    }
+
+    .advertising-img img {
+      width: 100%;
+      max-height: 100%;
+    }
+
+    .advertising-info {
+      margin-left: 20px;
+    }
+
+    .form-group {
+      width: 450px;
+    }
+    ul.advertising-list{
+      list-style:none;
+      margin:0;
+      padding:0;
+    }
+    ul.advertising-list li.advertising-item{
+      margin-top: 20px;
+    }
+    @media screen and (max-width: 1100px) {
+      .form-group {
+        margin-top: 15px;
+      }
+
+      .advertising-info {
+        margin: 0;
+      }
+    }
+  </style>
+  <div class="row">
+    <div class="col-lg-12">
+      <button class="btn btn-primary pull-right" id="advertising-add-btn"><i class="fa fa-plus"></i> 添加广告</button>
+      <ul class="pull-left tips" style="line-height: 18px;">
+        <li>支持 JPG/PNG 格式的图片 最多可上传6张</li>
+        <li>图片的宽度前三个大小780x340左右1</li>
+      </ul>
+    </div>
+  </div>
+  <ul class="advertising-list">
+    {% for one_advertising in advertising_list %}
+
+      <li class="box advertising-item box-primary" data-advertising-id="{{ one_advertising.id }}">
+        <div class="box-body">
+            <p>广告名称：{{ one_advertising.name }}</p>
+
+          <div class="pull-left advertising-img">
+            <input type="file" name="advertising-image-select" style="display: none;">
+            <img src="{{ one_advertising.image_url }}" class="img-thumbnail advertising-image">
+          </div>
+          <div class="pull-left advertising-info">
+                <div class="form-group">
+                    <p>显示位置：{{ one_advertising.get_position_display }}</p>
+                    <p>链接地址：{{ one_advertising.link_to }}</p>
+                    <p>添加时间：{{ one_advertising.create_time | date:'Y-m-d H:i:s' }}</p>
+                    <p>结束日期：{{ one_advertising.end_time | date:'Y-m-d' }}</p>
+                    <p>显示状态：{{ one_advertising.is_delete | display_status  }}</p> {# 就是关键字 default和”:”之间不能有空格，否则就报错 #}
+                    <p>优先级：{{ one_advertising.sort }}</p>
+                    <p>点击量：{{ one_advertising.click_num }}</p>
+                </div>
+          </div>
+
+        </div>
+        <div class="box-footer text-right">
+           <button class="btn btn-xs btn-warning update-btn" data-id="{{ one_advertising.id }}">
+               <i class="fa fa-edit"></i>
+               &nbsp;编辑
+           </button>
+            <button class="btn btn-xs btn-danger delete-btn" data-id="{{ one_advertising.id }}">
+                <i class="fa fa-trash-o"></i>
+                &nbsp;删除
+            </button>
+
+        </div>
+      </li>
+
+    {% endfor %}
+
+  </ul>
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/admin/webSite/article_advertising.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load article_date_filter %}
+{% load static %}
+
+{% block title %}注册-全民python{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/user/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ali_iconfont/iconfont.css' %}">
+{% endblock %}
+
+
+{% block banner %}
+{% endblock %}
+
+
+{% block grid-left %}
+    <div id="register-box">
+        <div class="register-title clearfix">
+            {% if register_type == 'bind' %}
+                <h2>绑定新全民python账号</h2>
+            {% else %}
+                <h2>注册全民python，让学习更简单、更有趣</h2>
+                <a href="{% url 'user:login' %}">已有帐号， 立即登录</a>
+            {% endif %}
+        </div>
+        <div class="register-fields">
+            <form action="#" method="post">
+                <div class="form-group">
+                   <i class="icon-yonghu1 iconfont"></i>
+                   <input type="text" name="username" id="username" class="form-control" placeholder="请输入注册用户名，3~18位长度">
+                </div>
+                <div class="form-group">
+                    <i class="icon-youxiang1 iconfont"></i>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="请输入注册邮箱">
+                </div>
+                <div class="form-group">
+                    <i class="icon-mima iconfont"></i>
+                    <input type="password" name="password" class="form-control password-input" placeholder="设置密码，6~16位长度含数字和字母">
+                    <a href="javascript:void(0);" title="查看密码" class="view-password">
+                        <i class="icon-mimabukejian iconfont"></i>
+                    </a>
+                </div>
+                <div class="form-group">
+                    <div class="verifycode-box">
+                        <i class="icon-yanzhengma iconfont"></i>
+                        <input type="text" name="verifyCode" class="form-control verify-code" placeholder="请输入邮箱收到的验证码">
+                    </div>
+                    <input type="button" class="zc_yzm" value="发送验证码">
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="hdtype" value="{{ register_type }}">
+                    <input type="hidden" name="hdnickename" value="{{ nick_name }}">
+                    <input type="hidden" name="hdavatarurl" value="{{ avatar_url }}">
+                    <input type="hidden" name="hdsex" value="{{ sex }}">
+                    <input type="hidden" name="hdsignature" value="{{ signature }}">
+                    <input type="hidden" name="hdopenid" value="{{ open_id }}">
+                    <input type="hidden" name="hidelogintype" value="{{ login_type }}">
+                    <input type="button" class="register-button" value="注册">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="register-success" style="display: none">
+        <h3><i class="icon-zhucechenggong iconfont"></i>&nbsp;注册成功</h3>
+        <p><span>10</span>秒后自动跳转，若无法跳转，可点击按钮跳转</p>
+        <a href="/">点击跳转</a>
+    </div>
+{% endblock %}
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/user/register.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

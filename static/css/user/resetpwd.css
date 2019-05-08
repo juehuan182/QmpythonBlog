@@ -1,0 +1,203 @@
+.grid-left {
+    width: 100%;
+    text-align: center;
+    background: #fff;
+}
+
+.forget-pw-flow {
+    width: 80%;
+    border-bottom: 3px solid #e0e2e5;
+    margin: 0.6rem auto 1.6rem;
+}
+.forget-pw-flow ul{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.forget-pw-flow li{
+    float: left;
+    width: 30%;
+    line-height: 1.2rem;
+    color: #666;
+    font-size: 0.32rem;
+    padding-bottom: 0.1rem;
+    position: relative;
+}
+
+.forget-pw-flow li span{
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1rem;
+    color: #fff;
+    background-color: #e0e2e5;
+    border-radius: 50%;
+    margin-right: 0.3rem;
+}
+
+.forget-pw-flow li.active-line:after {
+    content: "";
+    background: #4786ff;
+    width: 100%;
+    height: 3px;
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+}
+
+.forget-pw-flow li.active-blue span{
+    background-color: #4786ff;
+    box-shadow: 0 0 10px 0 #4786ff;
+}
+
+.step-one,.step-two,.step-three{
+    width: 7rem;
+    margin:0 auto;
+}
+
+.step-one ul>li,.step-two-02 ul>li, .step-three ul>li{
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.step-one ul>li>i,.step-three ul>li>i{
+    line-height: 1;
+    position: absolute;
+    top: 0.24rem;
+    left: 0.24rem;
+    font-size: 20px;
+    color: #aaa;
+}
+
+input.username-email,input.password{
+    width:100%;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    padding-left: 40px;
+    background-color: #fff;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.username-email:focus {
+    border: 1px solid #1890ff;
+}
+
+.step-one ul li p{
+    color: #c3c5c7;
+}
+
+.step-one>ul>li>p>a{
+    color: #666;
+}
+
+.step-one>ul>li>p>a:hover{
+    color: #4786ff!important
+}
+
+.step-one-button,.step-two-button01,.step-two-button02,.step-three-button {
+    font-size: 16px;
+    color: #FFFFFF;
+    background: #4285F4;
+    border-radius: 2px;
+    width: 100%;
+    height: 0.8rem;
+    line-height: 0.8rem;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    box-shadow: 0 0 10px 1px #b5ceff;
+    margin: 0.4rem 0;
+}
+
+/*step two*/
+.step-two-01,.step-two-02{
+    text-align: left;
+}
+
+.step-two-01>p.p-txt-01,.step-two-02>p.p-txt-02 {
+    font-size: 18px;
+    color: #666;
+    line-height: 18px;
+    padding: 0 0 5px;
+}
+
+.step-two-01>i.c-gray{
+    color: #c3c5c7;
+    font-style: normal;
+}
+
+.step-two-01 .email-code,.step-two-02 .email-code{
+    color: #666;
+    padding-top: 12px;
+    line-height: 14px;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.step-two-02 ul>li{
+    position: relative;
+}
+
+.verifycode-email{
+    max-width: 5rem;
+}
+
+.verifycode-email>i{
+    line-height: 1;
+    position: absolute;
+    top: 14px;
+    left: 10px;
+    font-size: 20px;
+    color: #aaa;
+}
+
+.verifycode-email .verify-code{
+    width: 100%;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    padding: 6px 0 6px 40px;
+    background-color: #fff;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    outline: none;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.verify-code:focus{
+    border: 1px solid #1890ff;
+}
+.zc_yzm {
+    box-shadow: 0 0 10px 1px #b5ceff;
+    background: #4786ff;
+    color: #fff;
+    cursor: pointer;
+    width: 94px;
+    height: 0.9rem;
+    border: none;
+    border-radius: 2px;
+    margin-left: 0.1rem;
+    position: absolute;
+    top: 0;
+    right: 1px;
+}
+
+
+@media screen and (max-width: 760px) {
+    .forget-pw-flow li{
+        font-size: 0.2rem;
+        line-height: 0.9rem;
+    }
+    .forget-pw-flow li span{
+        width: 0.9rem;
+        height: 0.9rem;
+        line-height: 0.9rem;
+    }
+
+    .step-one, .step-two, .step-three{
+        width: 100%;
+    }
+
+}
+

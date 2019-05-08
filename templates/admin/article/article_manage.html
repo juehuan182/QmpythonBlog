@@ -1,0 +1,171 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+
+{% block title %}
+    文章管理页
+{% endblock %}
+{% block style %}
+
+{% endblock %}
+
+{% block content_header %}
+    文章管理
+{% endblock %}
+
+{% block header_option_desc %}
+    正确的决策来自众人的智慧
+{% endblock %}
+
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/admin/base/bootstrap-datepicker.min.css' %}">
+    <style>
+        .ml20 {
+            margin-left: 20px;
+        }
+        .mt20 {
+            margin-top: 20px;
+        }
+        .pagination>li>a.active{
+            background-color: #367fa9;
+            color: #fff;
+        }
+    </style>
+    <div class="box">
+        <div class="box header" style="margin: 0;">
+            <form action="" class="form-inline">
+                <div class="form-group ml20 mt20">
+                    <label for="select-time">时间：</label>
+                        <input type="text" class="form-control" placeholder="请选择起始时间" readonly
+                               id="select-time" name="start_time" value="{{ start_time|date:"Y-m-d" }}">
+                    -
+                        <input type="text" class="form-control" placeholder="请选择结束时间" readonly
+                               name="end_time" value="{{ end_time|date:"Y-m-d"  }}">
+                </div>
+                <div class="form-group ml20 mt20">
+                    <label for="title">标题：</label>
+                    <input type="text" class="form-control" placeholder="请输入标题" id="title" name="title"
+                               value="{{ title }}">
+                </div>
+                <div class="form-group ml20 mt20">
+                    <label for="author">作者：</label>
+                        <input type="text" class="form-control" placeholder="请输入作者" id="author" name="author_name"
+                               value="{{ author_name }}">
+                </div>
+                <div class="form-group ml20 mt20">
+                    <label for="category">分类：</label>
+                    <select class="form-control" id="category" name="category_id">
+                        <option value="0">请选择分类</option>
+                        {% for one_category in categories %}
+
+                            {% if category_id and one_category.id == category_id %}
+                                <option value="{{ one_category.id }}" selected>{{ one_category.name }}</option>
+                            {% else %}
+                                <option value="{{ one_category.id }}">{{ one_category.name }}</option>
+                            {% endif %}
+
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group ml20 mt20">
+                    <button class="btn btn-primary">查询</button>
+                    <a href="#" class="btn btn-info ml20">清除查询</a>
+                </div>
+            </form>
+            <button class="btn btn-primary pull-right" id="btn-add-article">
+                <i class="glyphicon glyphicon-edit"></i>
+                        写文章
+            </button>
+        </div>
+        <div class="box-body">
+            <table id="assets_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>文章标题</th>
+                    <th>分类</th>
+                    <th>作者</th>
+                    <th>发布时间</th>
+                    <th>访问量</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for one_article in articles_info.object_list %}
+                    <tr>
+                        <td><a href="{% url 'articles:article_detail' one_article.id %}" target="_blank">{{ one_article.title }}</a></td>
+                        <td>{{ one_article.category.name }}</td>
+                        <td>{{ one_article.author.username }}</td>
+                        <td>{{ one_article.create_time }}</td>
+                        <td>{{ one_article.read_num }}</td>
+                        <td>
+                            <a href="{% url 'admin:article_edit' one_article.id %}" class="btn btn-xs btn-warning">编辑</a>
+                            <a href="javascript:void (0);" class="btn btn-xs btn-danger btn-del"
+                               data-article-id="{{ one_article.id }}">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer">
+            <span class="pull-left">第{{ articles_info.number }}页/总共{{ articles_info.paginator.num_pages }}页</span>
+                <!-- 分页 -->
+                <nav aria-label="Page navigation" class="pull-right">
+                  <ul class="pagination">
+                    {% if articles_info.has_previous %} {# 判断是否有上一页#}
+                        <li>
+                          <a href="?page={{ articles_info.previous_page_number }}&{{ other_param }}" aria-label="Previous">
+                            <span aria-hidden="true">上一页</span>
+                          </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                          <span>
+                            <span aria-hidden="true">上一页</span>
+                          </span>
+                        </li>
+                    {% endif %}
+                    {% for page in articles_info.pages %} {# 判断剩余页面的显示方法 #}
+                        {% if page %}
+                            {% ifequal page articles_info.number %} {# 判断是否当前页，设置样式，number当前页的页码 #}
+                                <li class="active">
+                                  <span>{{ page }}<span class="sr-only">(current)</span></span>
+                                </li>
+                            {% else %}
+                                <li><a href="?page={{ page }}&{{ other_param }}">{{ page }}</a></li>
+                            {% endifequal %}
+                        {% else %}
+                             <li class="none"><a href="">...</a> </li>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- 下一页 -->
+                    {% if articles_info.has_next %} {# 判断是否有下一页 #}
+                        <li>
+                          <a href="?page={{ articles_info.next_page_number }}&{{ other_param }}" aria-label="Next">
+                            <span aria-hidden="true">下一页</span>
+                          </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                          <span>
+                            <span aria-hidden="true">下一页</span>
+                          </span>
+                        </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/base/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'js/admin/base/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    <script src="{% static 'js/admin/article/article_manage.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

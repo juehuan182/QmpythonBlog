@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+
+{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block css %}
+    <style>
+        .banner {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'css/article/article_list.css' %}">
+    <link rel="stylesheet" media="(max-width:760px)" href="{% static 'css/article/category.css' %}">
+{% endblock %}
+
+{% block banner %}
+
+{% endblock %}
+
+{% block grid-left %}
+<div class="title">
+    <h3 class="clearfix">
+        分类：<strong>{{ category.name }}</strong>
+        <span>共有<strong>{{ articles_info.paginator.count }}</strong>篇文章</span>
+    </h3>
+</div>
+{% for article in articles_info.object_list %} {# 第page分页对象的元素列表，做分页获取数据要调用 .object_list #}
+    {% include 'article/article_list.html' %}
+{% empty %} {# 在for循环之前检查列表大小是常见的，当列表为空的时候给出特别提示，这是常见的，所以for支持可选empry来当为空时输出 #}
+    <div class="">没有相关内容</div>
+{% endfor %}
+<div class="pagination">
+    <ul>
+        {% if articles_info.has_previous %} {# 判断是否有上一页#}
+            <li style="color: #c8cdd2;"><a href="?page=1">首页</a></li>
+            <li style="color: #c8cdd2;"><a href="?page={{ articles_info.previous_page_number }}">上一页</a>
+            </li>
+            {# previous_page_number上一页页码#}
+        {% endif %}
+        {% for page in articles_info.pages %} {# 判断剩余页面的显示方法#}
+            {% if page %}
+                {% ifequal page articles_info.number %} {# 判断是否当前页，设置样式，number当前页的页码#}
+                    <li><a class="current-page" href="?page{{ page.querystring }}">{{ page }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ page }}">{{ page }}</a></li>
+                {% endifequal %}
+            {% else %}
+                <li><a href="">...</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if articles_info.has_next %} {# 判断是否有下一页#}
+            <li><a href="?{{ articles_info.next_page_number.querystring }}">下一页</a></li>
+            {# next_page_number下一页的页码#}
+            <li><a href="?page={{ articles_info.paginator.num_pages }}">尾页</a></li> {# num_pages页面总数#}
+        {% endif %}
+        <li><span>共{{ articles_info.paginator.num_pages }}页</span></li>
+        {# count计算集合元素个数 #}
+    </ul>
+</div>
+{% endblock %}

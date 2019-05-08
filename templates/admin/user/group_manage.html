@@ -1,0 +1,91 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  角色管理页
+{% endblock %}
+
+{% block content_header %}
+    角色管理页
+{% endblock %}
+
+{% block header_option_desc %}
+    角色管理页
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-header">
+            <a href="{% url 'admin:group_add' %}" class="btn btn-primary pull-right btn-add-group">
+               <i class="fa fa-plus"></i>
+                添加角色
+            </a>
+        </div>
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>角色名</th>
+              <th>组员数</th>
+              <th>拥有权限</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            <tr>
+                <td>0</td>
+                <td>超级管理员</td>
+                <td>1</td>
+                <td>拥有至高无上的权利，管理所有的管理员</td>
+                <td>
+                    <a href="javascript:void(0);" class="btn btn-xs btn-default" disabled>
+                                <i class="fa fa-edit"></i>
+                                  &nbsp;编辑
+                              </a>
+                    <button class="btn btn-xs btn-default" disabled>
+                                      <i class="fa fa-trash-o"></i>
+                                      &nbsp;删除
+                                  </button>
+                </td>
+            </tr>
+
+            {% for one_group in groups %}
+              <tr data-id="{{ one_group.id }}" data-name="{{ one_group.name }}">
+                <td>{{ one_group.id }}</td>
+                <td>{{ one_group.name }}</td>
+                <td>{{ one_group.num_users }}</td>
+                {% if one_group.permissions.all %}
+                    <td><a href="{% url 'admin:group_view' one_group.id %}">查看权限</a></td>
+                {% else %}
+                    <td><a href="{% url 'admin:group_edit' one_group.id %}">分配权限</a></td>
+                {% endif %}
+                <td>
+                    <a href="{% url 'admin:group_edit' one_group.id %}" class="btn btn-xs btn-warning btn-edit">
+                                            <i class="fa fa-edit"></i>
+                                            &nbsp;&nbsp;编辑
+                    </a>
+                    <button class="btn btn-xs btn-danger btn-del">
+                                           <i class="fa fa-trash-o"></i>
+                                            &nbsp;&nbsp;删除
+                    </button>
+                </td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/admin/user/group_manage.js' %}"></script>
+  <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+  </script>
+{% endblock %}

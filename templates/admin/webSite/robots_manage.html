@@ -1,0 +1,69 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  Robots页面
+{% endblock %}
+
+{% block content_header %}
+  Robots页面
+{% endblock %}
+
+{% block header_option_desc %}
+  Robots设置
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+            <div class="form-group ml20 mt20">
+                 <div class="show-msg" style="margin-top: 15px;">
+                    样式如：<br/>
+                    User-agent: *<br/>
+                    Disallow: /search.html<br/>
+                    Disallow: /404.htm<br/>
+                    Sitemap: http://www.xxx.com/sitemap.xml<br/>
+                </div>
+            </div>
+            <div class="form-group ml20 mt20">
+                    上次更新时间:{{ modify_time|date:'Y-m-d H:i:s' }}
+                    <a href="{% url 'robots' %}" target="_blank" class="">点击预览robots.txt</a>
+            </div>
+            <div class="form-group ml20 mt20">
+               <label class="layui-form-label" style="position: relative;bottom:180px;">Robots内容</label>
+                <textarea name="robots" class="robots-textarea" style="width:400px;" rows="10">User-agent: *Disallow: *</textarea>
+            </div>
+            <div class="form-group ml20 mt20">
+                <button class="btn btn-primary btn-add">确认提交</button>
+            </div>
+
+        </div>
+        <div class="box-footer">
+            <div class="show-msg">
+                    <strong>使用说明</strong><br>
+                    <p>提交后，如果发现页面内容未发现变化，可能是因为缓存的缘故，请对robots.txt页面进行刷新。</p>
+            </div>
+            <div class="show-msg">
+                <strong>功能介绍</strong><br>
+                <p style="white-space: normal;">1、robots.txt可以告诉百度您网站的哪些页面可以被抓取，哪些页面不可以被抓取。</p>
+                <p style="white-space: normal;">2、您可以通过Robots工具来创建、校验、更新您的robots.txt文件。</p>
+            </div>
+            <div class="show-msg">
+                <strong>注意事项</strong><br>
+                <p>1、当允许全站都被收录时，可以默认屏蔽搜索结果页以及404页面。</p>
+                <p>2、请在robots.txt文件里，放入网站地图sitemap。</p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/webSite/robots_manage.js' %}"></script>
+    <script type="text/javascript">
+      $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}
