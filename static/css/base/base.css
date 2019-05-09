@@ -437,11 +437,11 @@ body > header {
 .grid {
     width: 100%;
     padding-bottom: 100px;
-    margin: 30px auto;
+    margin: 25px auto;
 }
 
 .grid-left {
-    width: 70%;
+    width: 69%;
 }
 
 .grid-right {

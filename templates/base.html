@@ -1,5 +1,5 @@
 {% load base_simple_tags %}
-{% load message_reminder_filter %}
+{% load message_reminder_tag %}
 {% load static %}
 <!doctype html>
 <html>
@@ -272,7 +272,7 @@
                 </div>
                 <div class="widget hot-article">
                     <h3>热门文章</h3>
-                    {% get_hot_articles as hot_articles %}
+                    {% get_hot_articles 5 as hot_articles %}
 
                     <ul>
                         {% for article in hot_articles %}
@@ -329,7 +329,8 @@
                     <ul class="clearfix">
                         {% get_total_article as total_article %}
                         <li>文章总数：{{ total_article }}篇</li>
-                        <li>分类总数：{{ tags.count }}</li>
+                        {% get_categories as total_category %}
+                        <li>分类总数：{{ total_category }}</li>
                         {% get_access_nums as access_nums %}
                         <li>访问总数：{{ access_nums }}次</li>
                         <li>本网站已运行：<span class="runTime">0天</span></li>
@@ -488,8 +489,8 @@
         <div class="search-history search-hot">
             <strong>热搜词</strong>
             <ul>
-               <li class="transition"><a href="/search.html?s=黑洞">黑洞</a></li>
-               <li class="transition"><a href="/search.html?s=宇宙">宇宙</a></li>
+               <li class="transition"><a href="/search.html?s=python基础">python基础</a></li>
+               <li class="transition"><a href="/search.html?s=DJANGO">DJANGO</a></li>
                <li class="transition"><a href="/search.html?s=咖啡">咖啡</a></li>
                <li class="transition"><a href="/search.html?s=天文学">天文学</a></li>
                <li class="transition"><a href="/search.html?s=高铁">高铁</a></li>

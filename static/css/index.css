@@ -1,12 +1,12 @@
 .banner {
-    height: 340px;
+    height: 320px;
     min-height: 340px;
 }
 
 .home-banner-left {
     float: left;
     overflow: hidden;
-    width: 70%;
+    width: 69%;
     height: 100%;
     position: relative;
     /*border-radius: 2px;*/
@@ -280,7 +280,7 @@ article.excerpt-minic-index {
         padding-left: 0.3rem;
     }
     div.home-banner-left ul.banner-left-control-list {
-        left: 86%;
+        left: 4%;
     }
 
     div.home-banner-left ul.banner-left-control-list > li {
@@ -292,26 +292,39 @@ article.excerpt-minic-index {
         height: 4rem;
     }
 
-    /*div.home-banner-right {*/
-        /*width: 100%;*/
-        /*margin-left: 0;*/
-        /*margin-top: 5px;*/
-
-    /*}*/
-
-    .banner-right-item:first-child {
-        margin-right: 5px;
+    div.banner-left-item-info {
+        top: 48%;
     }
 
-    div.banner-right-item{
+
+    div.banner-left-item-info .banner-left-item-title {
+        font-size: 0.28rem;
+    }
+
+    div.home-banner-right {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+
+    }
+
+    .home-banner-left ul.banner-left-control-list > li{
+        width: 0.4rem;
+    }
+
+
+    /*.banner-right-item:first-child {*/
+        /*margin-right: 5px;*/
+    /*}*/
+
+    .banner-right-item{
         float: left;
         width: 49.2%;
         height: 120px;
     }
 
-    a > div.banner-right-title {
-        top: 30%;
-        font-size: 0.29rem;
+    .banner-right-item-title {
+        font-size: 12px;
     }
 
 

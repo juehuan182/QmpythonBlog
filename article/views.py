@@ -80,6 +80,17 @@ class ArticleDetailView(View):
         # 浏览量增加article自动完成
         article.increase_views()
 
+        # 将阅读数也添加到redis中
+        from django_redis import get_redis_connection
+
+        conn_redis = get_redis_connection('default')
+        # total_views = conn_redis.incr('article_{}_views'.format(article_id)) # incr 将 key 中储存的数字值增一。
+
+        # zincrby的原型是zincrby(name,amount,value):根据amount所设定的步长值增加有序集合（name）中的value的数值
+        # 实现了article_ranking中的article.id以步长1自增
+        # 即访问文章一次, article_ranking就将文章ID的值增1
+        conn_redis.zincrby('article_ranking', 1, article.id)
+
         # 上一篇，按照降序desc，将大于当前id过滤掉，即获取小于id的，然后用first获得第一个
         pre_article = Article.objects.only('title').order_by("-id").filter(id__lt=article_id).first()
         # 下一篇文章,升序asc，将小于当前id的过滤掉，取大于id的
@@ -119,7 +130,7 @@ class ArticleDetailView(View):
                        'article': article, 'pre_article': pre_article,
                        'next_article': next_article, 'relate_articles': relate_articles,
                        'comments_dict': comments_dict, 'humans_dict': humans_dict,
-                       'is_login': is_login
+                       'is_login': is_login,
                    }
 
         # 后台传给js获取值，视图函数中的字典或列表要用 json.dumps()处理。在模板上可能要加 safe 过滤器。

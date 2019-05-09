@@ -183,3 +183,52 @@ moreBtn.onclick =  function () {
     };
 };
 
+
+
+//统计网站运行时间
+function webRunning_time() {
+    var startTime = new Date("2018-11-01 00:49:00");
+    /*网站开始运行时间*/
+    var nowTime = new Date();
+    /*获取系统当前时间*/
+    var millisecondInterval = (nowTime.getTime() - startTime.getTime());
+    /*两个时间差毫秒数*/
+    var e_yearsold = millisecondInterval / (12 * 30 * 24 * 60 * 60 * 1000);
+    /*年*/
+    var yearsold = Math.floor(e_yearsold);
+    /*向下取整*/
+    var e_monthsold = (e_yearsold - yearsold) * 12;
+    /*将求整之后的余数求月*/
+    var monthsold = Math.floor(e_monthsold);
+    /*月*/
+    var e_daysold = (e_monthsold - monthsold) * 30;
+    var daysold = Math.floor(e_daysold);
+    /*日*/
+    var e_hrsold = (e_daysold - daysold) * 24;
+    var hrsold = Math.floor(e_hrsold);
+    /*时*/
+    var e_minsold = (e_hrsold - hrsold) * 60;
+    var minsold = Math.floor((e_hrsold - hrsold) * 60);
+    /*分*/
+    var seconds = Math.floor((e_minsold - minsold) * 60);
+    /*秒*/
+    var runTimes = document.querySelector(".site-statistics .runTime");
+    runTimes.innerHTML = "<span>" + yearsold + "年" + monthsold + "月" + daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
+
+    if (yearsold === 0) {
+        runTimes.innerHTML = "<span>" + monthsold + "月" + daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
+    }
+    if (monthsold === 0) {
+        runTimes.innerHTML = "<span>" + daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
+
+    }
+    if (daysold === 0) {
+        runTimes.innerHTML = "<span>" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
+    }
+}
+
+webRunning_time();
+/*刚开始先调用这个函数*/
+setInterval(webRunning_time, 1000); //隔1秒一直不停地 在执行*/
+
+

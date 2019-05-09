@@ -16,48 +16,83 @@ logger = logging.getLogger('qmpython')
 # @cache_page(60)
 # 单个view视图缓存，如果视图中有其他不一样，比如有些数据，因不同人不一样，则用单个视图的方式不行，因为都缓存了
 # 可以用底层操作cache，如以下set，get方式
+# def index(request):
+#     # 尝试从缓存中获取数据，如果没有返回None，那么从数据库查询存放到cache中
+#     context = cache.get('index_page_data')
+#     if context is None:
+#         # print('设置缓存') #测试是否生效
+#         # 获取文章
+#         articles = Article.objects.only('id', 'cover_img', 'category', 'title', 'author', 'create_time',
+#                                         'read_num', 'like_num').order_by('-create_time')  # 逆序排列
+#         # 最新发布
+#         new_articles = articles[0:settings.ONE_PAGE_COUNT]
+#         # 轮播图
+#         Advertisings = Advertising.objects.only('id').filter(is_delete=False)
+#         leftAdvertisings = Advertisings.filter(position='top_left')
+#         rightAdvertisings = Advertisings.filter(position='top_right')
+#
+#         # 获取首页标题，META关键词，META描述
+#         import configparser
+#         import os
+#         config = configparser.ConfigParser()
+#         conf_path = os.path.join(settings.BASE_DIR, 'util', 'web_info.ini')
+#         config.read(conf_path, encoding='utf-8')
+#         section_node = config.sections()[0]
+#         web_title = config.get(section_node, "WEB_SITE_TITLE")
+#         web_keywords = config.get(section_node, "WEB_SITE_KEYWORDS")
+#         web_desc = config.get(section_node, "WEB_SITE_DESC")
+#
+#         context = {'new_articles': new_articles,
+#                    'leftAdvertisings': leftAdvertisings,
+#                    'rightAdvertisings': rightAdvertisings,
+#                    'web_title': web_title,
+#                    'web_keywords': web_keywords,
+#                    'web_desc': web_desc
+#                    }
+#
+#         # 设置缓存
+#         # key value timeout
+#         cache.set('index_page_data', context, 1)
+#
+#     # 如果有千人千面数据出现，则可以通过字典的update更新数据
+#     #context.update('people': people)
+#
+#     return render(request, 'index.html', context=context)
+
+
 def index(request):
-    # 尝试从缓存中获取数据，如果没有返回None，那么从数据库查询存放到cache中
-    context = cache.get('index_page_data')
-    if context is None:
-        # print('设置缓存') #测试是否生效
-        # 获取文章
-        articles = Article.objects.only('id', 'cover_img', 'category', 'title', 'author', 'create_time',
-                                        'read_num', 'like_num').order_by('-create_time')  # 逆序排列
-        # 最新发布
-        new_articles = articles[0:settings.ONE_PAGE_COUNT]
-        # 轮播图
-        Advertisings = Advertising.objects.only('id').filter(is_delete=False)
-        leftAdvertisings = Advertisings.filter(position='top_left')
-        rightAdvertisings = Advertisings.filter(position='top_right')
+    # print('设置缓存') #测试是否生效
+    # 获取文章
+    articles = Article.objects.only('id', 'cover_img', 'category', 'title', 'author', 'create_time',
+                                    'read_num', 'like_num').order_by('-create_time')  # 逆序排列
+    # 最新发布
+    new_articles = articles[0:settings.ONE_PAGE_COUNT]
+    # 轮播图
+    Advertisings = Advertising.objects.only('id').filter(is_delete=False)
+    leftAdvertisings = Advertisings.filter(position='top_left')
+    rightAdvertisings = Advertisings.filter(position='top_right')
 
-        # 获取首页标题，META关键词，META描述
-        import configparser
-        import os
-        config = configparser.ConfigParser()
-        conf_path = os.path.join(settings.BASE_DIR, 'util', 'web_info.ini')
-        config.read(conf_path, encoding='utf-8')
-        section_node = config.sections()[0]
-        web_title = config.get(section_node, "WEB_SITE_TITLE")
-        web_keywords = config.get(section_node, "WEB_SITE_KEYWORDS")
-        web_desc = config.get(section_node, "WEB_SITE_DESC")
+    # 获取首页标题，META关键词，META描述
+    import configparser
+    import os
+    config = configparser.ConfigParser()
+    conf_path = os.path.join(settings.BASE_DIR, 'util', 'web_info.ini')
+    config.read(conf_path, encoding='utf-8')
+    section_node = config.sections()[0]
+    web_title = config.get(section_node, "WEB_SITE_TITLE")
+    web_keywords = config.get(section_node, "WEB_SITE_KEYWORDS")
+    web_desc = config.get(section_node, "WEB_SITE_DESC")
 
-        context = {'new_articles': new_articles,
-                   'leftAdvertisings': leftAdvertisings,
-                   'rightAdvertisings': rightAdvertisings,
-                   'web_title': web_title,
-                   'web_keywords': web_keywords,
-                   'web_desc': web_desc
-                   }
-
-        # 设置缓存
-        # key value timeout
-        cache.set('index_page_data', context, 1)
-
-    # 如果有千人千面数据出现，则可以通过字典的update更新数据
-    #context.update('people': people)
+    context = {'new_articles': new_articles,
+               'leftAdvertisings': leftAdvertisings,
+               'rightAdvertisings': rightAdvertisings,
+               'web_title': web_title,
+               'web_keywords': web_keywords,
+               'web_desc': web_desc
+               }
 
     return render(request, 'index.html', context=context)
+
 
 
 def column(request, column_id):
