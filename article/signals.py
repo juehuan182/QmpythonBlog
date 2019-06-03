@@ -7,14 +7,14 @@ from article.models import Comment, CommentNotification
 # 第一步，编写receiver并绑定到signal
 
 @receiver(post_save, sender=Comment, dispatch_uid="comment_post_save") #dispatch_uid 确保此receiver 只调用一次
-def notify_handler(sender, **kwargs):
+def notify_handler(sender, instance=None, created=False, **kwargs):
     # print('消息通知')
-    current_instance = kwargs.get('instance')
+    current_instance = instance
     the_article = current_instance.article
     create_p = current_instance.user
 
     # True if a new record was created.判断是否创建评论了
-    if kwargs.get('created', False):
+    if created:
         if current_instance.parent_id: #如果评论是一个回复评论，则同时通知给文章作者和回复的评论人，如果2者相等，则只通知一次
             if the_article.author == current_instance.parent.user:
                 get_p = current_instance.parent.user

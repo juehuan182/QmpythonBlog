@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}全民python-店铺演示{% endblock %}
+
+{% block description %}全民pythn-店铺演示{% endblock %}
+
+{% block keywords %}店铺演示 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/shop/goods_category.css' %}">
+{% endblock %}
+
+{% block banner %}
+
+{% endblock %}
+
+
+{% block grid-left %}
+    <div class="goods-category-wrap">
+        <div class="goods-category-header clearfix">
+            <div class="goods-category-title fl"><span>{{ category.name }}</span></div>
+            <div class="sort_bar fl">
+                <a href="{% url 'shop:goods_categories' category.id %}?sort=default" {% if sort == 'default' %} class="active" {% endif %}>默认</a>
+                <a href="{% url 'shop:goods_categories' category.id %}?sort=price" {% if sort == 'price' %}class="active" {% endif %}>价格</a>
+                <a href="{% url 'shop:goods_categories' category.id %}?sort=hot" {% if sort == 'hot' %}class="active" {% endif %}>热销</a>
+			</div>
+        </div>
+        {% include 'shop/goods_list.html' %}
+    </div>
+    {% include 'base/pagination_page.html' %}
+
+{% endblock %}
+
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/shop/shop.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

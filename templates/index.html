@@ -2,6 +2,8 @@
 {% load article_date_filter %}
 {% load static %}
 
+
+
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/article/article_list.css' %}">
@@ -20,12 +22,16 @@
                        </a>
                    </li>
                 {% empty %}
-                   <li>
-                       <a>
+                   <li class="banner-left-item">
+                       <a href="#">
                            <img src="/static/image/qmpython_banner.jpg" class="banner-left-item-img">
-                           <div class="banner-left-item-info">人生苦短，我用python</div>
+                           <div class="banner-left-item-info">
+                                <p class="banner-left-item-title">人生苦短，我用python</p>
+                           </div>
                        </a>
                    </li>
+
+
                 {% endfor %}
             </ul>
             <ul class="banner-left-control-direction">
@@ -35,6 +41,9 @@
             <ul class="banner-left-control-list">
                 {% for carouse in leftAdvertisings %}
                     <li></li>
+                {% empty %}
+                    <li></li>
+
                 {% endfor %}
             </ul>
     </div>
@@ -52,10 +61,11 @@
             {% empty %}
                 {% for right_item in  'x'|ljust:'4' %}
                     <li class="banner-right-item">
-                        <a>
-                               <img class="banner-right-item-img" src="/static/image/qmpython_banner.jpg"/>
-                                <div class="shadow"></div>
-                               <div class="banner-right-title">人生苦短，我用python</div>
+                        <a href="#" class="banner-right-item-article" target="_blank">
+                               <img class="banner-right-item-img" src="/static/image/qmpython_banner-right.jpg"/>
+                               <div class="banner-right-item-info">
+                                   <p class="banner-right-item-title">人生苦短，我用python</p>
+                               </div>
                         </a>
                     </li>
                 {% endfor %}
@@ -78,7 +88,7 @@
             </div>
 
             <div class="pagination loadmore">
-                <a href="javascript:void(0);" class="btn-more" data-page="2">点击查看更多</a>
+                <a href="javascript:void(0);" class="btn-more" data-page="2">查看更多</a>
             </div>
 {% endblock %}
 

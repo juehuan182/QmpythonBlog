@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}全民python-店铺演示{% endblock %}
+
+{% block description %}全民pythn-店铺演示{% endblock %}
+
+{% block keywords %}店铺演示 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/shop/order.css' %}">
+{% endblock %}
+
+{% block banner %}
+
+{% endblock %}
+
+{% block grid-left %}
+    <div class="order-info">
+        <div class="order-address">
+            <div>
+                <h3>选择收获地址</h3>
+            </div>
+            <ul class="addr-list">
+                {% for one_address in addrs %}
+                    <li class="addr-list-item">
+                        <span><input type="radio" name="address_radio" value="{{ one_address.id }}" {% if one_address.is_default %} checked {% endif %}></span>
+                        <span class="addr-name" limit="6" title="{{ one_address.receiver }}">{{ one_address.receiver }}</span>
+                        <span class="addr-info" limit="45">{{ one_address.address }}</span>
+                        <span class="addr-tel">{{ one_address.phone }}</span>
+                    </li>
+                {% endfor %}
+
+            </ul>
+            <div class="address-manage">
+                <a href="">新增收货地址</a>
+                <a href="">管理收货地址</a>
+            </div>
+        </div>
+        <div class="order-pay-method">
+            <h3>支付方式</h3>
+            <ul class="payment-list clearfix">
+                <li data-pay-method="1">
+                    <p>
+                        <i></i>货到付款
+                        <b></b>
+                    </p>
+                </li>
+                <li data-pay-method="2" class="selected">
+                    <p class="alipay">
+                        <i class="iconfont icon-zhifubao1"></i>
+                        支付宝
+                        <b></b>
+                    </p>
+                </li>
+                <li data-pay-method="3">
+                    <p class="wxpay">
+                        <i class="iconfont icon-weixin"></i>
+                        微信支付
+                        <b></b>
+                    </p>
+                </li>
+            </ul>
+        </div>
+        <div class="order-list">
+            <h3>确认清单信息</h3>
+                    <div class="order-warp">
+                        <ul class="order-thead clearfix">
+                            <li class="col01">商品名称</li>
+                            <li class="col02">商品单价</li>
+                            <li class="col03">数量</li>
+                            <li class="col04">小计</li>
+                        </ul>
+
+                        <div class="order-detail-list">
+                        {% for goods_sku in sku_list %}
+                            <ul class="order-detail-item clearfix">
+                                <li class="col01"><img src="{{ goods_sku.image }}"></li>
+                                <li class="col02">{{ goods_sku.name }} </li>
+                                <li class="col03">{{ goods_sku.price }}元</li>
+                                <li class="col04">
+                                   {{ goods_sku.count }}
+                                </li>
+                                <li class="col05"><strong>¥{{ goods_sku.amount }}</strong></li>
+                            </ul>
+                        {% endfor %}
+                        </div>
+                     </div>
+
+        </div>
+        <div class="order-pay-info">
+            <div>
+                <span class="total-goods-count"><em class="ftx-01">{{ total_count }}</em> 件商品，总商品金额：</span>
+                <em class="total-goods-price">￥{{ total_price }}</em>
+            </div>
+            <div class="freight-box">运费：<span class="freight">￥{{ transit_price }}</span></div>
+            <div>应付总金额：<span class="total-paymoney">￥{{ total_pay }}</span></div>
+            <div class="fc-consignee-info">
+                <span class="mr20" id="sendAddr" style="margin-right: 10px;">寄送至： xxxx</span>
+                <span id="sendMobile">收货人：xxx ***</span>
+            </div>
+        </div>
+        <div class="commit-order">
+            <button class="commit-btn" sku_ids="{{ sku_ids }}">提交订单</button>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/shop/order.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

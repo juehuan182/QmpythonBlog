@@ -6,40 +6,23 @@ import markdown
 
 
 from django.conf import settings
+
+from db.base_model import ModelBase
 from user.models import Account
 
 # Create your models here.
 
-# 基类
-class ModelBase(models.Model):
-    """
-    """
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间") # 设置为True时，会在model对象第一次被创建时，将字段的值设置为创建时的时间，以后修改对象时，字段的值不会再更新。
-    update_time = models.DateTimeField(auto_now=True, verbose_name="更新时间") # 最后修改时间，每次添加或修改，都会自动更新，无法程序中手动为字段赋值
-    is_delete = models.BooleanField(default=False, verbose_name="是否删除")
-
-    class Meta:
-        # 为抽象模型类, 用于其他模型来继承，数据库迁移时不会创建ModelBase表
-        abstract = True
-
-'''
-这里有几点要特别说明：
-抽象基类中有的元数据，子模型没有的话，直接继承；
-抽象基类中有的元数据，子模型也有的话，直接覆盖；
-子模型可以额外添加元数据；
-抽象基类中的abstract=True这个元数据不会被继承。也就是说如果想让一个抽象基类的子模型，同样成为一个抽象基类，那你必须显式的在该子模型的Meta中同样声明一个abstract = True；
-有一些元数据对抽象基类无效，比如db_table，首先是抽象基类本身不会创建数据表，其次它的所有子类也不会按照这个元数据来设置表名。
-'''
 
 # 栏目
 class Column(models.Model):
-    name = models.CharField(max_length=20, unique=True, verbose_name=u'栏目')
-    link_url = models.URLField(verbose_name=u'链接')
+    name = models.CharField(max_length=20, unique=True, verbose_name='栏目')
+    link_url = models.URLField(verbose_name= '链接')
+    index = models.IntegerField(verbose_name='位置')
 
     class Meta:  # 模型元选项
         db_table = 'tb_column'   # 在数据库中的表名，否则Django自动生成为app名字_类名
-        ordering = ['id']
-        verbose_name = u'栏目'
+        ordering = ['index']
+        verbose_name = '栏目'
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -50,7 +33,7 @@ class Category(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'分类')
 
     #多对一关系，会在数据库中生成column_id的字段,注意Django只有多对一关系，站在多的角度去看待
-    column = models.ForeignKey(Column, on_delete=models.CASCADE, verbose_name=u'所属栏目')
+    column = models.ForeignKey(Column, on_delete=models.CASCADE, related_name='categories', verbose_name=u'所属栏目')
 
     class Meta:
         db_table = 'tb_category'
@@ -77,21 +60,21 @@ class Tag(models.Model):
 # 文章
 class Article(ModelBase):
     # null是在数据库上表现NULL，而不是一个空字符串，所以对空字符串的限制，还需要通过blank，是否能为空字符串控制
-    title = models.CharField(max_length=35, validators=[MinLengthValidator(1), ], unique=True, verbose_name=u'标题')
-    keywords = models.CharField(max_length=50, validators=[MinLengthValidator(1), ], verbose_name=u'关键词')
-    description = models.CharField(verbose_name=u'描述', max_length=120, validators=[MinLengthValidator(1), ], blank=True)  #选填，如果不填默认抓取正文前54个字
-    content = models.TextField(verbose_name=u'内容')
-    cover_img = models.URLField(verbose_name=u'封面图', blank=True)
+    title = models.CharField(max_length=35, validators=[MinLengthValidator(1), ], unique=True, verbose_name='标题')
+    keywords = models.CharField(max_length=50, validators=[MinLengthValidator(1), ], verbose_name='关键词')
+    description = models.CharField(verbose_name='描述', max_length=120, validators=[MinLengthValidator(1), ], blank=True)  #选填，如果不填默认抓取正文前54个字
+    content = models.TextField(verbose_name='内容')
+    cover_img = models.URLField(verbose_name='封面图', blank=True)
     #PositiveIntegerField，该类型的值只允许为正整数或 0，毕竟阅读量不可能为负值。
-    read_num = models.PositiveIntegerField(verbose_name=u'浏览量', default=0)
-    like_num = models.IntegerField(verbose_name=u'点赞数', default=0)
+    read_num = models.PositiveIntegerField(verbose_name='浏览量', default=0)
+    like_num = models.IntegerField(verbose_name='点赞数', default=0)
 
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, verbose_name=u'所属类别')  #多对一关系
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, verbose_name='所属类别')  #多对一关系
 
     tag = models.ManyToManyField(Tag) #多对多关系
 
     #当外键指向的数据对象被删除“on_delete”时，models.DOTHING，即用户删除时，文章不做任何处理
-    author = models.ForeignKey(Account, on_delete=models.DO_NOTHING, verbose_name=u'作者')
+    author = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name='articles', verbose_name='作者')
 
     class Meta:
         db_table = 'tb_article'
@@ -209,10 +192,7 @@ class Advertising(ModelBase):
         verbose_name = '广告'
         verbose_name_plural = verbose_name
 
-
     def __str__(self):
         return self.name
-
-
 
 

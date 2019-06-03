@@ -1,15 +1,25 @@
 from django.urls import path
+from django.conf.urls import include
+
+from rest_framework.routers import DefaultRouter
+
 
 from .views import index, ColumnManageView, ColumnEditView, getColumnList, CategoryManageView, CategoryEditView, TagManageView, \
     AdvertisingManageView, AdvertisingEditView, FriendlinkManageView, FriendlinkEditView, AdvertisingAddView, TagEditView, ArticleManageView, ArticleEditView,\
-    RecommendArticleManageView, RecommendArticleAddView, \
-    RecommendArticleEditView, ArticlesByCategoryIdView, DocsManageView, DocsEditView, DocsPubView, CoursesManageView, CoursesEditView, CoursesPubView, \
+    RecommendArticleManageView, RecommendArticleAddView, ShoppingGoodsSKUsViewset,\
+    RecommendArticleEditView, ArticlesByCategoryIdView, DocsManageView, DocsEditView, DocsPubView, \
     CommentsManageView, CommentsEditView, GroupManagerView, UserGroupManageView, ArticleAddView, markDownUploadImage, uploadImageToServer, up_token, uploadFileToServer,\
     GroupAddView, GroupEditView, viewGroup, UserGroupEditView, UserGroupAddView, getGroupUser, UserInfoView, UserInfoEditView,\
-    ProhibitedWordsManageView, RobotsManageView, WebSiteInfoManageView, webuploadImage
+    ProhibitedWordsManageView, RobotsManageView, WebSiteInfoManageView, webuploadImage, ShoppingCategoriesView, ShoppingGoodsSPUsView
+
 
 
 app_name = 'admin'
+
+router = DefaultRouter()
+router.register('shop/goodsSKUs', ShoppingGoodsSKUsViewset)
+
+
 urlpatterns = [
     path('index/', index, name='index'),
 
@@ -64,12 +74,6 @@ urlpatterns = [
     path('docs/<int:doc_id>/', DocsEditView.as_view(), name='docs_edit'),
     path('docs/pub/', DocsPubView.as_view(), name='docs_pub'),
 
-    # 课堂
-    path('courses/', CoursesManageView.as_view(), name='courses_manage'),
-    path('courses/<int:course_id>/', CoursesEditView.as_view(), name='courses_edit'),
-    path('courses/pub/', CoursesPubView.as_view(), name='courses_pub'),
-
-
     # 评论信息
     path('comments/', CommentsManageView.as_view(), name='comments_manage'),
     path('comments/<int:comment_id>/', CommentsEditView.as_view(), name='comments_edit'),
@@ -101,5 +105,16 @@ urlpatterns = [
     # web网站信息
     path('website_info/', WebSiteInfoManageView.as_view(), name='website_info'),
     path('website_info/upload_image/', webuploadImage, name='web_uploadImage'),
+
+
+    # 商城模块
+    # 商品分类
+    path('shop/categories/', ShoppingCategoriesView.as_view(), name='shop_categories'),
+
+    # 商品信息
+    path('shop/goodsSPUs/', ShoppingGoodsSPUsView.as_view(), name='shop_goodsSPUs'),
+
+
+    path('', include(router.urls)),
 
 ]

@@ -1,0 +1,95 @@
+.grid-left{
+    width: 100%;
+    background-color: transparent;
+}
+
+.order-payment-info-top{
+    color: #666;
+    padding: 10px;
+}
+
+.o-title{
+    float: left;
+    width: 640px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+.o-price{
+    float: right;
+    width: 190px;
+    padding-top: 32px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    overflow: hidden;
+}
+
+.o-price strong{
+    font-size: 18px;
+    vertical-align: bottom;
+    color: #e31613;
+    margin: 0 3px;
+}
+
+.payment-main{
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 6px 32px rgba(0,0,0,.13);
+}
+
+.payment-main .p-w-hd{
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 18px;
+    font-family: "Microsoft Yahei";
+}
+
+.pay-code{
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    width: 298px;
+    height: 298px;
+}
+
+.pay-code img{
+    width: 298px;
+    height: 298px;
+}
+
+.pw-box-left {
+    padding-left: 250px;
+}
+
+.pw-box-ft{
+    height: 55px;
+    background-color: rgb(60, 165, 246);
+    padding: 8px 0 8px 125px;
+}
+
+.pw-box-ft p{
+    margin: 0;
+    font-size: 14px;
+    line-height: 22px;
+    color: #fff;
+    font-weight: 700;
+}
+
+.pw-box-right{
+    width: 379px;
+    height: 421px;
+    padding-left: 50px;
+    margin-top: -20px;
+}
+
+.payment-change span{
+    font-size:14px;
+    color: #2fa1dd;
+}
+
+.payment-change a{
+    color: #67a4ff;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-left: 5px;
+}

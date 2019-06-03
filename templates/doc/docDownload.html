@@ -41,3 +41,11 @@
 
 {% block grid-right %}
 {% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'js/shop/shop.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

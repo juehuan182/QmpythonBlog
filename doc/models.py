@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
 
-from article.models import ModelBase
+from db.base_model import ModelBase
 from user.models import Account
 
 class Doc(ModelBase):

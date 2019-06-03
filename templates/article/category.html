@@ -31,13 +31,14 @@
 {% for article in articles_info.object_list %} {# 第page分页对象的元素列表，做分页获取数据要调用 .object_list #}
     {% include 'article/article_list.html' %}
 {% empty %} {# 在for循环之前检查列表大小是常见的，当列表为空的时候给出特别提示，这是常见的，所以for支持可选empry来当为空时输出 #}
-    <div class="">没有相关内容</div>
+    <div style="padding: 10px;color: #666">没有相关内容</div>
 {% endfor %}
 <div class="pagination">
     <ul>
         {% if articles_info.has_previous %} {# 判断是否有上一页#}
             <li style="color: #c8cdd2;"><a href="?page=1">首页</a></li>
-            <li style="color: #c8cdd2;"><a href="?page={{ articles_info.previous_page_number }}">上一页</a>
+            <li style="color: #c8cdd2;">
+                <a href="?page={{ articles_info.previous_page_number }}">上一页</a>
             </li>
             {# previous_page_number上一页页码#}
         {% endif %}
@@ -61,4 +62,10 @@
         {# count计算集合元素个数 #}
     </ul>
 </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
 {% endblock %}

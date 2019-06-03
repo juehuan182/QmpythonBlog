@@ -19,28 +19,16 @@
             <div class="category-title clearfix">
                 <h2>{{ category.name }}</h2>
                 {% if category.article_set.all %}
-                    <a href="{% url 'categories' category.id %}">查看更多</a>
+                    <a href="{% url 'categories' category.id %}">查看更多>></a>
                 {% endif %}
             </div>
             <ul class="category-article-list clearfix">
                 {% for article in category.article_set.all %}
                     <li class="category-article-box fl">
-                        <div class="category-article-head">
-                            <a href="{% url 'articles:article_detail' article.id %}" target="_blank">
+                            <a href="{% url 'articles:article_detail' article.id %}" target="_blank" class="category-article-head">
                                 <img src="{{ article.cover_img }}">
+                                <span>{{article.title}}</span>
                             </a>
-                        </div>
-                        <div class="category-article-center">
-                            <h2>
-                                <a href="{% url 'articles:article_detail' article.id %}" target="_blank">{{ article.title }}</a>
-                            </h2>
-                            <p>{{ article.description|safe }}</p>
-                        </div>
-
-                        <div class="category-article-bottom">
-                            <span class="auth"><i class="icon-yonghu1 iconfont"></i>{{ article.author.username }}</span>
-                            <span class="dtime"><i class="icon-shijian iconfont"></i>{{article.create_time|date:'Y年m月d日' }}</span>
-                        </div>
                     </li>
                 {% empty %}
                     <p class="empty-article">暂时无相关文章，敬请关注!</p>
@@ -56,4 +44,10 @@
 {% endblock %}
 
 {% block grid-right %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
 {% endblock %}

@@ -4,6 +4,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import datetime
 from django.conf import settings
+
+from db.base_model import ModelBase
+
+
 '''
 继承AbstractUser，在syncdb时不再建立auth_user表，而是建立了以你的模块名为表名的表，你只需要在你的Model里增加你需要的字段即可
 AbstractUser 是一个抽象类
@@ -55,6 +59,34 @@ class Account(AbstractUser):
         groups_name_list = [group.name for group in self.groups.all()]
 
         return '、'.join(groups_name_list) #列表通过|拼接成字符串
+
+
+class AccountAddress(ModelBase):
+    """
+    用户收货地址模型
+    """
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='用户')
+    receiver = models.CharField(max_length=20, verbose_name='收货人')
+    address = models.CharField(max_length=256,verbose_name='收件地址')
+    zip_code = models.CharField(max_length=6, null=True, verbose_name='邮编')
+    phone = models.CharField(max_length=11, verbose_name='手机号码')
+    is_default = models.BooleanField(default=False, verbose_name='是否默认')
+
+    class Meta:
+        db_table = 'tb_address'
+        verbose_name = '收货地址'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.address
+
+
+
+
+
+
+
+
 
 
 #在django 2中，models中on_delete=models.XXX不再是默认选项，需要显性指定

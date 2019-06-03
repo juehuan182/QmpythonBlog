@@ -59,13 +59,15 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'article',
     'doc',
-    'course',
+    'shop',
     'admin',
     'pure_pagination', # 添加第三方分页的模块,这个模块是在django的分页功能上封装的
     'haystack', # 搜索
     'django.contrib.sitemaps', # 站点地图
     'rest_framework', # DRF
 
+    'django_filters',  #过滤
+    'api',
 ]
 
 # 中间件，在新版本django中,中间件的key值由MIDDLEWARE_CLASSES变更为MIDDLEWARE
@@ -78,6 +80,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'util.StatFlowMiddleware.StatFlowMiddleware', # 添加自定义中间件
 ]
 
 ROOT_URLCONF = 'QmpythonBlog.urls'
@@ -116,9 +119,9 @@ if 0:
     DB_PASSWORD = "qwe123"
     DB_NAME = "CainiaoBlog_DB"
 else:
-    DB_USER = "TEST"
-    DB_PASSWORD = "TEST"
-    DB_NAME = "TEST"
+    DB_USER = "python"
+    DB_PASSWORD = "python"
+    DB_NAME = "python"
 
 
 
@@ -322,7 +325,7 @@ EMAIL_FROM = "qmpython@qq.com"
 # EMAIL_FROM = EMAIL_HOST_USER
 
 # 一页显示多少条记录
-ONE_PAGE_COUNT = 10
+ONE_PAGE_COUNT = 3
 
 # 如果需要做分页的设置,需要设置成官网里面的,可以把10改成3,把2改成1,参考https://github.com/jamespacileo/django-pure-pagination.git
 PAGINATION_SETTINGS = {
@@ -355,6 +358,16 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
+
+    "history": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/4",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+
+
 }
 
 # 默认django将session保存到数据库中的django_session表中，如果需要将session存储到缓存中，则需要设置
@@ -375,21 +388,88 @@ CACHES = {
 # }
 
 
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
+    'formatters': {  # 日志信息显示的格式
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(lineno)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(module)s %(lineno)d %(message)s'
+        },
+    },
+    'filters': {  # 对日志进行过滤
+        'require_debug_true': {  # django在debug模式下才输出日志
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {  # 日志处理方法
+        'console': {  # 向终端中输出日志
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {  # 向文件中输出日志
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(os.path.dirname(BASE_DIR), "logback/blog.log"),  # 日志文件的位置
+            'maxBytes': 300 * 1024 * 1024,
+            'backupCount': 10,
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {  # 日志器
+        'django': {  # 定义了一个名为django的日志器
+            'handlers': ['console', 'file'],  # 可以同时向终端与文件中输出日志
+            'propagate': True,  # 是否继续传递日志信息
+            'level': 'INFO',  # 日志器接收的最低日志级别
+        },
+    }
+}
+
+
+
+
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated user.
-    'DEFAULT_PERMISSION_CLASSES': [
+    # 权限认证
+    'DEFAULT_PERMISSION_CLASSES': (
         # 使用django标准的 'django.contrib.auth'权限，未认证的用户只读权限
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+        #'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        #'rest_framework.permissions.IsAuthenticated',
+    ),
+
+    # 分页
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # LimitOffsetPagination 分页风格
+    'PAGE_SIZE': 3,  # 每页多少条记录
+    #'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+
+    # 身份验证
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+            'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.BasicAuthentication',
+        ),
+
 }
+
+import datetime
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1), # 指明token的有效期
+}
+
 
 
 #Oauth
 
 #github
-GITHUB_CLIENT_ID = 'cd1a29b306bdfaFFF43cbbc'
-GITHUB_CLIENT_SECRET = 'a1043edSSSsssfdaaSSS7bFFFFbff196fff541ddddd21795db949320431'
+GITHUB_CLIENT_ID = 'cdg1a29b306bdfa43cbbc'
+GITHUB_CLIENT_SECRET = 'ga1043edfdaa7bbff196541dd21795db9493204g31'
 GITHUB_CALLBACK_URL = 'http://www.qmpython.com:8000/user/githubCallback'  #授权回调地址
 
 # 入口重定向 :https://github.com/login/oauth/authorize?client_id=yourclientid&redirect_uri=yourredirect_uri
@@ -398,15 +478,15 @@ GITHUB_CALLBACK_URL = 'http://www.qmpython.com:8000/user/githubCallback'  #授�
 
 
 #QQ
-QQ_APP_ID = '10151212218870'
-QQ_APP_KEY = 'd80cc8d2e656acbd8dddfb90cf6a71c58f38'
+QQ_APP_ID = '101q518870'
+QQ_APP_KEY = 'qd80cc8d2e656acbd8b90cf6a71c58f3q8'
 QQ_CALLBACK_URL = 'http://www.qmpython.com:8000/user/qqCallback'    #填写你的回调地址
 #https://blog.csdn.net/a992970569/article/details/82107899
 
 
 #新浪微博
-WEIBO_APP_KEY = '33724521445299'
-WEIBO_APP_SECRET = '54daa0b44a2f346ffff246697f5dc1927d80'
+WEIBO_APP_KEY = '337w2455299'
+WEIBO_APP_SECRET = 'w54daa0b44a2f346246697f5dc1927d8w0'
 WEIBO_CALLBACK_URL = 'http://www.qmpython.com:8000/user/weiboCallback'    #填写你的回调地址
 
 

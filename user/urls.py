@@ -3,7 +3,8 @@ from django.urls import path, include, re_path
 
 from .views import RegisterView, checkUsername, checkEmail, LoginView,\
     LogoutView, RegisterView, UserProfileView, UserPasswordView, ResetPwdView, ConfirmView, checkVerifyCode, \
-    upload_avatar, bind_account, BindLoginView, bind_success, qq_login, qq_callback, github_login,\
+    upload_avatar, history, history_del, UserOrderView, UserOrderNotifyView, UserOrderReturnView, AddressView,\
+    bind_account, BindLoginView, bind_success, qq_login, qq_callback, github_login,\
     github_callback, weibo_login, weibo_callback
 
 
@@ -43,6 +44,22 @@ urlpatterns = [
     path('checkVerifyCode/', checkVerifyCode, name='checkVerifyCode'),
     # 上传头像
     path(r'uploadAvatar/', upload_avatar, name="uploadAvatar"),
+
+    # 浏览历史
+    path('history/', history, name='history'),
+    path('history_del/', history_del, name='history_del'),
+
+    # 我的订单
+    path('order/', UserOrderView.as_view(), name='my_order'),
+
+    # 支付宝同步通知
+    path('order/return/', UserOrderReturnView.as_view(), name='order_return'),
+
+    # 支付宝异步通知
+    path('order/notify/', UserOrderNotifyView.as_view(), name='order_notify'),
+
+    # 收货地址
+    path('address/', AddressView.as_view(), name='address'),
 
 
     # 第三方快捷登录

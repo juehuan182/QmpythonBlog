@@ -2,6 +2,7 @@ import os
 import json
 import urllib.parse
 import uuid
+import logging
 
 from django.shortcuts import render, redirect
 from django.views import View
@@ -13,14 +14,24 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_redis import get_redis_connection
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.http import HttpResponse
+
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+
 
 import requests
 
-from .models import Account, OAuthEx
+from article.models import Article
+from .models import Account, OAuthEx, AccountAddress
+from shop.models import OrderInfo, OrderGoods
 from .forms import LoginForm, RegisterForm, UpdateProfileForm, ChangePwdForm, ResetPwdPwdForm
 from util import json_status
 
 # Create your views here.
+logger = logging.Logger('django')
 
 '''
 使用authenticate()方法来认证一个给定的用户名(username)和密码(password)。该函数以关键字参数的形式接受认
@@ -191,6 +202,13 @@ class LoginView(View):
                     login(request, user)  # 登录，向session中添加SESSION_KEY, 便于对用户进行跟踪
                     # 如果调用login方法以后，
                     # request对象就会激活user属性，这个属性不管登录或者未登录都是存在
+
+                    # 获取登录后所要跳转的地址
+                    # 默认跳转到首页
+                    # next_url = request.GET.get('next', reverse('index'))
+                    # # 跳转到next_url
+                    # response = redirect(next_url)
+
                     if remember:
                         # 默认值就是2周14天，单位秒
                         request.session.set_expiry(None)
@@ -388,6 +406,285 @@ def upload_avatar(request):
     request.user.save(update_fields=['avatar'])
 
     return json_status.result(message="头像修改成功", data={'img_url': img_url})
+
+
+# 浏览历史
+@login_required
+def history(request):
+    #  建立redis连接
+    conn_redis = get_redis_connection(alias='history')
+    history_key = 'history_{}'.format(request.user.id)
+    # # 获取用户最新浏览的前10篇文章
+    # article_ids = conn_redis.lrange(history_key, 0, 9)
+    # print(article_ids)
+    # # # 从数据库中查询文章的具体信息
+    # # articles = Article.objects.filter(id__in=article_ids) # 这样查出来的会没有浏览顺序
+    # # 遍历获取用户浏览的文章信息,这样顺序会按照浏览历史排列
+    # article_list = []
+    # for id in article_ids:
+    #     article = Article.objects.get(id=id)
+    #     article_list.append(article)
+
+    # {'文章id': 文章数量}, 获取history_key对应hash的所有键值
+    article_dict = conn_redis.hgetall(history_key)
+    #print(article_dict) # {b'17': b'2019-05-20 00:51:55', b'16': b'2019-05-20 00:52:02', b'18': b'2019-05-20 00:51:50', b'10': b'2019-05-20 00:52:09'}
+
+    # 遍历获取文章的信息
+    article_list = []
+    for article_id, read_time in article_dict.items():
+        # print(article_id, read_time) # b'18' b'2019-05-19 11:25:38'
+        # 根据文章id获取文章信息
+        article = Article.objects.get(id=article_id.decode('utf-8'))
+        # 动态给article对象增加一个属性read_time，保存浏览文章的时间
+        article.read_time = read_time.decode('utf-8')  # 技巧！！
+        # 添加
+        article_list.append(article)
+
+    # 按照列表对象中的time倒序
+    article_list.sort(key=lambda article: article.read_time, reverse=True)
+
+    # 组织上下文
+    context = {
+        'article_list': article_list
+    }
+
+    return render(request, 'user/history.html', context=context)
+
+@login_required
+def history_del(request):
+    conn_redis = get_redis_connection(alias='history')
+    history_key = 'history_{}'.format(request.user.id)
+    history_count = conn_redis.hlen(history_key)
+    if not history_count:
+        json_status.params_error(message='没有浏览历史')
+
+    json_data = request.body
+    dict_data = json.loads(json_data.decode('utf-8'))
+    article_id = dict_data.get('article_id', '')
+    if article_id:
+        # hdel(name,*keys)：将name对应的hash中指定key的键值对删除
+        conn_redis.hdel(history_key, article_id)
+    else:
+        # delete(*name) 根据name删除redis中的任意数据类型
+        conn_redis.delete(history_key)
+
+    return json_status.result()
+
+
+
+class UserOrderView(View):
+    '''用户-订单中心'''
+    def get(self, request):
+        # 获取用户订单信息
+        user = request.user
+
+        orders = OrderInfo.objects.filter(user=user).order_by('-create_time')
+        # 遍历获取订单商品的信息
+        for order in orders:
+            # 根据order查询商品订单信息
+            order_skus = OrderGoods.objects.filter(order=order)
+
+            # 遍历order_skus计算商品小计
+            for order_sku in order_skus:
+                # 计算小计
+                amount = order_sku.count * order_sku.price
+                # 动态给order_sku增加属性amount，保存订单商品小计
+                order_sku.amount = amount
+
+            # 动态给order增加属性，保存订单商品的信息
+            order.order_skus = order_skus
+
+        # 分页数据
+        try:
+            page = int(request.GET.get('page', 1))  # 获取页码
+        except PageNotAnInteger:
+            logger.error("当前页数错误:PageNotAnInteger")
+            page = 1
+
+        # 实例化分页对象，articles需要分页的对象，在中间传一个数字，表示每页显示多少个
+        paginator = Paginator(orders, settings.ONE_PAGE_COUNT, request=request)
+        try:
+            orders_info = paginator.page(page)  # 获取当前页的数据
+        except EmptyPage:
+            # 若访问的页数大于实际页数，则返回最后一页数据
+            logger.info("访问的页数大于总页数")
+            orders_info = paginator.page(paginator.num_pages)
+
+
+        context = {
+            'obj_info': orders_info
+        }
+
+
+        return render(request, 'user/my_order.html', context=context)
+
+
+#"GET /user/order/?charset=utf-8
+# &out_trade_no=20190528165115590334601
+# &method=alipay.trade.page.pay.return
+# &total_amount=13.00
+# &sign=FifH5OlOgrIFJdPSCRRs1zGz%2FUh%2BloMKW0Y%2BP97%2BsN4xdeYsWsfLvwFGjnrOyR7HpKwpN%2B3Ujret%2BAO%2BZ%2FmQzyyaGCvAMZhA6l3VqLLiB9UC7Vq6ZxPdixkSS9EITnrJaR9fJGnGvM1mjdosGTvwz%2FAlXFQ7vunbbGuBLZ0cJFiQSNdS1KBYZhEib2091Q31h5Ps4usiIpJ8lFOEFHRfRY%2BwEBiv4e01DyqaPQYXmgHjG32Y7WJIgRqrpkTNPGXVEDPm0iQznwkzraV47hKRkcfR3dzCuG1%2B27bc1I%2FtYbe5pVEmcXZFKLvj%2FYg8H7%2BIBgxDLbMoWrm1pw5ciz%2FQJA%3D%3D
+# &trade_no=2019052822001459351000015123
+# &auth_app_id=2016092900624781
+# &version=1.0&app_id=2016092900624781
+# &sign_type=RSA2&seller_id=2088102177822976
+# &timestamp=2019-05-28+16%3A52%3A09 HTTP/1.1" 200 31391
+
+
+'''
+1、终端消费者在商家网站选择商品，下订单。
+
+2、商家把支付信息，get到支付宝指定的链接。
+
+3、终端消费者在支付宝的网站上操作付款。
+
+4、付款成功后，支付宝post付款成功的信息到商家预先提供的地址。
+
+5、支付宝在终端消费者付款成功后三秒后，通过get跳回商家指定的链接。
+
+'''
+
+from alipay import AliPay
+
+# alipay 同步通知
+class UserOrderReturnView(View):
+    def get(self, request):
+
+        # 初始化
+        alipay = AliPay(
+            appid="2016092900624781",  # 应用appid
+            app_notify_url="http://www.qmpython.com:8000/user/order/notify/",  # 默认回调url
+            app_private_key_path=os.path.join(settings.BASE_DIR, 'shop/payment/app_private_key.pem'),
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_path=os.path.join(settings.BASE_DIR, 'shop/payment/alipay_public_key.pem'),
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug=True  # 默认False，沙箱环境为True
+        )
+
+        data = request.GET
+        process_dict = data.dict()  # QueryDict转换为字典对象
+        #print(process_dict)
+        sign = process_dict.pop('sign')
+
+        success = alipay.verify(process_dict, sign)
+        if success:
+            return redirect(reverse('user:my_order'))
+
+
+
+# alipay 异步通知
+@method_decorator(csrf_exempt,name='dispatch')
+class UserOrderNotifyView(View):
+    def post(self, request):
+
+        # 初始化
+        alipay = AliPay(
+            appid="2016092900624781",  # 应用appid
+            app_notify_url="http://www.qmpython.com:8000/user/order/notify/",  # 默认回调url 异步支付通知url
+            app_private_key_path=os.path.join(settings.BASE_DIR, 'shop/payment/app_private_key.pem'),  # 应用私钥
+            alipay_public_key_path=os.path.join(settings.BASE_DIR, 'shop/payment/alipay_public_key.pem'),  # 支付宝公钥
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug=True  # 默认False，沙箱环境为True
+        )
+
+        data = request.POST  # QueryDict
+        processed_dict = {}
+        for key, value in data.items():
+            processed_dict[key] = value
+
+        # sign 不能参与签名验证，需要pop弹出来并保存值给下面用
+        sign = processed_dict.pop('sign', None) # 单独拿出sign字段
+
+        order_id = processed_dict.get("out_trade_no")
+
+        # print(signature, order_id)
+
+        # 校验参数
+        if not order_id:
+            return json_status.params_error(message='无效的订单id')
+
+        try:
+            order = OrderInfo.objects.get(order_id=order_id,
+                                          pay_method=2,
+                                          order_status=1)
+
+        except OrderInfo.DoesNotExist:
+            return json_status.params_error(message='订单错误')
+
+        #print(processed_dict)
+
+        success = alipay.verify(processed_dict, sign)
+        if success and processed_dict["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
+            # 支付成功
+            # 获取支付宝交易号
+            trade_no = processed_dict.get('trade_no')
+            # 更新订单状态
+            order.trade_no = trade_no
+            order.order_status = 4  # 待评价
+            order.save(update_fields=['trade_no', 'order_status'])
+            # 跳转到我的订单页面，异步不用跳转，服务器间的交互，不像页面跳转同步通知可以在页面上显示出来，这种交互方式是不可见的；
+            # 想办法处理同步更新页面
+            # 程序执行完后必须打印输出“success”（不包含引号）。如果商户反馈给支付宝的字符不是success这7个字符，
+            # 支付宝服务器会不断重
+            # 程序执行完成后，该页面不能执行页面跳转。如果执行页面跳转，支付宝会收不到success字符，
+            # 会被支付宝服务器判定为该页面程序运行出现异常，而重发处理结果通知；
+            # 特性https://docs.open.alipay.com/270/105902/
+            #print("trade succeed")
+
+            return HttpResponse("success")
+
+
+        return HttpResponse("fail")
+
+
+
+
+class AddressView(View):
+    def get(self, request):
+
+        addresses = AccountAddress.objects.get(user=request.user)
+
+        return render(request, 'user/deliver_address.html')
+
+
+    def post(self, request):
+        '''地址添加'''
+        receiver = request.POST.get('receiver')
+        address = request.POST.get('address')
+        zip_code = request.POST.get('zip_code')
+        phone = request.POST.get('phone')
+        is_default = request.POST.get('is_default')
+
+        # 校验数据
+        if not all(receiver, address, phone):
+            return json_status.params_error(message='数据不完整')
+
+        # 校验手机
+        import re
+        if re.match(r'1[3|4|5|7|8][0-9]{9}$', phone):
+            return json_status.params_error(message='手机号码不正确')
+
+        # 业务处理
+        user = request.user
+        try:
+            address = AccountAddress.objects.get(user=user, is_default=True)
+        except AccountAddress.DoesNotExist:
+            address = None
+
+        if address:
+            is_default = False
+        else:
+            is_default = True
+
+        # 添加地址
+        AccountAddress.objects.create(user=user,
+                                      receiver=receiver,
+                                      address=address,
+                                      zip_code=zip_code,
+                                      phone=phone,
+                                      is_default = is_default)
+
+        return render(request, 'user/deliver_address.html')
 
 
 # 第三方登录

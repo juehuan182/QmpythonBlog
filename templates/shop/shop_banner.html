@@ -1,0 +1,50 @@
+{% load shop_banner_tags %}
+
+<style>
+.banner{
+    background-color: #fff;
+}
+
+.guest-cart{
+    width: 180px;
+    height: 40px;
+    margin: 10px;
+}
+
+.guest-cart .cart-name {
+    width: 140px;
+    height: 100%;
+    line-height: 38px;
+    border: 1px solid #DFDFDF;
+    display: block;
+    font-size: 14px;
+    color: #f10214;
+    background-color: #F9F9F9;
+}
+
+
+.guest-cart .cart-name i{
+    font-size: 18px;
+    margin-right: 10px;
+    font-weight: 700;
+}
+
+.guest-cart .goods-count {
+    width: 40px;
+    height: 100%;
+    text-align: center;
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #da1026;
+}
+
+</style>
+
+<div class="guest-cart fr">
+			<a href="{% url 'shop:cart_list' %}" class="cart-name fl"><i class="iconfont icon-gouwuche"></i>我的购物车</a>
+			<div class="goods-count fl" id="show-count">
+                {% show_cart_num user %}
+            </div>
+</div>

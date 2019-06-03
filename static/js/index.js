@@ -55,7 +55,7 @@ for (let i = 0; i < bannerLeftControlDirectionLen; i++) {
 }
 
 /*下面点控制*/
-for (let j = 0; j < bannerLeftControlDirectionLen; j++) {
+for (let j = 0; j < bannerLeftControlLi; j++) {
     //注意这里在外面给每个设置对应属性值，不能放到事件函数里面，因为函数里面只有点击的时候才触发的
     bannerLeftControlLi[j].setAttribute("current-position", j); //不规范（自定义）的标签属性：getAttribute，setAttribute，removeAttribute
     bannerLeftControlLi[j].onclick = function () {
@@ -137,28 +137,30 @@ moreBtn.onclick =  function () {
             if (articles.length > 0){
                 //遍历
                 articles.forEach(function (one_article) {
-                    let articleStr = '    <article class="excerpt clearfix">\n' +
-                        '                        <a href="/articles/{0}/">\n' +
-                        '                            <img src="{1}" />\n' +
-                        '                        </a>\n' +
-                        '                    <div class="right-text">\n' +
-                        '                        <div class="header">\n' +
-                        '                            <a href="{% url \'categories\' {2} %}" title="css3" target="_blank">\n' +
-                        '                                    {3}\n' +
-                        '                            </a>\n' +
-                        '                            <h2><a href="/articles/{0}/">{4}</a></h2>\n' +
-                        '                        </div>\n' +
-                        '                        <p class="note">\n' +
-                        '                            {5}...\n' +
-                        '                        </p>\n' +
-                        '                        <div class="meta">\n' +
-                        '                            <span class="auth"><i class="icon-yonghu1 iconfont"></i>{6}</span>\n' +
-                        '                            <span class="dtime"><i class="icon-shijian iconfont"></i>{7}</span>\n' +
-                        '                            <span class="viewnum"><i class="icon-liulan iconfont"></i>阅读({8})</span>\n' +
-                        '                            <span class="like"><i class="icon-xihuan iconfont"></i>赞({9})</span>\n' +
-                        '                        </div>\n' +
-                        '                     </div>\n' +
-                        '                </article>';
+                    let articleStr =' <article class="excerpt clearfix">\n' +
+                        '    <a href=\"/articles/{0}/\">\n' +
+                        '        <img src=\"{1}\"/>\n' +
+                        '    </a>\n' +
+                        '    <div class=\"article-category\">\n' +
+                        '        <a href=\"/categories/{2}/\" target=\"_blank\">\n' +
+                        '            {3}\n' +
+                        '        </a>\n' +
+                        '    </div>\n' +
+                        '    <div class=\"right-text\">\n' +
+                        '        <div class=\"header\">\n' +
+                        '            <h2><a href=\"/articles/{0}/\">{4}</a></h2>\n' +
+                        '        </div>\n' +
+                        '        <p class=\"note\">\n' +
+                        '            {5}...\n' +
+                        '        </p>\n' +
+                        '        <div class=\"meta\">\n' +
+                        '            <span class=\"auth\"><i class=\"icon-yonghu1 iconfont\"></i>{6}</span>\n' +
+                        '            <span class=\"dtime\"><i class=\"icon-shijian iconfont\"></i>{7}</span>\n' +
+                        '            <span class=\"viewnum\"><i class=\"icon-liulan iconfont\"></i>阅读({8})</span>\n' +
+                        '            <span class=\"like\"><i class=\"icon-xihuan iconfont\"></i>赞({9})</span>\n' +
+                        '        </div>\n' +
+                        '    </div>\n' +
+                        '</article>';
 
                     // 格式化发布时间 2018-10-25T23:46:50.882384
                     public_time = dateFormat(one_article.create_time);

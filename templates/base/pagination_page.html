@@ -1,0 +1,83 @@
+<style>
+    /*分页*/
+    .pagination{
+        margin-top: 30px;
+        padding-bottom: 10px;
+    }
+
+    .pagination ul{
+        list-style: none;
+        text-align: center;
+    }
+
+    .pagination ul li{
+        display: inline-block;
+        margin-left: 10px;
+    }
+
+    .pagination ul li>a{
+        display: inline-block;
+        cursor: pointer;
+        border: 1px solid rgb(60, 165, 246);
+        padding: 5px 10px;
+        color: rgb(60, 165, 246);
+    }
+
+    div.pagination ul li:hover a{
+            background-color: rgb(60, 165, 246);
+            color: #fff;
+    }
+
+    /*设置当前页样式*/
+    .pagination ul li>a.current-page{
+        background-color: rgb(60, 165, 246);
+        color: #fff;
+    }
+
+
+
+    /*最后一个li元素*/
+    .pagination ul li:last-child{
+        border: 0;
+    }
+
+    /*最后一个li元素*/
+    .pagination ul li:last-child:hover{
+        background: transparent;
+        color: #999999;
+        cursor:default;
+    }
+
+
+</style>
+
+
+<div class="pagination">
+    <ul>
+        {% if obj_info.has_previous %} {# 判断是否有上一页#}
+            <li style="color: #c8cdd2;"><a href="?page=1&{{ other_param }}">首页</a></li>
+            <li style="color: #c8cdd2;">
+                <a href="?page={{ obj_info.previous_page_number }}&{{ other_param }}">上一页</a>
+            </li>
+            {# previous_page_number上一页页码#}
+        {% endif %}
+        {% for page in obj_info.pages %} {# 判断剩余页面的显示方法#}
+            {% if page %}
+                {% ifequal page obj_info.number %} {# 判断是否当前页，设置样式，number当前页的页码#}
+                    <li><a class="current-page" href="?page{{ page.querystring }}&{{ other_param }}">{{ page }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ page }}&{{ other_param }}">{{ page }}</a></li>
+                {% endifequal %}
+            {% else %}
+                <li><a href="">...</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if obj_info.has_next %} {# 判断是否有下一页#}
+            <li><a href="?{{ obj_info.next_page_number.querystring }}&{{ other_param }}">下一页</a></li>
+            {# next_page_number下一页的页码#}
+            <li><a href="?page={{ obj_info.paginator.num_pages }}&{{ other_param }}">尾页</a></li> {# num_pages页面总数#}
+        {% endif %}
+        <li><span>共{{ obj_info.paginator.num_pages }}页</span></li>
+        {# count计算集合元素个数 #}
+    </ul>
+</div>

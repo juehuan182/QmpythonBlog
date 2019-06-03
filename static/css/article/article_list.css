@@ -6,6 +6,7 @@
     color: #666;
     margin-bottom: 0.2rem;
     background-color: transparent;
+    padding: 0 10px;
 }
 
 .title h3 span{
@@ -26,7 +27,8 @@ article.excerpt {
 
 article.excerpt:hover {
     background: #fff;
-    box-shadow: 0 0 25px 2px #B0AFAF;
+    box-shadow: 0 0 25px 2px rgba(0,0,0,.2);
+
 }
 
 article.excerpt > a {
@@ -52,36 +54,42 @@ article.excerpt > a > img:hover {
 .excerpt .right-text {
     height: 100%;
     float: left;
-    width: 500px;
+    width: 70.6%;
     margin-left: 20px;
     position: relative;
 
 }
 
-.right-text .header > a {
+.article-category {
     background-color: #373737;
-    padding: 3px 6px;
-    display: inline-block;
-    position: relative;
-}
-
-.right-text .header > a:after { /*after 代表设置后面的样式。网页上常常看到有些文字前或后有小图标*/
-    content: ""; /*与before 及 :after 伪元素配合使用，来插入生成内容。伪元素如果没有设置“content”属性，伪元素是无用的。content属性值为空时，仅仅把他当做一个内容很少的盒子*/
-    border-left: 6px solid #373737;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
+    padding: 5px 10px;
     position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
 }
+
+.article-category > a {
+    vertical-align: middle;
+}
+
+
+/*.right-text .header > a:after { !*after 代表设置后面的样式。网页上常常看到有些文字前或后有小图标*!*/
+/*    content: ""; !*与before 及 :after 伪元素配合使用，来插入生成内容。伪元素如果没有设置“content”属性，伪元素是无用的。content属性值为空时，仅仅把他当做一个内容很少的盒子*!*/
+/*    border-left: 6px solid #373737;*/
+/*    border-top: 6px solid transparent;*/
+/*    border-bottom: 6px solid transparent;*/
+/*    position: absolute;*/
+/*    left: 100%;*/
+/*    top: 50%;*/
+/*    transform: translateY(-50%);*/
+
+/*}*/
 
 .right-text h2 {
     display: inline;
     font-size: 0.36rem;
     font-weight: 500;
-    margin-left: 0.2rem;
     margin-bottom: 0.14rem;
     transition: color 0.25s, background-color 0.25s;
     cursor: pointer;
@@ -104,7 +112,7 @@ article.excerpt > a > img:hover {
     text-align: justify;
     letter-spacing: 0;
     word-wrap: break-word;
-    line-height: 0.4rem;
+    line-height: 0.45rem;
     max-height: 60px;
     margin-top: 14px;
     margin-bottom: 0;
@@ -134,23 +142,25 @@ article.excerpt > a > img:hover {
 }
 
 .loadmore a.btn-more {
-    border: 1px solid rgb(60, 165, 246);
-    border-radius: 1px;
-    color: rgb(60, 165, 246);
+    border: none;
+    border-radius: 50px;
+    color: #fff;
     cursor: pointer;
     display: block;
-    font-size: 16px;
+    font-size: 14px;
     height: 36px;
-    max-width: 230px;
+    max-width: 100px;
     line-height: 34px;
     margin: 0 auto;
     text-align: center;
-
+    background: linear-gradient(90deg,#00aeff,#3369e7);
+    box-shadow: 0 2px 6px 0 rgba(51,105,231,.4);
 }
 
 .loadmore:hover a.btn-more {
     color: #fff;
-    background-color: rgb(60, 165, 246);
+    box-shadow: 0 4px 12px 0 rgba(51,105,231,.4);
+    border-color: rgba(0,0,0,.3);
 }
 
 /*分页*/

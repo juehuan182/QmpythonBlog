@@ -3,7 +3,7 @@
 {% load static %}
 <!doctype html>
 <html>
-<head>
+<head>·
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="/static/image/qmpython_favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
@@ -47,68 +47,70 @@
             <nav> <!--nav是H5新增标签，定义导航链接的部分 -->
                 <!-- login start -->
                     <div class="login-box">
-            {% if request.user.is_authenticated %}
-                <div class="user">
-                    <div class="header-img">
-                        <a href="{% url 'user:profile' %}" rel="nofollow">
-                            <img src="{{ request.user.avatar }}" class="head-avatar-img" alt="头像">
-                        </a>
-                    </div>
-                    <ul class="user-menu">
-                        {% if request.user.is_staff %}
-                            <li><a href="{% url 'admin:index' %}">后台管理</a></li>
-                        {% endif %}
-                        <li><a href="{% url 'user:profile' %}" rel="nofollow">个人信息</a></li>
-                        <li>
-                            <a href="{% url 'article:notification' %}">消息中心
-                                {% message_reminder_count request.user as msg_nums%}
-                                {% if msg_nums %}
-                                    <span class="message-num">{{ msg_nums }}</span>
-                                {% endif %}
-                            </a>
-                        </li>
-                        <li><a href="{% url 'user:logout' %}?next={{ request.path }}" rel="nofollow">退出登录</a></li>
-                    </ul>
-                </div>
-            {% else %}
-                <div class="userinfo-notlogin">
-{#                    <a href="{% url 'user:login' %}?next={{ request.path }}">登录</a>#}
-                    <a class="login" rel="nofollow">登录</a>
-                    <span class="line"></span>
-{#                    <a href="{% url 'user:register' %}?next={{ request.path }}">注册</a>#}
-                    <a class="register" rel="nofollow">注册</a>
-                </div>
-            {% endif %}
-        </div>
-                 <!-- login end -->
-                {% get_nav_columns as columns %}
-                <ul>
-                    {% for column in columns %}
-                        <li>
-                            <a href="{{ column.link_url }}">
-                                {{ column.name }}
-                                {% if column.category_set.all %} {# 判断栏目下是否有分类 #}
-                                    <i class="iconfont icon-arrowdown"></i>
-                                {% endif %}
-                            </a>
+                        {% if request.user.is_authenticated %}
+                            <div class="user">
+                                <div class="header-img">
+                                    <a href="{% url 'user:profile' %}" rel="nofollow">
+                                        <img src="{{ request.user.avatar }}" class="head-avatar-img" alt="头像">
+                                    </a>
+                                    <span>{{user.nick_name}}</span>
+                                    <span class="user-oper"><i class="icon-yonghu1 iconfont"></i></span>
+                                    <span>{{ user.profile|default_if_none:'暂无'}}</span>
 
-                            {% if column.category_set.all %} {# 判断有没有子表内容，没有就不用ul了，反向查询，默认用子表category_set #}
-
-                                <ul>
-                                    {% for category in column.category_set.all %}  {# 主表访问子表，用外键反向查询方式.子表表名_set方式#}
-                                        <li><a href="{% url 'categories' category.id %}"
-                                               target="_blank">{{ category.name }}</a></li>
-                                    {% endfor %}
+                                </div>
+                                <ul class="user-menu">
+                                    {% if request.user.is_staff %}
+                                        <li><a href="{% url 'admin:index' %}">后台管理</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'user:profile' %}" rel="nofollow">个人信息</a></li>
+                                    <li>
+                                        <a href="{% url 'article:notification' %}">消息中心
+                                            {% message_reminder_count request.user as msg_nums%}
+                                            {% if msg_nums %}
+                                                <span class="message-num">{{ msg_nums }}</span>
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    <li><a href="{% url 'user:logout' %}?next={{ request.path }}" rel="nofollow">退出登录</a></li>
                                 </ul>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
+                            </div>
+                        {% else %}
+                            <div class="userinfo-notlogin">
+            <!--{#                    <a href="{% url 'user:login' %}?next={{ request.path }}">登录</a>#}-->
+                                <a class="login" rel="nofollow">登录</a>
+                                <span class="line"></span>
+            <!--{#                    <a href="{% url 'user:register' %}?next={{ request.path }}">注册</a>#}-->
+                                <a class="register" rel="nofollow">注册</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                 <!-- login end -->
+                    {% get_nav_columns as columns %}
+                    <ul>
+                        {% for column in columns %}
+                            <li>
+                                <a href="{{ column.link_url }}">
+                                    {{ column.name }}
+                                </a>
+
+                                {% if column.category_set.all %} {# 判断有没有子表内容，没有就不用ul了，反向查询，默认用子表category_set #}
+                                    <span><i class="iconfont icon-down"></i></span>
+
+                                    <ul>
+                                        {% for category in column.category_set.all %}  {# 主表访问子表，用外键反向查询方式.子表表名_set方式#}
+                                            <li><a href="{% url 'categories' category.id %}"
+                                                   target="_blank">{{ category.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
             </nav>
             <!-- nav end -->
         </div>
         <div class="m-header-logo fl">
-            <a href="#">
+            <a href="/">
                 <img src="{% static 'image/qmpython_logo.png' %}" alt="">
             </a>
         </div>
@@ -126,7 +128,7 @@
     <div class="pcNav clearfix">
         <!-- logo start -->
         <div class="header-logo fl">
-            <a href="#"></a>
+            <a href="/"></a>
         </div>
         <!-- logo end -->
         <!-- nav start -->
@@ -211,133 +213,148 @@
 
             {% endblock %}
         </div>
-        {% block grid-right %}
             <div class="grid-right fr">
-                <div class="widget-tops blog-introduction">
-                    <h3>博客简介</h3>
-                    <div class="text-introduction">
-                        <p>
-                            全民python博客: www.qmpython.com，一个关注Python开发技术、关注用户体验、坚持更多原创实战教程的个人网站，
-                            愿景：成为宇宙中最具有代表性的python博客，期待您的参与,一起走进科技的世界，<a href="" style="color:#4285f4;">了解更多...</a>
-                        </p>
+                {% block grid-right %}
+                    <div class="blog-introduction">
+                        <h3>博客简介</h3>
+                        <div class="text-introduction">
+                            <p>
+                                全民python博客: www.qmpython.com，一个关注Python开发技术、关注用户体验、坚持更多原创实战教程的个人网站，
+                                愿景：成为宇宙中最具有代表性的python博客，期待您的参与,一起走进科技的世界，<a href="" style="color:#4285f4;">了解更多...</a>
+                            </p>
+                        </div>
+
                     </div>
+                    <div class="widget attention-us" style="display: none;">
+                        <ul class="clearfix">
+                            <li class="qq">
+                                <a href="#" title="QQ">
+                                    <i class="icon-qq iconfont"></i>
+                                </a>
+                            </li>
+                            <li class="weixin">
+                                <a href="#" title="微信">
+                                    <i class="iconfont icon-weixin"></i>
+                                </a>
+                            </li>
+                            <li class="weibo">
+                                <a href="#" title="新浪微博">
+                                    <i class="iconfont icon-weibo"></i>
+                                </a>
+                            </li>
+                            <li class="rss">
+                                <a href="#" title="公众号">
+                                    <i class="iconfont icon-erweima"></i>
+                                </a>
+                            </li>
+                            <li class="email">
+                                <a href="mailto:qmpython@qq.com" title="邮件">
+                                    <i class="icon-youxiang1 iconfont"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="widget information">
+                        <h3>资讯</h3>
+                        <ul>
+                            <li>
+                                <i class=""></i>
+                                <iframe id="tianqi" scrolling="no" frameborder="0" allowtransparency="true"
+                                        src="//i.tianqi.com/index.php?c=code&a=getcode&id=34" width="300" height="25">
+                                </iframe>
+                            </li>
+                            {#                            <li>#}
+                            {#                                <i class=""></i>#}
+                            {#                              历史今天：#}
+                            {#                            <iframe src="http://www.todayonhistory.com/code/6.html?w=250&h=20&bky=dotted&bks=0&fs=14&fc=#565656&hg=14&ie=0&xhx=none&sd=300&px=3&len=0&sk=1&n=0"#}
+                            {#                                    width="250" height="15" scrolling="no" frameborder="0" allowtransparency="true"></iframe>#}
+                            {##}
+                            {#                            </li>#}
+                        </ul>
+                    </div>
+                    <div class="widget hot-article">
+                        <h3>
+                            <i class="iconfont icon-remen"></i>
+                            热门文章
+                        </h3>
+                        {% get_hot_articles 5 as hot_articles %}
 
-                </div>
-                <div class="widget attention-us">
-                    <ul class="clearfix">
-                        <li class="qq">
-                            <a href="#" title="QQ">
-                                <i class="icon-qq iconfont"></i>
-                            </a>
-                        </li>
-                        <li class="weixin">
-                            <a href="#" title="微信">
-                                <i class="iconfont icon-weixin"></i>
-                            </a>
-                        </li>
-                        <li class="weibo">
-                            <a href="#" title="新浪微博">
-                                <i class="iconfont icon-weibo"></i>
-                            </a>
-                        </li>
-                        <li class="rss">
-                            <a href="#" title="公众号">
-                                <i class="iconfont icon-erweima"></i>
-                            </a>
-                        </li>
-                        <li class="email">
-                            <a href="mailto:qmpython@qq.com" title="邮件">
-                                <i class="icon-youxiang1 iconfont"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="widget information">
-                    <h3>资讯</h3>
-                    <ul>
-                        <li>
-                            <i class=""></i>
-                            <iframe id="tianqi" scrolling="no" frameborder="0" allowtransparency="true"
-                                    src="//i.tianqi.com/index.php?c=code&a=getcode&id=34" width="300" height="25">
-                            </iframe>
-                        </li>
-                        {#                            <li>#}
-                        {#                                <i class=""></i>#}
-                        {#                              历史今天：#}
-                        {#                            <iframe src="http://www.todayonhistory.com/code/6.html?w=250&h=20&bky=dotted&bks=0&fs=14&fc=#565656&hg=14&ie=0&xhx=none&sd=300&px=3&len=0&sk=1&n=0"#}
-                        {#                                    width="250" height="15" scrolling="no" frameborder="0" allowtransparency="true"></iframe>#}
-                        {##}
-                        {#                            </li>#}
-                    </ul>
-                </div>
-                <div class="widget hot-article">
-                    <h3>热门文章</h3>
-                    {% get_hot_articles 5 as hot_articles %}
-
-                    <ul>
-                        {% for article in hot_articles %}
-                            <li class="clearfix">
-                                <div class="post-thumb">
+                        <ul>
+                            {% for article in hot_articles %}
+                                <li class="clearfix">
                                     <a href="{% url 'articles:article_detail' article.id %}" target="_blank">
-                                        <img src="{{ article.cover_img }}" alt="{{ article.title }}">
+                                            <img src="{{ article.cover_img }}" alt="{{ article.title }}">
                                     </a>
-                                </div>
-                                <div class="post-text">
-                                    <a href="{% url 'articles:article_detail' article.id %}" class="text" target="_blank">
-                                        {{ article.title }}
-                                    </a>
-                                    <div class="post-meta">
-                                        <span class="dtime">{{ article.create_time|date:'Y年m月d日' }}</span>
-                                        <span class="viewnum">阅读({{ article.read_num }})</span>
+                                    <div class="post-text">
+                                        <a href="{% url 'articles:article_detail' article.id %}" class="text" target="_blank">
+                                            {{ article.title }}
+                                        </a>
+                                        <div class="post-meta">
+                                            <span class="dtime">{{ article.create_time|date:'Y年m月d日' }}</span>
+                                            <span class="viewnum">阅读({{ article.read_num }})</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="widget commend-article">
-                    <h3>推荐文章</h3>
-                    {% get_recommend_articles as recommend_articles %}
-                    <ul>
-                        {% for one_recommend_article in recommend_articles %}
-                            <li><span>{{ forloop.counter }}</span>
-                                <a href="{% url 'articles:article_detail' one_recommend_article.article.id %}">{{ one_recommend_article.article.title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="widget widget_tags">
-                    <h3>标签</h3>
-                    {% get_tags as tags %}
-                    <div class="tagcloud clearfix">
-                        {% for tag in tags %}
-                            <a href="{% url 'tag' tag.id %}" class="tag-cloud-link">{{ tag.name }}</a>
-                        {% endfor %}
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                </div>
-                <div class="widget friendly-link">
-                    <h3>友情链接</h3>
-                    {% get_friend_links as friend_links %}
-                    <ul class="clearfix">
-                        {% for friend_link in friend_links %}
-                            <li><a href="{{ friend_link.link_url }}" target="_blank">{{ friend_link.name }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="widget site-statistics">
-                    <h3>网站信息</h3>
-                    <ul class="clearfix">
-                        {% get_total_article as total_article %}
-                        <li>文章总数：{{ total_article }}篇</li>
-                        {% get_categories as total_category %}
-                        <li>分类总数：{{ total_category }}</li>
-                        {% get_access_nums as access_nums %}
-                        <li>访问总数：{{ access_nums }}次</li>
-                        <li>本网站已运行：<span class="runTime">0天</span></li>
-                    </ul>
-                </div>
+                    <div class="widget commend-article">
+                        <h3>
+                            <i class="iconfont icon-tuijianshangjia"></i>
+                            推荐文章
+                        </h3>
+                        {% get_recommend_articles as recommend_articles %}
+                        <ul>
+                            {% for one_recommend_article in recommend_articles %}
+                                <li><span>{{ forloop.counter }}</span>
+                                    <a href="{% url 'articles:article_detail' one_recommend_article.article.id %}">{{ one_recommend_article.article.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="widget widget_tags">
+                        <h3>
+                           <i class="iconfont icon-icon-test"></i>
+                            标签
+                        </h3>
+                        {% get_tags as tags %}
+                        <div class="tagcloud clearfix">
+                            {% for tag in tags %}
+                                <a href="{% url 'tags' tag.id %}" class="tag-cloud-link">{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="widget friendly-link">
+                        <h3>
+                            <i class="iconfont icon-youqinglianjie"></i>
+                            友情链接
+                        </h3>
+                        {% get_friend_links as friend_links %}
+                        <ul class="clearfix">
+                            {% for friend_link in friend_links %}
+                                <li><a href="{{ friend_link.link_url }}" target="_blank">{{ friend_link.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="widget site-statistics">
+                        <h3>
+                            <i class="iconfont icon-icon"></i>
+                            网站信息
+                        </h3>
+                        <ul class="clearfix">
+                            {% get_total_article as total_article %}
+                            <li>文章总数：{{ total_article }}篇</li>
+                            {% get_categories as total_category %}
+                            <li>分类数目：{{ total_category }}</li>
+                            {% get_tags as tags %}
+                            <li>标签总数：{{ tags.count }}</li>
+                            {% get_access_nums as access_nums %}
+                            <li>访问总量：{{ access_nums }}次</li>
+                            <li>网站运行：<span class="runTime">0天</span></li>
+                        </ul>
+                    </div>
+                {% endblock %}
             </div>
-        {% endblock %}
     </div>
 </div>
 <footer>
@@ -356,10 +373,17 @@
 
 <div class="rollbar">
     <ul>
-        <li class="hide"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1328500761&site=qq&menu=yes">
+        <li class=""><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1328500761&site=qq&menu=yes">
             <i class="icon-qq iconfont"></i><span>qq咨询</span></a></li>
-        <li class="hide"><a href="#"><i class="iconfont icon-erweima"></i><span>关注微信</span></a></li>
-        <li class="hide"><a href="#"><i class="iconfont icon-zaixianzixun"></i><span>在线咨询</span></a></li>
+        <li class="">
+            <a href="#"><i class="iconfont icon-erweima"></i>
+                <span>
+                    关注微信
+                    <img src="/static/image/wxcode.png" style="max-width: 100%">
+                </span>
+            </a>
+        </li>
+        <li class=""><a href="#"><i class="iconfont icon-zaixianzixun"></i><span>在线咨询</span></a></li>
         <li><a href="javascript:;" onclick="goTop();"><i class="iconfont icon-dingbu"></i><span>回顶部</span></a></li>
     </ul>
 </div>
@@ -454,12 +478,6 @@
             <a href="" title="微信登录" style="display:none;" rel="nofollow"><i class="iconfont icon-weixin"></i></a>
             <a href="{% url 'user:weiboLogin' %}" title="微博登录" rel="nofollow"><i class="iconfont icon-weibo"></i></a>
             <a href="{% url 'user:githubLogin' %}" title="GitHub登录" rel="nofollow"><i class="icon-github iconfont"></i></a>
-
-{#            <a title="QQ登录" rel="nofollow"><i class="icon-qq iconfont"></i></a>#}
-{#            <a title="微信登录" style="display:none;" rel="nofollow"><i class="iconfont icon-weixin"></i></a>#}
-{#            <a title="微博登录" rel="nofollow"><i class="iconfont icon-weibo"></i></a>#}
-{#            <a title="GitHub登录" rel="nofollow"><i class="icon-github iconfont"></i></a>#}
-
        </div>
       </footer>
      </div>
@@ -511,38 +529,39 @@ csrf问题django官方给出的方法都不起作用,可以用以上2种方法�
 这两种方法是一个意思,就是设置请求头中X-CSRFToken为csrf_token的值
 但是单独的js无法在渲染模板时获取{{ csrf_token }}这个模板变量,所以只能从cookie中取值了,就显得代码长了些.
 -->
-<script src="{% static 'js/common/message.js' %}"></script>
+<script src="/static/js/common/message.js"></script>
 <script src="{% static 'js/common/common.js' %}"></script>
 <script src="{% static 'js/base.js' %}"></script>
 <script src="{% static 'js/user/login_register_box.js' %}"></script>
-{#<script type="text/javascript">#}
-{#$.ajaxSetup({#}
-{#     beforeSend: function(xhr, settings) {#}
-{#         function getCookie(name) {#}
-{#             var cookieValue = null;#}
-{#             if (document.cookie && document.cookie != '') {#}
-{#                 var cookies = document.cookie.split(';');#}
-{#                 for (var i = 0; i < cookies.length; i++) {#}
-{#                     var cookie = jQuery.trim(cookies[i]);#}
-{#                     // Does this cookie string begin with the name we want?#}
-{#                     if (cookie.substring(0, name.length + 1) == (name + '=')) {#}
-{#                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));#}
-{#                         break;#}
-{#                     }#}
-{#                 }#}
-{#             }#}
-{#             return cookieValue;#}
-{#         }#}
-{#         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {#}
-{#             // Only send the token to relative URLs i.e. locally.#}
-{#             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));#}
-{#         }#}
-{#     }#}
-{# }); #}
-{#</script>#}
-{#<script type="text/javascript">#}
-{#    $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});#}
-{#</script>#}
+
+<!--{#<script type="text/javascript">#}-->
+<!--{#$.ajaxSetup({#}-->
+<!--{#     beforeSend: function(xhr, settings) {#}-->
+<!--{#         function getCookie(name) {#}-->
+<!--{#             var cookieValue = null;#}-->
+<!--{#             if (document.cookie && document.cookie != '') {#}-->
+<!--{#                 var cookies = document.cookie.split(';');#}-->
+<!--{#                 for (var i = 0; i < cookies.length; i++) {#}-->
+<!--{#                     var cookie = jQuery.trim(cookies[i]);#}-->
+<!--{#                     // Does this cookie string begin with the name we want?#}-->
+<!--{#                     if (cookie.substring(0, name.length + 1) == (name + '=')) {#}-->
+<!--{#                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));#}-->
+<!--{#                         break;#}-->
+<!--{#                     }#}-->
+<!--{#                 }#}-->
+<!--{#             }#}-->
+<!--{#             return cookieValue;#}-->
+<!--{#         }#}-->
+<!--{#         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {#}-->
+<!--{#             // Only send the token to relative URLs i.e. locally.#}-->
+<!--{#             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));#}-->
+<!--{#         }#}-->
+<!--{#     }#}-->
+<!--{# }); #}-->
+<!--{#</script>#}-->
+<!--{#<script type="text/javascript">#}-->
+<!--{#    $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});#}-->
+<!--{#</script>#}-->
 
 {% block js %}
 {% endblock %}

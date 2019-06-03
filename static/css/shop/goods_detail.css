@@ -1,0 +1,265 @@
+
+.grid-left{
+    width: 100%;
+    background-color: transparent;
+}
+
+.goods-detail-action{
+    background-color: #fff;
+}
+
+.goods-detail-pic{
+    width: 43%;
+    height: 420px;
+    border: 1px solid #eee;
+}
+.goods-detail-pic img{
+    margin: 50px auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+.goods-detail-info{
+    width: 55%;
+}
+
+.goods-detail-info h1{
+    margin-top: 10px;
+    color: #666;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.goods-detail-info p{
+    color: #e4393c;
+    font-size: 12px;
+    padding-right:10px;
+    margin-top: 5px;
+}
+
+.goods-price-wrap{
+    margin-top: 20px;
+    margin-right: 20px;
+    color: #999;
+    font-size: 12px;
+    padding: 5px 10px;
+    background-color: #efefef;
+}
+
+
+.original-price span{
+    text-decoration: line-through;
+    font-size: 14px;
+    color: #333;
+}
+
+
+.discount-price em, .goods-total-price em{
+    font-style: normal;
+    vertical-align: middle;
+    color: #FF0036;
+    font-size: 18px;
+    font-family: Arial;
+    -webkit-font-smoothing: antialiased;
+
+}
+
+
+.discount-price span, .goods-total-price span{
+    vertical-align: middle;
+    font-size: 30px;
+    color: #FF0036;
+    font-weight: bolder;
+    font-family: Arial;
+    -webkit-font-smoothing: antialiased;
+}
+
+.goods-sku{
+    margin-top: 20px;
+}
+
+.goods-sku p{
+    color: #666;
+}
+
+
+
+.goods-sku ul li{
+    line-height: 10px;
+    color: #666;
+    background-color: #F7F7F7;
+    margin-right: 7px;
+    margin-bottom: 4px;
+}
+
+
+.goods-sku ul>li>a{
+    color: #666;
+    display: inline-block;
+    border: 1px solid #ccc;
+    padding: 10px 10px;
+    font-size: 12px;
+}
+
+.goods-number{
+    margin-top: 30px;
+    color: #838383;
+    font-size: 12px;
+}
+
+.num-name{
+    margin-top: 15px;
+}
+
+.choose-amount{
+    width: 58px;
+    height: 44px;
+    border: 1px solid #ccc;
+    position: relative;
+    margin-left: 40px;
+}
+
+.choose-amount input{
+    width: 43px;
+    height: 42px;
+    border: none;
+    text-align: center;
+}
+.choose-amount a{
+    display: block;
+    width: 15px;
+    text-align: center;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    background: #f1f1f1;
+    color: #666;
+    position: absolute;
+    right: -1px;
+    border: 1px solid #ccc;
+}
+
+.choose-amount a.btn-add{
+    top: -1px;
+}
+
+.choose-amount a.btn-reduce{
+    bottom: -1px;
+}
+
+.goods-stock{
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+.goods-total-price{
+    margin-top: 20px;
+    color:#838383;
+}
+
+.operate-btn{
+    margin: 40px 0;
+}
+
+.operate-btn a{
+    display: inline-block;
+    width:170px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    background-color: #ffeded;
+    border: 1px solid #FF0036;
+    color: #FF0036;
+}
+
+.operate-btn a.add-cart-btn {
+    background-color: #ff0036;
+    border: 1px solid #ff0036;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.goods-recommend{
+    background-color: #fff;
+    margin-top: 20px;
+    padding: 10px 10px;
+}
+
+.goods-recommend-tab{
+    width: 10%;
+    height: 38px;
+    line-height: 38px;
+    color: rgb(60, 165, 246);
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid rgb(60, 165, 246);
+}
+
+.goods-recommend-scroll{
+    margin-top: 10px;
+    height: 240px;
+    overflow: hidden;
+}
+
+.goods-recommend-item{
+    width:150px;
+    margin: 10px 35px;
+}
+
+.goods-recommend-item a{
+    display: inline-block;
+    width: 100%;
+    height:150px;
+}
+
+.goods-recommend-item img{
+    max-width:100%;
+    max-height: 100%;
+
+}
+
+.goods-name{
+    margin-top: 5px;
+    overflow: hidden;
+    /*word-break: break-all;*/
+    /*word-wrap: break-word;*/
+    height: 35px;
+}
+
+.goods-name a{
+    color:#666;
+    font-size: 12px;
+}
+
+.goods-desc{
+    color: #e4393c;
+    font-size: 14px;
+    font-family: Verdana;
+    margin-top: 10px;
+    text-align: center;
+
+}
+
+.goods-detail-introduce{
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.detail_tab{
+    border-bottom: 1px solid rgb(60, 165, 246);
+
+}
+.detail_tab li{
+    float: left;
+    padding: 10px 25px;
+    font-size: 14px;
+    color: #666;
+}
+
+.detail_tab li.active{
+    background-color: rgb(60, 165, 246);
+    color: #fff;
+}
+
+.tab_content{
+    background-color: #fff;
+}

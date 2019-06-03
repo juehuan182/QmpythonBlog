@@ -1,4 +1,45 @@
 
+// 实现移动端菜单下拉效果
+
+// let spanBtn = document.querySelector("·navbar-toggle>nav>ul>li>span");
+//
+// spanBtn.addEventListener("touchstart", function (e) {
+//     e.preventDefault();
+//     console.log('click');
+// });
+//
+// $(".mnav>.navbar-toggle>nav>ul>li>span").click(function () {
+//
+//     console.log('click');
+//     // 改变箭头方向，旋转180°
+//     $(this).children.css('transform', 'rotate(180deg)');
+//     // 显示子菜单
+//     $(this).nextSibling.show();
+//
+// });
+
+
+$(".mnav > .navbar-toggle > nav > ul > li > span").on("touchstart", function (e) {
+    // console.log('touchstart');
+    // 改变箭头方向，旋转180°
+    if ($(this).children().hasClass("rotate")){
+        $(this).children().removeClass("rotate");
+    }else {
+        $(this).children().addClass("rotate");
+    }
+
+    // 显示子菜单
+    $(this).next().toggle();
+});
+
+
+// 移动端点击设置切换显示
+$(".user-oper").on("touchstart", function (e) {
+    $(this).parent().next().toggle();
+
+});
+
+
 var urlstr = location.href;
 var urlstatus = false;
 $(".nav > ul > li > a").each(function () {
@@ -137,9 +178,10 @@ function dateFormat(time) {
 
 //获取class->tag-cloud-link
 var tags_cloud = document.getElementsByClassName("tag-cloud-link");
-var colors = ['#036564', '#EB6841', '#3FB8AF', '#FE4365', '#FC9D9A', '#EDC951', '#C8C8A9', '#83AF9B'];
+var colors = ['#036564', '#EB6841', '#3FB8AF', '#FE4365', '#FC9D9A', '#EDC951','#e77f67', '#f3a683', '#778beb', '#596275', '#f5cd79', '#20bf6b', '#C8C8A9', '#83AF9B'];
 for (var i = 0; i < tags_cloud.length; i++) {
 
     temp = i % colors.length;
     tags_cloud[i].style.background = colors[temp];
 }
+

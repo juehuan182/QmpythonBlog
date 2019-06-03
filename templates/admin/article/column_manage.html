@@ -33,20 +33,24 @@
                             <th>栏目名称</th>
                             <th>链接地址</th>
                             <th>分类数量</th>
+                            <th>栏目位置</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
                             {% for one_column in columns %}
-                                <tr data-id="{{ one_column.id }}" data-name="{{ one_column.name }}" data-link="{{one_column.link_url}}">
+                                <tr data-id="{{ one_column.id }}" data-name="{{ one_column.name }}" data-link="{{one_column.link_url}}"
+                                data-index="{{one_column.index}}">
                                     <td>{{ one_column.id }}</td>
                                     <td>{{ one_column.name }}</td>
                                     <td>{{ one_column.link_url }}</td>
                                     <td>{{ one_column.num_categories }}</td>
+                                    <td>{{ one_column.index }}</td>
+
                                     <td>
                                         <button class="btn btn-xs btn-warning btn-edit">
                                             <i class="fa fa-edit"></i>
-                                            &nbsp;;编辑
+                                            &nbsp;编辑
                                         </button>
                                         <button class="btn btn-xs btn-danger btn-del">
                                            <i class="fa fa-trash-o"></i>

@@ -141,7 +141,8 @@ div.banner-left-item-info .banner-left-item-title{
     float: left;
     overflow: hidden;
     height: 3.35rem;
-    width: 3.265rem;
+    /*width: 3.265rem;*/
+    width: 49%;
     position: relative;
     transform: rotate(0deg); /*为了防止transform过渡时border-radius原先边界处圆角应该隐藏的地方溢了出来*/
 }
@@ -319,7 +320,7 @@ article.excerpt-minic-index {
 
     .banner-right-item{
         float: left;
-        width: 49.2%;
+        width: 49%;
         height: 120px;
     }
 

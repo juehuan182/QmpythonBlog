@@ -20,18 +20,18 @@
     <div class="current-position">
         当前位置：
         <a href="{% url 'index' %}">首页</a>
-        &nbsp;>&nbsp;
+        <span> > </span>
         <a href="{{ article.category.column.link_url }}">{{ article.category.column.name }}</a> <!--跨表查询，正向直接子表.主表即可 -->
-        &nbsp;>&nbsp;
+        <span> > </span>
         <a href="{% url 'categories' article.category.id %} ">{{ article.category.name }}</a>
-        &nbsp;>&nbsp;
+        <span> > </span>
         <a class="article-title">{{ article.title }}</a>
     </div>
 {% endblock %}
 
 
 {% block grid-left %}
-    <div class="infosbox">
+    <div class="article-container">
         <div class="article-header">
             <h1 class="article-title">{{ article.title }}</h1>
             <div class="article-meta">
@@ -50,11 +50,16 @@
         <div class="article-copyright">
             转载此文章须经作者同意，并请附上本页链接：{{ request.META.HTTP_HOST }}{{ request.path }}
         </div>
+        <div class="article-tags">
+                {% for one_tag in article.tag.all %}
+                    <a href="{% url 'tags' one_tag.id %}">{{ one_tag.name }}</a>
+                {% endfor %}
+        </div>
         <!--点赞，赞赏 -->
         <div class="article-actions clearfix">
             <a href="javascript:;" class="thumbs-up" onclick="likeArticle({{ article.id }});"><i
                     class="iconfont icon-xihuan"></i>赞(<span>{{ article.like_num }}</span>)</a>
-            <a href="javascript:void(0);" class="reward" onclick="payToggle();"><i class="iconfont icon-fukuan"></i>赏</a>
+            <a href="javascript:void(0);" class="reward" onclick="payToggle();"><i class="iconfont icon-fukuan"></i>打赏</a>
 
             <div class="hide-box"></div>
             <div class="reward-box clearfix">
@@ -78,7 +83,7 @@
                 </div>
             </div>
             <div class="article-share">
-                <span>分享到：</span>
+                分享:
                 <a href="javascript:shareAction('qzone','{{ article.title }}','{{ article.excerpt }}','{{ article.cover_img }}');"
                    title="分享到QQ空间"><i class="iconfont icon-qqkongjian"></i></a>
                 <a href="javascript:shareAction('qq','{{ article.title }}','{{ article.excerpt }}','{{ article.cover_img }}');"
@@ -99,6 +104,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="article-prenext clearfix">
@@ -117,8 +123,10 @@
                 {% endif %}
             </p>
         </div>
+    </div>
 
-        <div class="article-relevant">
+
+    <div class="article-relevant">
             <h3>相关文章</h3>
             <ul class="clearfix">
                 {% for relate_article in relate_articles %}
@@ -130,7 +138,7 @@
             </ul>
         </div>
 
-        <div class="article-comments" is_login="{{ is_login }}">
+    <div class="article-comments" is_login="{{ is_login }}">
             <h3>文章评论</h3>
             {% if user.is_authenticated %}
                 <!--评论区域 begin -->
@@ -161,11 +169,9 @@
             <!-- 回复区域 end -->
         </div>
 
-    </div>
+
 {% endblock %}
 
-{% block grid-right %}
-{% endblock %}
 
 {% block js %}
 <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>

@@ -4,11 +4,14 @@
     <a href="/articles/{{ article.id }}/">
         <img src="{{ article.cover_img }}"/>
     </a>
+    <div class="article-category">
+        <a href="{% url 'categories' article.category.id %}" target="_blank">
+            {{ article.category.name }}
+        </a>
+    </div>
+
     <div class="right-text">
         <div class="header">
-            <a href="{% url 'categories' article.category.id %}" title="css3" target="_blank">
-                {{ article.category.name }}
-            </a>
             <h2><a href="{% url 'articles:article_detail' article.id %}">{{ article.title }}</a></h2>
         </div>
         <p class="note">
@@ -22,3 +25,4 @@
         </div>
     </div>
 </article>
+

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}全民python-店铺演示{% endblock %}
+
+{% block description %}全民pythn-店铺演示{% endblock %}
+
+{% block keywords %}店铺演示 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/shop/shop.css' %}">
+{% endblock %}
+
+
+{% block banner %}
+    {% include 'shop/shop_banner.html' %}
+{% endblock %}
+
+
+{% block grid-left %}
+    {% for goods_category in goods_categories %}
+        <div class="goods-category-wrap">
+            <div class="goods-category-title clearfix">
+                <h2>{{ goods_category.name }}</h2>
+                {% if goods_category.goodssku_set.all %}
+                    <a href="{% url 'shop:goods_categories' goods_category.id %}">查看更多>></a>
+                {% endif %}
+            </div>
+            <ul class="goods-list">
+                {% for one_goods in  goods_category.goodssku_set.all %}
+                    <li class="goods-list-item">
+                        <div class="goods-list-itme-header">
+                            <a href="{% url 'shop:goods_detail' one_goods.id %}">
+                                <img src="{{ one_goods.image }}" alt="">
+                            </a>
+                        </div>
+                        <div class="goods-title">
+                            <a href="" title="商品标题">{{ one_goods.name }}</a>
+                        </div>
+                        <div class="goods-desc clearfix">
+                            <span class="fl">销售量：<em>{{ one_goods.sales }}</em></span>
+                            <span class="fr" style="color: #f57575;">￥{{ one_goods.price }}</span>
+                        </div>
+                    </li>
+                {% empty %}
+                    <p class="empty-article">暂无商品，敬请关注!</p>
+                {% endfor %}
+            </ul>
+        </div>
+    {% empty %}
+        <div class="goods-category-wrap">
+            内容尚在建设中，敬请关注，谢谢~~
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/shop/shop.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

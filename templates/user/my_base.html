@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/user/my_base.css' %}">
+    {% block my_base_css %}
+
+    {% endblock %}
+{% endblock %}
+
+{% block banner %}
+
+{% endblock %}
+
+
+{% block grid-left %}
+    <div class="left-menu">
+        <div class="menu-header">
+            <h3>个人中心</h3>
+        </div>
+        <ul class="user-menu">
+            <li><a href="{% url 'user:profile' %}">个人信息</a></li>
+            <li><a href="{% url 'user:history' %}">浏览历史</a></li>
+            <li><a href="{% url 'user:my_order' %}">我的订单</a></li>
+            <li><a href="{% url 'user:address' %}">收货地址</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block grid-right %}
+        {# 用户中心右侧块 #}
+        {% block right_content %}
+        {% endblock %}
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'js/user/my_base.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+
+    {% block my_base_js %}
+
+    {% endblock %}
+
+{% endblock %}

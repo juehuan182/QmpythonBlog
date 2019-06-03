@@ -68,7 +68,7 @@
         </article>
 
     {% empty %} {# 在for循环之前检查列表大小是常见的，当列表为空的时候给出特别提示，这是常见的，所以for支持可选empry来当为空时输出 #}
-        <div class="">没有搜索到您想要的结果！</div>
+        <div style="padding: 10px;color: #666;">没有搜索到您想要的结果！</div>
     {% endfor %}
     {% if page %}
         <div class="pagination">

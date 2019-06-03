@@ -352,6 +352,30 @@ desired effect
                         </ul>
                     </li>
                 {% endif %}
+
+
+               <li class="treeview">
+                        <a href="#">
+                            <i class="glyphicon glyphicon-shopping-cart"></i>
+                            <span>商城模块</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="{% url 'admin:shop_categories' %}">
+                                    商品类别
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'admin:shop_goodsSPUs' %}">
+                                    商品信息
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -424,18 +448,6 @@ desired effect
 <script src="{% static 'js/base/fsweetalert.js'%}"></script>
 <script src="{% static 'js/base/sweetalert.min.js'%}"></script>
 <script src="{% static 'js/admin/base/admin.js'%}"></script>  <!-- 解决adminlte左侧菜单栏高亮定位，参考https://blog.csdn.net/qq_43044679/article/details/83818342-->
-    <script>
-      $(function () {
-        $('#assets_table').DataTable({
-          "paging": true,       <!-- 允许分页 -->
-          "lengthChange": true, <!-- 允许改变每页显示的行数 -->
-          "searching": true,    <!-- 允许内容搜索 -->
-          "ordering": true,     <!-- 允许排序 -->
-          "info": true,         <!-- 显示信息 -->
-          "autoWidth": false    <!-- 固定宽度 -->
-        });
-      });
-    </script>
 <script>
     $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
 </script>

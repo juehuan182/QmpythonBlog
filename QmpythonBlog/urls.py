@@ -19,34 +19,14 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.views.static import serve
 
-from rest_framework import routers, serializers, viewsets
 
-from .views import index, column, category, tag, Article
-from user.models import Account
+from .views import index, column, category, tag
 
-
-# Seriallzers 定义这个API的表现
-class ArticleSerializer(serializers.HyperlinkedModelSerializer):
-    author = serializers.ReadOnlyField(source='author.username')
-    class Meta:
-        model = Article  # 指明序列化器处理数据字段从模型类参考生成
-        fields = ['title', 'description', 'cover_img', 'read_num', 'like_num', 'author'] # 指明该序列化器包含的模型类中有哪些字段,’all’指明包含所有字段
-
-
-#ViewSets定义这个API的行为
-class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all()   # queryset 指明该视图在查询数据时使用的查询集
-    serializer_class = ArticleSerializer  # serializer_class 指明该视图在进行序列化或反序列化时使用的序列化器
-
-#Routers提供了一种简单的方式来设置url
-router = routers.DefaultRouter()
-router.register(r'articles', ArticleViewSet)
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
     path('admin/', include('admin.urls', namespace='admin')),
 
-    path('api/', include(router.urls)),
     # 通过username/password获取token
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # 注意这个url可以是任何你想要的，但是必须导入 rest_framework.urls，并且 namespace必须为rest_framework。
@@ -61,7 +41,7 @@ urlpatterns = [
     path('categories/<int:category_id>/', category, name='categories'),
 
     # 文章标签
-    path('tag/<int:tag_id>/', tag, name='tag'),
+    path('tags/<int:tag_id>/', tag, name='tags'),
 
     # 文章
     path('articles/', include('article.urls', namespace='articles')),
@@ -74,8 +54,15 @@ urlpatterns = [
     # 文档
     path('docs/', include('doc.urls', namespace='docs')),
 
+    # 店铺
+    path('shop/', include('shop.urls', namespace='shop')),
+
     # 验证
     path('verification/', include('verification.urls', namespace='verification')),
+
+
+    # 用来测试django restful api接口测试
+    path('api/', include('api.urls',namespace='api')),
 
 
 ] #+ static(MEDIA_URL, document_root=MEDIA_ROOT)   #方法2；在最后通过static方法，把MEDIA_URL加进去，这样模板中才能正确显示图片。因为图片属于静态文件。

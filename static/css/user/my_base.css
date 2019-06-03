@@ -1,0 +1,42 @@
+
+.grid-left{
+    width: 12%;
+}
+
+.grid-right {
+    float: left;
+    width: 86%;
+    margin-left: 20px;
+}
+
+.banner {
+    display: none;
+}
+
+.left-menu .menu-header{
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.left-menu li {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.left-menu li.active{
+    border-left: 2px solid #3ca5f6;
+    color: #3ca5f6;
+}
+
+.left-menu li.active a{
+    color: #3ca5f6;
+}
+
+.left-menu a{
+    color: #666;
+}

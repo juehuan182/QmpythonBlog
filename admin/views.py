@@ -32,10 +32,9 @@ from util.fastdfs.fdfs import FDFS_Client
 from article.models import Column, Category, Tag, Article, ArticleRecommend, Advertising, Comment
 from user.models import Account, FriendLink
 from doc.models import Doc
-from course.models import Course, Lectuer, CourseCategory
 from util import json_status
 
-from .forms import ArticleAddForm, AdvertisingAddForm, DocPubForm, CoursePubForm
+from .forms import ArticleAddForm, AdvertisingAddForm, DocPubForm
 
 # Create your views here.
 
@@ -67,7 +66,7 @@ Django之CBV装饰器method_decorator
 # <app_label>.<permission_codename>
 
 # @method_decorator(permission_required('article.add_column'), name='dispatch') 针对类视图全部方法
-class ColumnManageView(View):
+class ColumnManageView(LoginRequiredMixin, View):
     def get(self, request):
         """
             相当于sql:
@@ -77,7 +76,7 @@ class ColumnManageView(View):
                 where t.id = t1.column_id
 
         """
-        columns = Column.objects.annotate(num_categories=Count('category'))
+        columns = Column.objects.annotate(num_categories=Count('categories'))  # categories为模型类中设置的relate_name,否则为子表小写表名
         return render(request, 'admin/article/column_manage.html', locals())
 
     def post(self, request):
@@ -98,8 +97,13 @@ class ColumnManageView(View):
         if Column.objects.filter(name=column_name).exists():
             return json_status.params_error(message="该栏目名称已存在")
 
-        column_link = dict_data.get('column_link', '#') # 如果没填则默认给'#'
-        Column.objects.create(name=column_name, link_url=column_link)
+        column_link_url = dict_data.get('column_link_url', '#') # 如果没填则默认给'#'
+
+        column_index = dict_data.get('column_index')
+        if not column_index.strip():
+            return json_status.params_error(message="栏目位置不能为空")
+
+        Column.objects.create(name=column_name, link_url=column_link_url, index=column_index)
 
         return json_status.result(message="栏目创建成功")
 
@@ -160,16 +164,21 @@ class ColumnEditView(PermissionRequiredMixin, View):
         if not column_link_url.strip():
             return json_status.params_error(message="链接地址为空")
 
+        column_index = dict_data.get('column_index')
+        if not column_index.strip():
+            return json_status.params_error(message="栏目位置不能为空")
+
         column = Column.objects.only('id').filter(id=column_id).first()
         if not column:
             return json_status.params_error(message="该栏目不存在")
 
-        if Column.objects.filter(name=column_name, link_url=column_link_url).exists():
+        if Column.objects.filter(name=column_name, link_url=column_link_url, index= column_index).exists():
             return json_status.params_error(message="栏目名称和链接地址都未变化，请重新编辑")
 
         column.name = column_name
         column.link_url = column_link_url
-        column.save(update_fields=['name', 'link_url'])
+        column.index = column_index
+        column.save(update_fields=['name', 'link_url', 'index'])
 
         return json_status.result(message='栏目修改成成功')
 
@@ -746,6 +755,17 @@ class RecommendArticleManageView(View):
 
 
 class RecommendArticleAddView(PermissionRequiredMixin, View):
+    permission_required = ('article.add_articlerecommend', 'article.change_articlerecommend', 'article.delete_articlerecommend')
+    raise_exception = True
+    permission_denied_message = '没有权限进行操作'
+
+    def handle_no_permission(self):
+        if self.request.method.lower() != 'get':
+            return json_status.params_error(message=self.permission_denied_message)
+        else:
+            return super(ArticleEditView, self).handle_no_permission()
+
+
     def get(self, request):
         categories = Category.objects.only('id', 'name').annotate(num_articles=Count('article')).order_by('-num_articles')
         priority = ArticleRecommend.PRI_CHOICES # ((1, '第一级'), (2, '第二级'), (3, '第三级'), (4, '第四级'), (5, '第五级'), (6, '第六级'))
@@ -756,7 +776,7 @@ class RecommendArticleAddView(PermissionRequiredMixin, View):
         return render(request, 'admin/article/recommand_article_add.html', locals())
 
     def post(self, request):
-        if request.user.has_perms('article.add_articlerecommend'):
+        if not request.user.has_perms('article.add_articlerecommend'):
             return json_status.params_error(message='没有操作权限')
 
         json_data = request.body
@@ -1122,79 +1142,6 @@ class DocsPubView(View):
             return json_status.result()
 
         return json_status.params_error(message=doc_form.get_error())
-
-
-class CoursesManageView(View):
-    def get(self, request):
-        course = Course.objects.select_related('lectuer', 'coursecategory').only('title', 'course_category__name', 'lectuer__name').filter(is_delete=False)
-        return render(request, 'admin/course/courses_manage.html', locals())
-
-class CoursesEditView(View):
-    def get(self, request, course_id):
-        course = Course.objects.filter(id=course_id, is_delete=False).first()
-        if not course:
-            raise Http404('需要更新的文章不存在！')
-
-        lectuers = Lectuer.objects.only('id', 'name').filter(is_delete=False)
-        courseCategories = CourseCategory.objects.only('id', 'name').filter(is_delete=False)
-
-        context = {
-                    'course': course,
-                    'lectuers': lectuers,
-                    'courseCategories': courseCategories
-                  }
-
-        return render(request, 'admin/course/courses_pub.html', context=context)
-
-
-    def delete(self, request, course_id):
-        course = Course.objects.filter(id=course_id).first()
-        if course:
-            course.delete() # 物理删除
-            return json_status.result()
-        else:
-            return json_status.params_error(message="该课程不存在")
-
-
-    def put(self, request, course_id):
-        course = Course.objects.filter(id=course_id).first()
-        if not course:
-            return json_status.params_error(message="该课程不存在")
-
-        json_data = request.body
-        if not json_data:
-            return json_status.params_error(message='参数错误')
-        # 将json转化为dict
-        dict_data = json.loads(json_data.decode('utf-8'))
-
-        course_form = CoursePubForm(dict_data, instance=course)
-        if course_form.is_valid():
-            course.save()
-            return json_status.result()
-
-        return json_status.params_error(message=course_form.get_error())
-
-
-class CoursesPubView(View):
-    def get(self,request):
-        lectuers = Lectuer.objects.all()
-        courseCategories = CourseCategory.objects.filter(is_delete=False)
-        return render(request, 'admin/course/courses_pub.html', locals())
-
-    def post(self, request):
-        json_data = request.body
-        if not json_data:
-            return json_status.params_error(message="参数错误")
-
-        # 将json转化为dict
-        dict_data = json.loads(json_data.decode('utf-8'))
-
-        course_form = CoursePubForm(dict_data)
-        if course_form.is_valid():
-            course_form.save()
-            return json_status.result()
-
-        return json_status.params_error(course_form.get_error())
 
 class GroupManagerView(View):
     @method_decorator(permission_required('group.view_group', raise_exception=True))
@@ -1853,7 +1800,62 @@ def webuploadImage(request):
 
 
 
+#  商城模块
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import renderers
+from shop.models import GoodsCategory, GoodsSPU, GoodsSKU
+from shop.serializers import GoodsCategorySerializer, GoodsSPUSerializer, GoodsSKUSerializer
 
+
+class ShoppingCategoriesView(APIView):
+    renderer_classes = (renderers.JSONRenderer, renderers.TemplateHTMLRenderer)
+
+    def get(self, request):
+        # 获取查询集
+        goods_categories = GoodsCategory.objects.only('id')
+
+        goods_serializer = GoodsCategorySerializer(goods_categories, many=True)
+        return Response({'goods_categories':goods_categories}, template_name='admin/shop/goods_category_manage.html')
+
+        #return render(request, 'admin/shop/goods_category_manage.html', {'goods_categories': goods_categories})
+
+    def post(self, request):
+        # 获取参数
+        # 序列化
+        serializer_data = GoodsCategorySerializer(data=request.data)
+        if serializer_data.is_valid():
+            serializer_data.save()
+            return Response(serializer_data.data,status=status.HTTP_201_CREATED)
+
+        return Response(serializer_data.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+from rest_framework import mixins
+from rest_framework import generics
+
+
+class ShoppingGoodsSPUsView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+
+    queryset = GoodsSPU.objects.all() # 查询结果集
+    serializer_class = GoodsSPUSerializer # 序列化类
+
+    def get(self, request, *args, **kwargs):
+
+        #return render(request, 'admin/shop/goods_manage.html')
+        return self.list(request,  *args, **kwargs)
+
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+from rest_framework import viewsets
+
+class ShoppingGoodsSKUsViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = GoodsSKU.objects.all()
+    serializer_class = GoodsSKUSerializer
 
 
 

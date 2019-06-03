@@ -173,6 +173,7 @@ $(".kr-passport-login .kr-passport-button").click(function () {
 /*********************注册功能****************************/
 
 $(".register").click(function () {
+
     // 隐藏登录框
     $(".kr-portal").hide();
     $(".kr-passport-login").hide();

@@ -12,7 +12,3 @@ class FormMixin:
             return err_msg_str
         return None
 
-
-global TEST_NUM
-
-TEST_NUM = 'aaa'

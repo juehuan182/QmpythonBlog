@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}全民python-微信支付{% endblock %}
+
+{% block description %}全民pythn-微信支付{% endblock %}
+
+{% block keywords %}微信支付 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/shop/wechatPay.css' %}">
+{% endblock %}
+
+{% block banner %}
+
+{% endblock %}
+
+{% block grid-left %}
+    <div class="order-payment-info">
+        <div class="order-payment-info-top clearfix">
+            <div class="o-title">订单提交成功，请尽快付款！订单号：96213522981</div>
+            <div class="o-price"><span>应付金额</span><strong>6798.00</strong><span>元</span></div>
+        </div>
+        <div class="payment-main">
+            <div class="p-w-hd">微信支付</div>
+            <div class="p-w-box clearfix">
+               <div class="pw-box-left fl">
+                   <div class="pay-code">
+                       <img src="//img30.360buyimg.com/jr_image/jfs/t2893/157/4205885241/62385/951af5d5/57b51ea9Nb862ca5e.png" width="298" height="298">
+                   </div>
+                   <div class="pw-box-ft">
+                                <p>请使用微信扫一扫</p>
+                                <p>扫描二维码支付</p>
+                            </div>
+               </div>
+               <div class="pw-box-right fl">
+                   <img src="{% static 'image/payment/icon_phone-bg.png' %}">
+               </div>
+            </div>
+        </div>
+        <div class="payment-change">
+            <span>&lt;</span>
+            <a href="/shop/cart/order/">选择其他支付方式</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/shop/shop.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

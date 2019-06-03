@@ -1,19 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'user/my_base.html' %}
+
 {% load static %}
 
-{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+{% block title %}全民python-我的资料{% endblock %}
 
-{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+{% block description %}全民pythn-我的资料{% endblock %}
 
-{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+{% block keywords %} 我的资料 {% endblock %}
 
-{% block css %}
-{#    <link rel="stylesheet" href="https://cdn.bootcss.com/cropper/3.1.3/cropper.min.css">#}
+{% block my_base_css %}
+    {#    <link rel="stylesheet" href="https://cdn.bootcss.com/cropper/3.1.3/cropper.min.css">#}
     <link rel="stylesheet" href="{% static 'css/user/cropper.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/user/my_profile.css' %}">
 {% endblock %}
 
-{% block grid-left %}
+
+{% block right_content %}
     <div class="usercenter-main">
         <div class="usercenter-tab clearfix">
             <div class="tabPane">基本资料</div>
@@ -142,10 +144,8 @@
 
 {% endblock %}
 
-{% block grid-right %}
-{% endblock %}
-{% block js %}
-{#    <script src="//cdn.bootcss.com/cropper/3.1.3/cropper.min.js"></script>#}
+
+{% block my_base_js %}
     <script src="{% static 'js/user/cropper.min.js' %}"></script>
     <script src="{% static 'css/laydate/laydate.js' %}"></script>
     <script src="{% static 'js/user/my_profile.js' %}"></script>
@@ -153,9 +153,6 @@
         $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
     </script>
 {% endblock %}
-
-
-
 
 
 

@@ -12,7 +12,7 @@ register = template.Library()
 @register.simple_tag
 def get_nav_columns():
     # 获取栏目
-    columns = Column.objects.all()
+    columns = Column.objects.only('name')
     return columns
 
 
@@ -27,6 +27,8 @@ def get_hot_articles(num):
     # 以 0 表示有序集第一个成员，以 1 表示有序集第二个成员
     # 以 -1 表示最后一个成员， -2 表示倒数第二个成员
     article_ranking = conn_redis.zrange('article_ranking', 0, -1, desc=True)[:num]
+    print(article_ranking)
+
     if article_ranking:
         #print(article_ranking) # [b'14', b'10', b'15', b'11']
         # 得到前num名文章ID

@@ -1,13 +1,14 @@
 import logging
+from datetime import datetime, timedelta
 
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.db.models import Count
 from django.http import JsonResponse
-from datetime import datetime, timedelta
 from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django_redis import get_redis_connection
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -32,6 +33,7 @@ def article_list(request):
         select_related('author', 'category').values('id', 'title', 'description', 'category_id', 'category__name', 'author__username', 'create_time',
                                     'read_num', 'like_num', 'cover_img')[start_page:end_page]
     article_list = list(articles)
+
     return JsonResponse({"article_list": article_list})
 
 
@@ -81,8 +83,6 @@ class ArticleDetailView(View):
         article.increase_views()
 
         # 将阅读数也添加到redis中
-        from django_redis import get_redis_connection
-
         conn_redis = get_redis_connection('default')
         # total_views = conn_redis.incr('article_{}_views'.format(article_id)) # incr 将 key 中储存的数字值增一。
 
@@ -100,7 +100,7 @@ class ArticleDetailView(View):
         # 子查从
         category = article.category
         # relate_articles = category.article_set.only('id') _set反向查询法，以下另外种查询方法比这种查询效率快
-        relate_articles = Article.objects.filter(category=category).exclude(id=article_id)[:5]
+        relate_articles = Article.objects.filter(category=category).exclude(id=article_id)[:8]
 
         # 查询多少个人参与，多少条评论
         comment_query_set = article.comment_set.filter(is_delete=False).order_by('-id')  # 反向查询
@@ -122,15 +122,47 @@ class ArticleDetailView(View):
 
         if request.user.is_authenticated:
             is_login = 1
+
+            # 添加用户的历史记录
+            conn_redis = get_redis_connection('history')
+            history_key = 'history_{}'.format(request.user.id)
+            # # 移除列表中的文章
+            # conn_redis.lrem(history_key, 0, article_id)
+            # # 把article_id插入到列表左侧
+            # conn_redis.lpush(history_key, article_id)
+            # # 只保存用户最新浏览的10条文章
+            # conn_redis.ltrim(history_key, 0, 9)
+
+            # 用hash类型
+            # 先尝试获取article_id的值 ->hget history_key属性
+            # 如果article_id在hash中不存在,hget返回None
+            article_count = conn_redis.hget(history_key, article_id)
+
+            # 如果article_id在hash中不存在,hlen获取history_key对应的hash中键值的个数
+            history_count = conn_redis.hlen(history_key)
+            if history_count < 10 or article_count: # 获取hash前10篇
+                # 设置hash中article_id对应的访问时间
+                view_time = datetime.now()
+                #print(view_time) # 2019-05-19 23:20:03.249092
+                # redis.exceptions.DataError: Invalid input of type: 'datetime'. Convert to a byte, string or number first.
+                # 要转换为字符串格式
+                view_time = view_time.strftime('%Y-%m-%d %H:%M:%S')
+                #print(view_time) # 2019-05-19 11:24:39
+                # 设置hash中article_id对应的值
+                # hset->如果article_id已经存在，更新数据，如果不存在，添加数据
+                conn_redis.hset(history_key, article_id, view_time)
         else:
             is_login = 0
 
         context = {
                        'comment_list': comment_list,
-                       'article': article, 'pre_article': pre_article,
-                       'next_article': next_article, 'relate_articles': relate_articles,
-                       'comments_dict': comments_dict, 'humans_dict': humans_dict,
-                       'is_login': is_login,
+                       'article': article,
+                       'pre_article': pre_article,
+                       'next_article': next_article,
+                       'relate_articles': relate_articles,
+                       'comments_dict': comments_dict,
+                       'humans_dict': humans_dict,
+                       'is_login': is_login
                    }
 
         # 后台传给js获取值，视图函数中的字典或列表要用 json.dumps()处理。在模板上可能要加 safe 过滤器。
@@ -210,7 +242,6 @@ def article_likes(request, article_id):
 @login_required
 def notification(request):
     '''展示提示消息列表'''
-    from datetime import datetime
     now_date = datetime.now()
     # get_p 查询子表，主表
     notifications = CommentNotification.objects.filter(get_p=request.user)

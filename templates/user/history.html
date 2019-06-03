@@ -1,0 +1,64 @@
+{% extends 'user/my_base.html' %}
+{% load static %}
+
+{% block title %}全民python-浏览历史{% endblock %}
+
+{% block description %}全民pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+
+{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+
+{% block my_base_css %}
+    <link rel="stylesheet" href="{% static 'css/user/history.css' %}">
+{% endblock %}
+
+
+{% block right_content %}
+    <div class="history-wrap">
+        <div class="history-head-box clearfix">
+            <div class="history-head fl">
+            <i class="iconfont icon-yuyuelishi"></i>
+            <span class="b-head-t">浏览历史</span>
+        </div>
+            <div class="history-btn fr">
+            <a class="cleanhsbtn">清空历史</a>
+        </div>
+        </div>
+
+        <ul class="history-list">
+        {% for article in article_list %}
+            <li class="history-list-item">
+                <div class="left-info">
+                    <div class="lastread-timeline"><i class="history-red-round"></i> <span class="lastread-time">{{ article.read_time }}</span></div>
+                </div>
+                <div class="right-info clearfix">
+                        <a href="{% url 'articles:article_detail' article.id %}" class="fl">
+                            <img src="{{ article.cover_img }}">
+                        </a>
+                    <div class="right-txt fl">
+                        <a class="title" href="">{{ article.title }}</a>
+                        <p class="desc">
+                            {{ article.description}}
+                        </p>
+                        <div class="w-info">
+                            <img alt="" src="{{ user.avatar }}">
+                            <span class="username">{{ user.nick_name }}</span>
+                            <i class="iconfont icon-delete history-del" data-articleId="{{ article.id }}"></i>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <div style="padding: 10px;color: #666">无历史浏览记录</div>
+        {% endfor %}
+        </ul>
+    </div>
+
+
+{% endblock %}
+
+{% block my_base_js %}
+    <script src="{% static 'js/user/history.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

@@ -2,7 +2,6 @@ from django import forms
 
 from article.models import Article, Category, Advertising
 from doc.models import Doc
-from course.models import Course
 
 
 from util.forms import FormMixin
@@ -99,37 +98,4 @@ class DocPubForm(forms.ModelForm, FormMixin):
             }
         }
 
-
-class CoursePubForm(forms.ModelForm, FormMixin):
-    class Meta:
-        model = Course
-        exclude = ['create_time', 'update_time', 'is_delete']
-        error_messages = {
-            'title': {
-                'max_length': "课程标题长度不能超过50",
-                'min_length': "课程标题长度不能少于1",
-                'required': "课程标题不能为空",
-            },
-            'cover_url': {
-                'required': "课程封面图URL不能为空",
-            },
-            'video_url': {
-                'required': "课程视频URL不能为空",
-            },
-            'duration': {
-                'required': "课程时长不能为空",
-            },
-            'desc': {
-                'required': "课程简介不能为空",
-            },
-            'outline': {
-                'required': "课程大纲不能为空",
-            },
-            'lectuer': {
-                'required': "课程讲师不能为空",
-            },
-            'course_category': {
-                'required': "课程分类不能为空",
-            }
-        }
 

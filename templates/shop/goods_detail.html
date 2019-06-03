@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}全民python-店铺演示{% endblock %}
+
+{% block description %}全民pythn-店铺演示{% endblock %}
+
+{% block keywords %}店铺演示 {% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/shop/goods_detail.css' %}">
+{% endblock %}
+
+{% block banner %}
+    {% include 'shop/shop_banner.html' %}
+{% endblock %}
+
+{% block grid-left %}
+    <div class="goods-detail">
+        <div class="goods-detail-action clearfix">
+            <div class="goods-detail-pic fl">
+                <img src="{{ sku.image }}">
+            </div>
+            <div class="goods-detail-info fr">
+                <h1>{{ sku.name }}</h1>
+                <p>{{ sku.desc }}</p>
+                <div class="goods-price-wrap">
+                    <div class="original-price">原价：<span>￥{{ sku.price }}</span></div>
+                    <div class="discount-price">促销价：<em>￥</em><span>{{ sku.promotion_price }}</span></div>
+                </div>
+                <div class="goods-sku">
+                    <p>其他规格</p>
+                    <ul class="clearfix">
+                        <li class="fl"><a href="">探险活宝-白 140</a></li>
+                        <li class="fl"><a href="">探险活宝-白 140</a></li>
+                        <li class="fl"><a href="">探险活宝-白 140</a></li>
+                        <li class="fl"><a href="">探险活宝-白 140</a></li>
+                        <li class="fl"><a href="">探险活宝-白 140</a></li>
+                    
+                        {% for sku in same_spu_skus %}
+                            <li class="fl"><a href="{% url 'shop:goods_detail' sku.id %}">{{ sku.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="goods-number clearfix">
+                    <div class="num-name fl">
+                        数量
+                    </div>
+                    <div class="choose-amount fl">
+                        <input type="text" class="num-show" value="1" maxlength="8" title="请输入购买量">
+                        <a class="btn-add" href="javascript:;">+</a>
+                        <a class="btn-reduce" href="javascript:;">-</a>
+                    </div>
+                    <div class="goods-stock fl">
+                        库存{{ sku.stock  }}
+                    </div>
+                </div>
+
+                <div class="goods-total-price">总价：<em>￥</em><span></span></div>
+
+
+                <div class="operate-btn" data-skuId="{{ sku.id }}">
+                    <a href="javascript:;" class="buy-btn">立即购买</a>
+                    <a href="javascript:;" class="add-cart-btn">
+                        加入购物车
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="goods-recommend">
+            <div class="goods-recommend-tab">相关推荐</div>
+            <ul class="goods-recommend-scroll clearfix">
+            {% for goods_item in  'x'|ljust:'6' %}
+                <li class="goods-recommend-item fl">
+                    <a href="/shop/goods/1/">
+                        <img src="//img10.360buyimg.com/n3/jfs/t1/27004/12/1064/262408/5c0f1f37Ed511e2ec/d02ad4e2de852c5a.jpg" alt="course">
+                    </a>
+                    <div class="goods-name">
+                        <a href="" title="">冰心儿童文学：寄小读者+繁星·春水（套装共2册） 中小学生课外阅读必读名篇 现代小说散文作品诗歌全集</a>
+                    </div>
+                    <div class="goods-desc clearfix">
+                        <strong>￥2980.00</strong>
+                    </div>
+                </li>
+             {% endfor %}
+            </ul>
+        </div>
+        <div class="goods-detail-introduce">
+            <div class="detail_tab">
+                <ul class="clearfix">
+                    <li class="active">商品介绍</li>
+                    <li>商品评价</li>
+                </ul>
+            </div>
+            <div class="tab_content">
+                <div class="goods-detail">
+                    <dl>
+                        <dt>商品详情</dt>
+                        <dd>{{ sku.goods_spu.detail|safe }}</dd>
+                    </dl>
+                </div>
+                <div class="goods-comment">
+
+                    <dl>
+                        {% for order in sku_orders %}
+                            <dt>评论时间{{ order.update_time }}</dt>
+                            <dd>评论内容{{ order.comment }}</dd>
+                        {% endfor %}
+                    </dl>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block grid-right %}
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/shop/goods_detail.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

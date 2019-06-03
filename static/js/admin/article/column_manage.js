@@ -18,11 +18,15 @@ function column_add_or_edit(_this) {
     let columnId = $(_this).parents("tr").attr("data-id") ? $(_this).parents("tr").attr("data-id") : 0; //直接用data获取是number型，用val()获取则是string
     let columnName = $(_this).parents("tr").attr("data-name") ? $(_this).parents("tr").attr("data-name") : '';
     let columnLink = $(_this).parents("tr").attr("data-link") ? $(_this).parents("tr").attr("data-link") : '';
+    let columnIndex = $(_this).parents("tr").attr("data-index") ? $(_this).parents("tr").attr("data-index") : '';
+
 
     swal({
         title: columnId ? '您正在编辑【' + columnName + '】栏目' : '新增文章栏目',
         text: "栏目名称：<input type='text' name='column-name' id='column-name' value='" + columnName + "'style='width: 70%;display: inline-block'>"
-            +"<br/>链接地址：<input type='text' placeholder='请输入链接地址' name='column-link' id='column-link' value='" + columnLink + "'style='width: 70%;display: inline-block'>",
+            +"<br/>链接地址：<input type='text' placeholder='请输入链接地址' name='column-link' id='column-link' value='" + columnLink + "'style='width: 70%;display: inline-block'>"
+            +"<br/>栏目位置：<input type='text' placeholder='请输入栏目位置' name='column-index' id='column-index' value='" + columnIndex + "'style='width: 70%;display: inline-block'>",
+
         html:true,
         type: 'input',
         inputValue: columnId ? columnName : '', // 第一个表单元素在这里写才生效，其他在标签内直接写
@@ -36,6 +40,7 @@ function column_add_or_edit(_this) {
     }, function () {
         let inputColumnName = $("#column-name").val();
         let inputColumnLink = $("#column-link").val();
+        let inputColumnIndex = $("#column-index").val();
 
         if (!inputColumnName.trim()){
           swal.showInputError("栏目名称不能为空");
@@ -46,14 +51,26 @@ function column_add_or_edit(_this) {
           return false;
         }
 
-        if ((columnName && inputColumnName === columnName) && (columnLink && inputColumnLink === columnLink)){
-            swal.showInputError("栏目名称和链接地址都未变化，请重新编辑");
+        if (!inputColumnLink.trim()){
+            swal.showInputError("栏目url地址不能为空");
+            return false;
+        }
+
+        if (!inputColumnIndex.trim()){
+            swal.showInputError("栏目位置不能为空");
+            return false;
+        }
+
+
+        if ((columnName && inputColumnName === columnName) && (columnLink && inputColumnLink === columnLink)&& (columnIndex && inputColumnIndex === columnIndex)){
+            swal.showInputError("栏目名称、链接地址以及栏目位置都未变化，请重新编辑");
             return false;
         }
 
         var sDataParams = {
             "column_name":inputColumnName,
-            "column_link_url": inputColumnLink
+            "column_link_url": inputColumnLink,
+            "column_index": inputColumnIndex
         };
 
         $.ajax({
@@ -70,8 +87,12 @@ function column_add_or_edit(_this) {
                     if(columnId){
                         $(_this).parents('tr').find('td:nth-child(2)').text(inputColumnName);
                         $(_this).parents("tr").attr("data-name",inputColumnName);
+
                         $(_this).parents('tr').find('td:nth-child(3)').text(inputColumnLink);
                         $(_this).parents("tr").attr("data-link",inputColumnLink);
+
+                        $(_this).parents('tr').find('td:nth-child(5)').text(inputColumnIndex);
+                        $(_this).parents("tr").attr("data-index",inputColumnIndex);
 
                         swal({
                             title: "栏目修改成功",

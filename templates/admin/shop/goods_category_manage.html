@@ -1,0 +1,72 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+    商品分类管理
+{% endblock %}
+
+
+{% block content_header %}
+    商品分类管理
+{% endblock %}
+
+{% block header_option_desc %}
+    商品分类管理
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    {{goods_categories}}
+                    <button class="btn btn-primary pull-right" id="btn-add-goods_category">
+                        <i class="fa fa-plus"></i>
+                        添加分类
+                    </button>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>序列ID</th>
+                            <th>名称</th>
+                            <th>级别</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for goods_category in goods_categories %}
+                                <tr data-id="{{ goods_category.id }}" data-name="{{ goods_category.name }}">
+                                    <td>{{ goods_category.id }}</td>
+                                    <td>{{ goods_category.name }}</td>
+                                    <td>{{ goods_category.get_category_type_display }}</td>
+                                    <td>{{ goods_category.create_time }}</td>
+                                    <td>
+                                        <button class="btn btn-xs btn-warning btn-edit">
+                                            <i class="fa fa-edit"></i>
+                                            &nbsp;编辑
+                                        </button>
+                                        <button class="btn btn-xs btn-danger btn-del">
+                                           <i class="fa fa-trash-o"></i>
+                                            &nbsp;&nbsp;删除
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/shop/goods_category_manage.js' %}"></script>
+
+{% endblock %}
+
+

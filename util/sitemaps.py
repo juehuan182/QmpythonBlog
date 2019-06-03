@@ -9,10 +9,10 @@ class ArticleSitemap(Sitemap):
     changefreq = "weekly"  # 页面可能发生更改的频率
     priority = 1.0  # 此网址的优先级与您网站上其他网址的优先级相关
 
-    def items(self):
+    def items(self):   # items()方法返回了在这个站点地图中所包含对象的查询集QuerySet,
         return Article.objects.all()
 
-    def lastmod(self, obj):
+    def lastmod(self, obj):  # 接收items()返回的每一个对象并且返回对象最后修改时间
         return obj.update_time
 
     def location(self, obj):
