@@ -1,0 +1,5 @@
+.main-header .logo .logo-lg {
+    width: 200px;
+    height: 50px;
+    background: url(/static/image/qmpython_logo.png) no-repeat center center/auto 56px;
+}

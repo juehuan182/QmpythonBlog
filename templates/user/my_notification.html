@@ -1,19 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'user/my_base.html' %}
 {% load static %}
 
-{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+{% block title %}全民python-消息通知{% endblock %}
 
-{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
+{% block description %}全民pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
 
 {% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
 
-{% block css %}
-    <link rel="stylesheet" href="{% static 'css/user/notification.css' %}">
+{% block my_base_css %}
+    <link rel="stylesheet" href="{% static 'css/user/my_notification.css' %}">
 {% endblock %}
 
-{% block grid-left %}
 
-{% csrf_token %}
+{% block right_content %}
+
     <div class="notificationcenter-main">
         <div class="notificationcenter-tab clearfix">
             <div class="tabPane">系统通知</div>
@@ -48,11 +48,12 @@
 
 {% endblock %}
 
-{% block grid-right %}
 
+
+
+{% block my_base_js %}
+    <script src="{% static 'js/user/my_notification.js' %}"></script>
+    <script type="text/javascript">
+        $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
 {% endblock %}
-
-{% block js %}
-    <script src="{% static 'js/user/notification.js' %}"></script>
-{% endblock %}
-

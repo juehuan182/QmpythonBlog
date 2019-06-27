@@ -129,7 +129,7 @@ class ArticleViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Ge
 
     # Token认证
     from rest_framework.permissions import IsAuthenticated
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
 
     # def get_queryset(self):
     #     queryset = Article.objects.all()

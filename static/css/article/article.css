@@ -42,7 +42,7 @@
 .article-header{
     border-bottom: 1px solid #eaeaea;
     margin-bottom: 0.4rem;
-    padding: 5px 0 25px 0;
+    padding: 5px 10px;
     text-align: center;
 }
 
@@ -51,7 +51,7 @@
     color: #3d464d;
     font-size: 0.52rem;
     font-weight: bold;
-    line-height: 0.5rem;
+    line-height: 0.6rem;
     margin-top: 0.6rem;
 }
 
@@ -75,9 +75,13 @@
     margin-bottom: 0.5rem;
 }
 
+.article-content ul, .article-content li {
+    list-style: disc;
+}
+
 /*!*文章段落*!*/
 .article-content p{
-    line-height: 0.45rem;
+    line-height: 0.5rem;
     font-size: 0.3rem;
     color: #3d464d;
     margin-bottom:0.2rem;
@@ -681,9 +685,15 @@ hr.m-0 {
         font-size: 0.2rem;
     }
 
+    .article-header{
+        padding: 5px;
+        margin-bottom: 0;
+    }
+
     .article-header h1.article-title {
-        font-size: 0.33rem;
+        font-size: 0.3rem;
         line-height: 0.55rem;
+        margin-top: 0.1rem;
     }
     .article-header .article-meta>span {
         color: #a7a7a7;
@@ -697,9 +707,14 @@ hr.m-0 {
 
 
     .article-content {
-        margin-top: 0.4rem;
+        margin-top: 0;
         padding: 0 0.1rem 0 0.1rem;
     }
+
+    .editormd-preview-container, .editormd-html-preview {
+        padding: 2px;
+    }
+
 
     .article-content h1, .article-content h2, .article-content h3,
     .article-content h4, .article-content h5, .article-content h6 {
@@ -707,8 +722,9 @@ hr.m-0 {
         margin-bottom: 0.2rem;
     }
     .article-content p {
-        font-size: 0.3rem;
-        line-height: 0.49rem;
+        font-size: 0.25rem;
+        line-height: 0.4rem;
+        margin-bottom: 0.2rem!important;
     }
     .article-content img {
         width: 100%!important;
@@ -723,11 +739,14 @@ hr.m-0 {
         border: none;
     }
     .article-copyright {
-        padding: 0 0.2rem 0.1rem 0.2rem;
+        padding: 0 0.6rem;
+        font-size: 0.25rem;
     }
     .article-container > div.article-prenext p{
         float: none;
         width: 100%;
+        font-size: 0.25rem;
+        margin-bottom: 5px;
     }
     .article-relevant li {
         float: none;
@@ -735,6 +754,7 @@ hr.m-0 {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        margin-top: 0.1rem;
     }
     .reward-box {
         width: 70%;
@@ -765,5 +785,10 @@ hr.m-0 {
         padding: 0.1rem 0.1rem;
         border-radius: 20px;
     }
-
+    #no-editor{
+        font-size: 0.25rem;
+    }
+    .article-relevant a {
+    font-size: 0.25rem;
+}
 }

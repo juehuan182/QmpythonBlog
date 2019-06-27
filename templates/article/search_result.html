@@ -14,6 +14,7 @@
         .banner {
             display: none;
         }
+
         span.highlighted {
             color: red;
         }
@@ -40,13 +41,15 @@
     {% for item in page %}
         <article class="excerpt clearfix">
             <a href="{% url 'articles:article_detail' item.object.id %}">
-               <img src="{{ item.object.cover_img }}"/> {# 这里需要加个object #}
-           </a>
+                <img src="{{ item.object.cover_img }}"/> {# 这里需要加个object #}
+            </a>
+            <div class="article-category">
+                <a href="{% url 'categories' item.object.category.id %}" target="_blank">
+                    {{ item.object.category.name }}
+                </a>
+            </div>
             <div class="right-text">
                 <div class="header">
-                    <a href="{% url 'categories' item.object.category.id %}" title="css3" target="_blank">
-                        {{ item.object.category.name }}
-                    </a>
                     <h2>
                         <a href="{% url 'articles:article_detail' item.object.id %}">
                             {% myhighlight item.object.title with query %}
@@ -54,8 +57,7 @@
                     </h2>
                 </div>
                 <p class="note">
-                    {% myhighlight item.object.description with query start_head True %}
-                    {#  #}
+                    {% myhighlight item.object.description with query start_head True %}...
                 </p>
                 <div class="meta">
                     <span class="auth"><i class="icon-yonghu1 iconfont"></i>{{ item.object.author }}</span>
@@ -74,7 +76,9 @@
         <div class="pagination">
             <ul>
                 {% if page.has_previous %} {# 判断是否有上一页#}
-                    <li style="color: #c8cdd2;"><a href="{% url 'articles:search' %}?q={{ query }}&page={{ page.previous_page_number }}">上一页</a></li> {# previous_page_number上一页页码#}
+                    <li style="color: #c8cdd2;"><a
+                            href="{% url 'articles:search' %}?q={{ query }}&page={{ page.previous_page_number }}">上一页</a>
+                    </li> {# previous_page_number上一页页码#}
                 {% else %}
                     <li style="color: #c8cdd2;"><a href="{% url 'articles:search' %}?q={{ query }}">首页</a></li>
                 {% endif %}
@@ -82,18 +86,22 @@
                 {% for page_num in paginator.page_range %} {# 判断剩余页面的显示方法#}
                     {% if page_num %}
                         {% if page_num == page.number %} {# 判断是否当前页，设置样式，number当前页的页码#}
-                            <li><a class="current-page">{{  page_num }}</a></li>
+                            <li><a class="current-page">{{ page_num }}</a></li>
                         {% else %}
-                            <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ page_num }}">{{ page_num }}</a></li>
+                            <li>
+                                <a href="{% url 'articles:search' %}?q={{ query }}&page={{ page_num }}">{{ page_num }}</a>
+                            </li>
                         {% endif %}
                     {% else %}
                         <li><a href="">...</a></li>
                     {% endif %}
                 {% endfor %}
                 {% if page.has_next %} {# 判断是否有下一页#}
-                    <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ page.next_page_number }}">下一页</a></li> {# next_page_number下一页的页码#}
+                    <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ page.next_page_number }}">下一页</a>
+                    </li> {# next_page_number下一页的页码#}
                 {% else %}
-                    <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ paginator.num_pages }}">尾页</a></li> {# num_pages页面总数#}
+                    <li><a href="{% url 'articles:search' %}?q={{ query }}&page={{ paginator.num_pages }}">尾页</a></li>
+                    {# num_pages页面总数#}
                 {% endif %}
                 <li><span>共{{ paginator.num_pages }}页</span></li>
                 {# count计算集合元素个数 #}

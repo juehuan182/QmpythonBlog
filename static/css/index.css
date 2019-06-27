@@ -1,19 +1,18 @@
 .banner {
-    height: 320px;
-    min-height: 340px;
+    height: 360px;
 }
 
 .home-banner-left {
     float: left;
     overflow: hidden;
-    width: 69%;
+    width: 70.5%;
     height: 100%;
     position: relative;
     /*border-radius: 2px;*/
 }
 
 .home-banner-left ul.banner-left-list {
-    height: 6.4rem; /*因为ul下面的li设置了绝对定位absolute脱离了文档流，所以对li设置宽高或者想通过img默认大小来达到撑开外面盒子是不行的*/
+    height: 7.2rem; /*因为ul下面的li设置了绝对定位absolute脱离了文档流，所以对li设置宽高或者想通过img默认大小来达到撑开外面盒子是不行的*/
 }
 
 .home-banner-left ul.banner-left-list > li.banner-left-item {
@@ -47,7 +46,7 @@
 
 div.banner-left-item-info {
     background-image: linear-gradient(-180deg,transparent 13%,rgba(0,0,0,.65) 97%);
-    top: 71%;
+    top: 72%;
     height: 100px;
     padding-left: 15px;
     padding-top: 50px;
@@ -131,8 +130,8 @@ div.banner-left-item-info .banner-left-item-title{
 
 .home-banner-right {
     float: right;
-    width: 29%;
-    /*height: 100%;*/
+    width: 27.5%;
+    height: 100%;
     overflow: hidden;
     margin-left: 1%;
 }
@@ -140,9 +139,8 @@ div.banner-left-item-info .banner-left-item-title{
 .banner-right-item {
     float: left;
     overflow: hidden;
-    height: 3.35rem;
-    /*width: 3.265rem;*/
-    width: 49%;
+    height: 3.5rem;
+    width: 100%;
     position: relative;
     transform: rotate(0deg); /*为了防止transform过渡时border-radius原先边界处圆角应该隐藏的地方溢了出来*/
 }
@@ -151,17 +149,10 @@ div.banner-left-item-info .banner-left-item-title{
     /*margin-bottom: 14px;*/
 /*}*/
 
-.banner-right-item:nth-child(2n) {
-    margin-left: 0.1rem;
+.banner-right-item:nth-of-type(2) {
+    margin-top: 10px;
 }
 
-.banner-right-item:nth-child(3n) {
-    margin-top: 0.1rem;
-}
-
-.banner-right-item:nth-child(4) {
-    margin-top: 0.1rem;
-}
 
 .banner-right-item-img {
     height: 100%;
@@ -194,29 +185,24 @@ a.banner-right-item-article:hover .banner-right-item-info{
 }
 
 .banner-right-item-title {
-    bottom: 6px;
+    bottom: 20px;
+    /*left: 10px;*/
     color: #fff;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 18px;
-    max-height: 36px;
+    width: 100%;
+    max-height: 50px;
     overflow: hidden;
     padding: 0 10px;
     position: absolute;
-    text-align: justify;
+    text-align: center;
     transition: bottom .5s;
 }
 
 a.banner-right-item-article:hover .banner-right-item-title{
-    position: absolute;
-    bottom: 72px;
-    color: #fff;
-    font-size: 13px;
-    line-height: 18px;
-    max-height: 72px;
+    bottom: 120px;
     opacity: 1;
-    overflow: hidden;
     padding: 0 10px;
-    text-align: justify;
     transform: translateY(50%);
 
 }
@@ -264,8 +250,7 @@ article.excerpt-minic-index {
 /*移动适配*/
 @media screen and (max-width: 760px){
     div.banner {
-        height: 4rem;
-        min-height: 4rem;
+        height: 3.6rem;
     }
 
     div.home-banner-left {
@@ -294,7 +279,7 @@ article.excerpt-minic-index {
     }
 
     div.banner-left-item-info {
-        top: 48%;
+        top: 50%;
     }
 
 
@@ -304,8 +289,8 @@ article.excerpt-minic-index {
 
     div.home-banner-right {
         width: 100%;
-        margin-left: 0;
-        margin-top: 5px;
+        height: 60%;
+        margin-top: 6px;
 
     }
 
@@ -318,16 +303,24 @@ article.excerpt-minic-index {
         /*margin-right: 5px;*/
     /*}*/
 
+    .banner-right-item:nth-of-type(2){
+        margin-left: 5px;
+        margin-top: 0;
+    }
+
     .banner-right-item{
         float: left;
         width: 49%;
-        height: 120px;
+        height: 100%;
     }
 
     .banner-right-item-title {
         font-size: 12px;
     }
 
+    a.banner-right-item-article:hover .banner-right-item-title {
+        transform: translateY(360%);
+    }
 
     .article.excerpt{
 
@@ -343,10 +336,19 @@ article.excerpt-minic-index {
 
     article.excerpt .right-text{
         width: 50%;
+        margin-left: 15px;
     }
 
     .right-text > p.note{
-        display:none;
+        margin-top: 0;
+        line-height: 15px;
+        font-size: 0.24rem;
+        max-height: 45px;
+        color: #999;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
     }
 
     div.meta > .auth , div.meta > .like, div.meta >.viewnum{
@@ -362,7 +364,12 @@ article.excerpt-minic-index {
     }
 
     div.right-text h2{
-        font-size: 0.3rem;
+        font-size: 0.25rem;
+        display: inline-block;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     div.right-text .meta {

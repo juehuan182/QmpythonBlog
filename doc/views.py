@@ -10,7 +10,7 @@ from django.utils.encoding import escape_uri_path
 from .models import Doc
 # Create your views here.
 
-logger = logging.getLogger('django')
+logger = logging.getLogger('qmpython')
 
 def doc_index(request):
     docs = Doc.objects.only('id').filter(is_delete=False)

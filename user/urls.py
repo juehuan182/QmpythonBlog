@@ -7,6 +7,8 @@ from .views import RegisterView, checkUsername, checkEmail, LoginView,\
     bind_account, BindLoginView, bind_success, qq_login, qq_callback, github_login,\
     github_callback, weibo_login, weibo_callback
 
+from article.views import notification, mark_to_read, mark_to_delete
+
 
 app_name = 'user'  #需要提供namespace命名空间时,需要添加在应用的urls.py文件中添加 app_name = "appname"
 
@@ -48,6 +50,14 @@ urlpatterns = [
     # 浏览历史
     path('history/', history, name='history'),
     path('history_del/', history_del, name='history_del'),
+
+    # 评论通知
+    path('notification/', notification, name='notification'),
+    path('notification/no-read/', notification, name='notification_no_read'),
+    path('notification/mark-to-read/', mark_to_read, name='mark_to_read'),
+    path('notification/mark-to-delete/', mark_to_delete, name='mark_to_delete'),
+
+
 
     # 我的订单
     path('order/', UserOrderView.as_view(), name='my_order'),

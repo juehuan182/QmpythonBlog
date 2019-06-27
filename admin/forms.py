@@ -1,6 +1,6 @@
 from django import forms
 
-from article.models import Article, Category, Advertising
+from article.models import Article, Category, Advertising, Tag
 from doc.models import Doc
 
 
@@ -18,6 +18,8 @@ class ArticleAddForm(forms.ModelForm, FormMixin):
     """
     category = forms.ModelChoiceField(queryset=Category.objects.only('id'), error_messages={"required": "文章分类id不能为空",
                                                                                             "invalid_choice": "文章分类id不存在"})
+    tag = forms.ModelMultipleChoiceField(queryset=Tag.objects.only('id'), required=False)
+
     class Meta:
         model = Article   #  说明要引用的models类
         fields = ['title', 'keywords', 'description', 'category', 'content', 'cover_img', 'tag']  # 说明要关联类中的哪些字段,# exclude 排除

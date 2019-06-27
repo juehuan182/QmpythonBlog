@@ -31,6 +31,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{% static 'css/base/sweetalert.css' %}">
     <link rel="stylesheet" href="{% static 'css/admin/base/bootstrap-datepicker.min.css' %}">
 
+    <link rel="stylesheet" href="{% static 'css/admin/base/base.css' %}">
+
     {% block style %}
 
 
@@ -78,7 +80,7 @@ desired effect
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>P</b>y</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>全民</b>python</span>
+            <span class="logo-lg"></span>
         </a>
 
         <!-- Header Navbar -->
@@ -354,27 +356,27 @@ desired effect
                 {% endif %}
 
 
-               <li class="treeview">
-                        <a href="#">
-                            <i class="glyphicon glyphicon-shopping-cart"></i>
-                            <span>商城模块</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li>
-                                <a href="{% url 'admin:shop_categories' %}">
-                                    商品类别
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'admin:shop_goodsSPUs' %}">
-                                    商品信息
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+{#               <li class="treeview">#}
+{#                        <a href="#">#}
+{#                            <i class="glyphicon glyphicon-shopping-cart"></i>#}
+{#                            <span>商城模块</span>#}
+{#                            <span class="pull-right-container">#}
+{#                                <i class="fa fa-angle-left pull-right"></i>#}
+{#                            </span>#}
+{#                        </a>#}
+{#                        <ul class="treeview-menu">#}
+{#                            <li>#}
+{#                                <a href="{% url 'admin:shop_categories' %}">#}
+{#                                    商品类别#}
+{#                                </a>#}
+{#                            </li>#}
+{#                            <li>#}
+{#                                <a href="{% url 'admin:shop_goodsSPUs' %}">#}
+{#                                    商品信息#}
+{#                                </a>#}
+{#                            </li>#}
+{#                        </ul>#}
+{#                    </li>#}
 
             </ul>
             <!-- /.sidebar-menu -->

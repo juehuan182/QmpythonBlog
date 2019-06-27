@@ -2,7 +2,7 @@ import logging
 import random
 
 
-from celery_tasks.celery_main import app
+from celery_tasks.main import app
 
 from django.core.mail import send_mail
 from django_redis import get_redis_connection

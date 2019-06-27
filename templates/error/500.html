@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<head>
+	<meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'image/qmpython_favicon.ico' %}">
+
+	<title>全民python-500</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/error/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/error/animate.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/error/style.css' %}">
+{#	<script type="text/javascript" src="{% static 'js/base/jquery.min.js' %}"></script>#}
+</head>
+<body class="bg503 errorpage">
+<section>
+	<div class="wp">
+		<div class="cont">
+			<div class="fl error_cut"><img src="{% static 'image/error/pic503.png' %}"/></div>
+			<div class="fr error_cut">
+				<img src="{% static 'image/error/word503.png' %}"/>
+				<br/><br/><br/><br/><br/><br/>
+				<p>服务器错误，请稍后重新刷新。</p>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>

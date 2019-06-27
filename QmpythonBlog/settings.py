@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import sys
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
+
 # print(__file__)  # 所在文件的绝对路径
 # print(os.path.abspath(__file__))  # 获得文件当前路径
 # print(os.path.dirname(os.path.abspath(__file__)))  # 获得文件父目录
@@ -26,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dlnb+jaj$h=f&s5(m$8gky&^tgjobk5b204qvfi)0j#xpnq#-7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # 测试环境中打开调试模式，能够显示详细的报错信息，生产环境改为False避免暴露项目内部信息
+DEBUG = False  # 测试环境中打开调试模式，能够显示详细的报错信息，生产环境改为False避免暴露项目内部信息
 
 #允许访问的客户端的地址, “*”表示的就是任意的ip地址
 if DEBUG:
@@ -68,11 +72,13 @@ INSTALLED_APPS = [
 
     'django_filters',  #过滤
     'api',
+    'corsheaders', # 解决跨域问题
 ]
 
 # 中间件，在新版本django中,中间件的key值由MIDDLEWARE_CLASSES变更为MIDDLEWARE
 # 在新版本django中SessionAuthenticationMiddleware这个中间件不需要了。
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # 建议加在第一行，必须在CsrfViewMiddleware之前
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,6 +88,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'util.StatFlowMiddleware.StatFlowMiddleware', # 添加自定义中间件
 ]
+
+#设置全局跨域
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 ROOT_URLCONF = 'QmpythonBlog.urls'
 
@@ -119,9 +129,9 @@ if 0:
     DB_PASSWORD = "qwe123"
     DB_NAME = "CainiaoBlog_DB"
 else:
-    DB_USER = "python"
-    DB_PASSWORD = "python"
-    DB_NAME = "python"
+    DB_USER = "qmpython"
+    DB_PASSWORD = "qmpython@Lei"
+    DB_NAME = "qmpython"
 
 
 
@@ -193,8 +203,8 @@ USE_TZ = True  # 修改时区确认,默认是Ture，时间是utc时间，由于�
 STATIC_URL = '/static/'     #这个“static”指访问静态文件，引入时用的别名
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # 这里指静态文件保存哪个路径,这个“static”指目录名
 
-if not DEBUG:
-    STATIC_ROOT = '/root/src/www/QmpythonBlog/static'  # 指定收集的静态文件的路径
+# if not DEBUG:
+#     STATIC_ROOT = '/root/src/www/QmpythonBlog/static'  # 指定收集的静态文件的路径
 
 '''
 STATIC_ROOT 是在部署静态文件时(pyhtonmanage.pycollectstatic)所有的静态文静聚合的目录,STATIC_ROOT要写成绝对地址,
@@ -225,60 +235,60 @@ CKEDITOR_IMAGE_BACKEND = 'pillow'  # 用于生成图片缩略图，在编辑器�
 # CKEDITOR_BROWSE_SHOW_DIRS = True #在编辑器里浏览上传的图片时，图片会以路径分组，日期排序
 # CKEDITOR_RESTRICT_BY_USER = True #限制用户浏览图片的权限，只能浏览自己上传的图片，图片会传到以用户名命名的文件夹下，超级管理员依旧可以看所有图片
 
-
-CKEDITOR_CONFIGS = {
-    'custom_config': {
-        'language': 'zh-hans',
-        'width': 'auto',
-        # 'height': '500',
-        'image_previewText': ' ',
-        'tabSpaces': 4,
-        'toolbar': 'Custom',
-        # 添加按钮在这里
-        'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline', 'Format', 'RemoveFormat'],
-            ['NumberedList', 'BulletedList'],
-            ['Blockquote', 'CodeSnippet'],  # 代码块工具
-            ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar'],
-            ['Font', 'FontSize'],
-            ['TextColor', 'BGColor'],
-            ['Link', 'Unlink'],
-            ['Maximize']
-        ],
-        'extraPlugins': ','.join(
-            [
-                # your extra plugins here
-                'div',
-                'autolink',
-                'autoembed',
-                'embedsemantic',
-                'autogrow',
-                # 'devtools',
-                # 'widget',
-                # 'lineutils',
-                'clipboard',
-                'dialog',
-                'dialogui',
-                'elementspath',
-                'codesnippet',
-                'uploadimage',
-            ]),
-
-    },
-    'special': {
-        'language': 'zh-hans',
-        'toolbar': 'Custom',
-        'skin': 'moono',
-        'width': '800',
-        'height': '250',
-        'toolbar_Custom': [['Bold', 'Italic', 'Underline', 'Format', 'RemoveFormat'],
-                           ['NumberedList', 'BulletedList'],
-                           ['Blockquote', 'CodeSnippet'],
-                           ['Link', 'Unlink'],
-                           ['Maximize']],
-
-    }
-}
+#
+# CKEDITOR_CONFIGS = {
+#     'custom_config': {
+#         'language': 'zh-hans',
+#         'width': 'auto',
+#         # 'height': '500',
+#         'image_previewText': ' ',
+#         'tabSpaces': 4,
+#         'toolbar': 'Custom',
+#         # 添加按钮在这里
+#         'toolbar_Custom': [
+#             ['Bold', 'Italic', 'Underline', 'Format', 'RemoveFormat'],
+#             ['NumberedList', 'BulletedList'],
+#             ['Blockquote', 'CodeSnippet'],  # 代码块工具
+#             ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar'],
+#             ['Font', 'FontSize'],
+#             ['TextColor', 'BGColor'],
+#             ['Link', 'Unlink'],
+#             ['Maximize']
+#         ],
+#         'extraPlugins': ','.join(
+#             [
+#                 # your extra plugins here
+#                 'div',
+#                 'autolink',
+#                 'autoembed',
+#                 'embedsemantic',
+#                 'autogrow',
+#                 # 'devtools',
+#                 # 'widget',
+#                 # 'lineutils',
+#                 'clipboard',
+#                 'dialog',
+#                 'dialogui',
+#                 'elementspath',
+#                 'codesnippet',
+#                 'uploadimage',
+#             ]),
+#
+#     },
+#     'special': {
+#         'language': 'zh-hans',
+#         'toolbar': 'Custom',
+#         'skin': 'moono',
+#         'width': '800',
+#         'height': '250',
+#         'toolbar_Custom': [['Bold', 'Italic', 'Underline', 'Format', 'RemoveFormat'],
+#                            ['NumberedList', 'BulletedList'],
+#                            ['Blockquote', 'CodeSnippet'],
+#                            ['Link', 'Unlink'],
+#                            ['Maximize']],
+#
+#     }
+# }
 
 # 设置项是否开启URL访问地址后面不为/跳转至带有/的路径
 # APPEND_SLASH = False
@@ -325,7 +335,7 @@ EMAIL_FROM = "qmpython@qq.com"
 # EMAIL_FROM = EMAIL_HOST_USER
 
 # 一页显示多少条记录
-ONE_PAGE_COUNT = 3
+ONE_PAGE_COUNT = 15
 
 # 如果需要做分页的设置,需要设置成官网里面的,可以把10改成3,把2改成1,参考https://github.com/jamespacileo/django-pure-pagination.git
 PAGINATION_SETTINGS = {
@@ -422,7 +432,7 @@ LOGGING = {
         },
     },
     'loggers': {  # 日志器
-        'django': {  # 定义了一个名为django的日志器
+        'qmpython': {  # 定义了一个名为django的日志器
             'handlers': ['console', 'file'],  # 可以同时向终端与文件中输出日志
             'propagate': True,  # 是否继续传递日志信息
             'level': 'INFO',  # 日志器接收的最低日志级别
@@ -468,9 +478,9 @@ JWT_AUTH = {
 #Oauth
 
 #github
-GITHUB_CLIENT_ID = 'cdg1a29b306bdfa43cbbc'
-GITHUB_CLIENT_SECRET = 'ga1043edfdaa7bbff196541dd21795db9493204g31'
-GITHUB_CALLBACK_URL = 'http://www.qmpython.com:8000/user/githubCallback'  #授权回调地址
+GITHUB_CLIENT_ID = 'cd1a29b306bdfa43cbbc'
+GITHUB_CLIENT_SECRET = 'a1043edfdaa7bbff196541dd21795db949320431'
+GITHUB_CALLBACK_URL = 'http://www.qmpython.com/user/githubCallback'  #授权回调地址
 
 # 入口重定向 :https://github.com/login/oauth/authorize?client_id=yourclientid&redirect_uri=yourredirect_uri
 
@@ -478,16 +488,16 @@ GITHUB_CALLBACK_URL = 'http://www.qmpython.com:8000/user/githubCallback'  #授�
 
 
 #QQ
-QQ_APP_ID = '101q518870'
-QQ_APP_KEY = 'qd80cc8d2e656acbd8b90cf6a71c58f3q8'
-QQ_CALLBACK_URL = 'http://www.qmpython.com:8000/user/qqCallback'    #填写你的回调地址
+QQ_APP_ID = '101518870'
+QQ_APP_KEY = 'd80cc8d2e656acbd8b90cf6a71c58f38'
+QQ_CALLBACK_URL = 'http://www.qmpython.com/user/qqCallback'    #填写你的回调地址
 #https://blog.csdn.net/a992970569/article/details/82107899
 
 
 #新浪微博
-WEIBO_APP_KEY = '337w2455299'
-WEIBO_APP_SECRET = 'w54daa0b44a2f346246697f5dc1927d8w0'
-WEIBO_CALLBACK_URL = 'http://www.qmpython.com:8000/user/weiboCallback'    #填写你的回调地址
+WEIBO_APP_KEY = '3372455299'
+WEIBO_APP_SECRET = '54daa0b44a2f346246697f5dc1927d80'
+WEIBO_CALLBACK_URL = 'http://www.qmpython.com/user/weiboCallback'    #填写你的回调地址
 
 
 
@@ -517,8 +527,13 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 BAIDU_CLOUD_USER_ID = ''
 BAIDU_CLOUD_USER_KEY = ''
 
+
+
 # FastDFS地址
 FASTDFS_SERVER_DOMAIN = 'http://www.qmpython.com:8888/'
+FASTDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'util/fastdfs/client.conf')
+
+
 
 # 从七牛云"个人中心>密钥管理"中获取自己的 Access Key 和 Secret Key
 QI_NIU_ACCESS_KEY = 'mHXibYhu-xcOahyvizWNWTkAmJPiUm419zOekf70'    # '你自己七牛云上的AK'

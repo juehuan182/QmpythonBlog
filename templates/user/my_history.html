@@ -8,7 +8,7 @@
 {% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
 
 {% block my_base_css %}
-    <link rel="stylesheet" href="{% static 'css/user/history.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user/my_history.css' %}">
 {% endblock %}
 
 
@@ -57,7 +57,7 @@
 {% endblock %}
 
 {% block my_base_js %}
-    <script src="{% static 'js/user/history.js' %}"></script>
+    <script src="{% static 'js/user/my_history.js' %}"></script>
     <script type="text/javascript">
         $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
     </script>

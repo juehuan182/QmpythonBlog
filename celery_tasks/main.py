@@ -12,7 +12,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'QmpythonBlog.settings')
 app = Celery('QmpythonBlog')
 
 #  从单独的配置模块中加载配置，导入celery配置
-app.config_from_object('celery_tasks.celery_config')
+app.config_from_object('celery_tasks.config')
 
 # 自动搜索任务
 app.autodiscover_tasks(['celery_tasks.email', ])

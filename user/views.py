@@ -31,7 +31,7 @@ from .forms import LoginForm, RegisterForm, UpdateProfileForm, ChangePwdForm, Re
 from util import json_status
 
 # Create your views here.
-logger = logging.Logger('django')
+logger = logging.Logger('qmpython')
 
 '''
 使用authenticate()方法来认证一个给定的用户名(username)和密码(password)。该函数以关键字参数的形式接受认
@@ -448,7 +448,7 @@ def history(request):
         'article_list': article_list
     }
 
-    return render(request, 'user/history.html', context=context)
+    return render(request, 'user/my_history.html', context=context)
 
 @login_required
 def history_del(request):

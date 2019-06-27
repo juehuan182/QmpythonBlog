@@ -16,7 +16,7 @@ from .models import Article, Comment, ArticleLikeDetail, CommentNotification
 
 from haystack.views import SearchView
 
-logger = logging.getLogger('django')
+logger = logging.getLogger('qmpython')
 def article_list(request):
     try:
         page = int(request.GET.get('page', 1))  #默认第一页
@@ -251,7 +251,7 @@ def notification(request):
         'notifications': notifications,
         'now_date': now_date
     }
-    return render(request, 'user/notification.html', context=context)
+    return render(request, 'user/my_notification.html', context=context)
 
 
 @login_required

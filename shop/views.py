@@ -24,7 +24,7 @@ from alipay import AliPay
 
 # Create your views here.
 
-logger = logging.Logger('django')
+logger = logging.Logger('qmpython')
 
 
 def shop_index(request):

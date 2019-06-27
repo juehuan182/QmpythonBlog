@@ -25,7 +25,7 @@
         <span> > </span>
         <a href="{% url 'categories' article.category.id %} ">{{ article.category.name }}</a>
         <span> > </span>
-        <a class="article-title">{{ article.title }}</a>
+        <a class="article-title">正文</a>
     </div>
 {% endblock %}
 
@@ -174,13 +174,12 @@
 
 
 {% block js %}
-<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
 
     <script src="{% static 'plugins/editor_md/lib/marked.min.js' %}"></script>
     <script src="{% static 'plugins/editor_md/lib/prettify.min.js' %}"></script>
     <script src="{% static 'plugins/editor_md/lib/raphael.min.js' %}"></script>
     <script src="{% static 'plugins/editor_md/lib/underscore.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/lib/sequence-diagram.min.js' %}/"></script>
+    <script src="{% static 'plugins/editor_md/lib/sequence-diagram.min.js' %}"></script>
     <script src="{% static 'plugins/editor_md/lib/flowchart.min.js' %}"></script>
     <script src="{% static 'plugins/editor_md/lib/jquery.flowchart.min.js' %}"></script>
     <script src="{% static 'plugins/editor_md/editormd.js' %}"></script>
@@ -209,7 +208,7 @@
 {#    <script src="{% static 'js/article/prism_patched.min.js' %}"></script>#}
     <script src="{% static 'js/common/js_cookie.js' %}"></script>
     <script src="{% static 'js/article/qrcode.js' %}"></script>
-    <script src="{% static 'js/common/common.js' %}"></script>
+{#    <script src="{% static 'js/common/common.js' %}"></script>#}
     <script src="{% static 'js/article/article.js' %}"></script>
 
     <script type="text/javascript">

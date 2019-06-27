@@ -177,7 +177,8 @@ function replayComment(_this) {
 
 
 //动态增加文章评论
-commentBtn.onclick = function () {
+if (commentBtn){
+    commentBtn.onclick = function () {
     //取出输入的评论内容
     // 1. 取出换行符 \n 的索引位置
     var index = contentArea.value.indexOf("\n");  //indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。如果要检索的字符串值没有出现，则该方法返回 -1。
@@ -309,6 +310,8 @@ commentBtn.onclick = function () {
     //console.log('new_content=' + encodeURIComponent(new_content) + '&article_id=' + encodeURIComponent(article_id) + '&parent_id=' + encodeURIComponent(parent_comment_id));
     xhr.send('new_content=' + encodeURIComponent(new_content) + '&parent_id=' + encodeURIComponent(parent_comment_id));
 };
+}
+
 
 
 

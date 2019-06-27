@@ -1,11 +1,11 @@
 
 .grid-left{
-    width: 12%;
+    width: 15%;
 }
 
 .grid-right {
     float: left;
-    width: 86%;
+    width: 82%;
     margin-left: 20px;
 }
 

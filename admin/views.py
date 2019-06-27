@@ -39,7 +39,7 @@ from .forms import ArticleAddForm, AdvertisingAddForm, DocPubForm
 # Create your views here.
 
 
-logger = logging.getLogger('qmpythonLog')
+logger = logging.getLogger('qmpython')
 
 @login_required
 def index(request):

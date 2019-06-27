@@ -158,3 +158,27 @@ def tag(request, tag_id):
 
 
     return render(request, 'article/tag.html', context=context)
+
+
+# 自定义处理函数
+def permission_denied(request,exception=None):
+    #全局403处理函数
+    from django.shortcuts import render_to_response
+    response = render_to_response('error/403.html', {})
+    response.status_code = 403
+    return response
+
+def page_not_found(request, exception=None):
+    #全局404处理函数
+    from django.shortcuts import render_to_response
+    response = render_to_response('error/404.html', {})
+    response.status_code = 404
+    return response
+
+def page_error(request,exception=None):
+    #全局500处理函数
+    from django.shortcuts import render_to_response
+    response = render_to_response('error/500.html', {})
+    response.status_code = 500
+    return response
+

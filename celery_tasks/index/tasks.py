@@ -1,6 +1,6 @@
 import logging
 
-from celery_tasks.celery_main import app
+from celery_tasks.main import app
 
 from django.conf import settings
 from django.template import loader

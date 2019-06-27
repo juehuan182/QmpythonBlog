@@ -107,7 +107,7 @@ class Article(ModelBase):
             self.description = strip_tags(md.convert(self.content))[:120]   #strip_tags 去掉 HTML 文本的全部 HTML 标签
 
         if not self.cover_img: # 如果为为空则给个默认值
-            self.cover_img = settings.SITE_DOMAIN + '/static/image/article/article_cover.jpg'
+            self.cover_img = '/static/image/article/article_cover.png'
 
         # 调用父类的 save 方法将数据保存到数据库中
         super(Article, self).save(*args, **kwargs)

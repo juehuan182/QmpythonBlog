@@ -165,14 +165,15 @@ class Highlighter(object):
         #加上最后一个匹配的query后面的部分
         highlighted_chunk += text[matched_so_far:]
 
-        #如果不要开头not start_head才加点
-        if start_offset > 0 and not self.start_head:
+        if len(self.text_block) < self.max_length:  # 在这加一句判断，如果字符串长度小于max_length 的值的话，我们就直接将其返回就可以了
+            return self.text_block[:start_offset] + highlighted_chunk
+
+        #这里的start_offset 与end_offset 分别代表高亮代码的开始位置与结束为止，第一个if语句就是为什么标题只显示部分的原因：
+        # 如果高亮部分在中间的话，前面的部分就直接显示…。
+        if start_offset > 0:
             highlighted_chunk = '...%s' % highlighted_chunk
 
         if end_offset < len(self.text_block):
             highlighted_chunk = '%s...' % highlighted_chunk
 
-        #可见到目前为止还不包含start_offset前面的，即第一个匹配的前面的部分（text_block[:start_offset]），如需展示(当start_head为True时)便加上
-        if self.start_head:
-            highlighted_chunk = self.text_block[:start_offset] + highlighted_chunk
         return highlighted_chunk
