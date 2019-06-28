@@ -867,9 +867,9 @@ body > footer img {
     background-color: rgba(255, 255, 255, 1);
     width: 1.9rem;
     position: absolute;
-    top: 60%;
+    top: 80%;
     transform: translateY(-50%);
-    right: 1.4rem;
+    right: 1.2rem;
     padding: 5px 5px;
     box-sizing: border-box;
     font-size: 12px;

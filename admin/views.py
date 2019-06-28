@@ -1,4 +1,6 @@
 import json
+import os
+
 from datetime import datetime, timedelta
 import logging
 from collections import OrderedDict  # 创建有序字典
@@ -1632,9 +1634,10 @@ class ProhibitedWordsManageView(View):
 
 class RobotsManageView(View):
     def get(self, request):
-        import os
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         file_path = os.path.join(BASE_DIR, 'templates', 'robots.txt')
+
+        print(file_path)
 
         # 读取文件上次更新时间
         modify_timestamp = os.path.getmtime(file_path)
@@ -1652,8 +1655,9 @@ class RobotsManageView(View):
 
         dict_data = json.loads(json_data.decode('utf-8'))
         robots = dict_data.get('robots_content')
-        import os
+        print(robots)
         file_path = os.path.join(settings.BASE_DIR, 'templates', 'robots.txt')
+        print(file_path)
 
         with open(file_path, 'w') as f:
             f.write(robots)
