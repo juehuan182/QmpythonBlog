@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dlnb+jaj$h=f&s5(m$8gky&^tgjobk5b204qvfi)0j#xpnq#-7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # 测试环境中打开调试模式，能够显示详细的报错信息，生产环境改为False避免暴露项目内部信息
+DEBUG = True  # 测试环境中打开调试模式，能够显示详细的报错信息，生产环境改为False避免暴露项目内部信息
 
 #允许访问的客户端的地址, “*”表示的就是任意的ip地址
 if DEBUG:
@@ -539,3 +539,10 @@ FASTDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'util/fastdfs/client.conf')
 QI_NIU_ACCESS_KEY = 'mHXibYhu-xcOahyvizWNWTkAmJPiUm419zOekf70'    # '你自己七牛云上的AK'
 QI_NIU_SECRET_KEY = 'VDm0lXqcRIs-Bguv1-VUdHG4DJoyEFj4N6KfzSMg'    # '你自己七牛云上的SK'
 QI_NIU_BUCKET_NAME = 'qmpython'   # '你自己在七牛云上创建的存储空间名'
+
+
+# 百度主动推送
+BAIDU_PUSH_SITE = 'https://www.qmpython.com'
+BAIDU_PUSH_TOKEN = 'kB7UZp8IIesqeq2J'
+
+

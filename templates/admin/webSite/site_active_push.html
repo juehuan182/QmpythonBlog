@@ -1,0 +1,119 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  链接主动推送页面
+{% endblock %}
+
+
+{% block style %}
+    <style>
+        .url-title span {
+            {#float: left;#}
+            font-weight: bold;
+            color: #000;
+        }
+
+        .url-input textarea {
+            border: 1px solid #e6e6e6;
+            border-radius: 3px;
+            padding: 5px;
+            height: 200px;
+            width: 50%;
+            font-size: 14px;
+            word-wrap: break-word;
+            line-height: 18px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            outline: none;
+            margin-top: 10px;
+            resize: none;
+            color: rgb(153, 153, 153);
+        }
+
+    .mt10 {
+        margin-top: 10px;
+    }
+    .ml10 {
+        margin-left: -25px;
+    }
+    .submit-tip{
+        list-style-type: disc;
+        line-height: 20px;
+        color: #999;
+    }
+
+    .mt50 {
+        margin-top: 50px;
+    }
+
+    #siteurl-btn-submit{
+        width: 118px;
+        height: 36px;
+        line-height: 36px !important;
+        border-radius: 3px;
+        cursor: pointer;
+        outline: none;
+        display: inline-block;
+        text-align: center;
+        font-size: 14px;
+        color: #fff;
+        border: 1px solid transparent;
+        background-color: #3F82FC;
+    }
+
+    </style>
+
+{% endblock %}
+
+
+
+
+{% block content_header %}
+  链接主动推送页面
+{% endblock %}
+
+{% block header_option_desc %}
+  链接主动推送
+{% endblock %}
+
+{% block content %}
+    <div class="linksubmit-main">
+
+            <div class="urlsubmit-area">
+
+            <div class="url-title">
+                <span>请填写链接地址</span>
+            </div>
+
+            <div class="url-input">
+                <textarea id="siteurl-urls" placeholder=""></textarea>
+            </div>
+
+            <div class="url-tip ml10 mt10">
+                <ul class="submit-tip">
+                    <li>请在输入框中填写当前选择站点的链接</li>
+                    <li>您每次最多可提交20条链接，每行一条</li>
+                    <li>仅支持页面对应链接的提交，不支持sitemap形式的文件提交</li>
+                </ul>
+            </div>
+
+        </div>
+            <p id="err-msg" class="error-tip hide" style="display: none;">请提交所选站点的链接</p>
+
+
+        <div class="mb10 mt50" id="">
+            <button id="siteurl-btn-submit">提交</button>
+        </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/webSite/site_active_push.js' %}"></script>
+    <script type="text/javascript">
+      $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

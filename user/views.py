@@ -1080,8 +1080,8 @@ def weibo_callback(request):
     code = request.GET.get('code', '')
     state = request.GET.get('state', '')  # 如果传递参数，会回传该参数。
     loginType = '2'
-    print(state,get_state())
-    print(state == get_state())
+    # print(state,get_state())
+    # print(state == get_state())
     if state == get_state():
         weibo = OAuth_WEIBO(settings.WEIBO_APP_KEY,
                             settings.WEIBO_APP_SECRET,

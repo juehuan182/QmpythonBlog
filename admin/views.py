@@ -1637,7 +1637,6 @@ class RobotsManageView(View):
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         file_path = os.path.join(BASE_DIR, 'templates', 'robots.txt')
 
-        print(file_path)
 
         # 读取文件上次更新时间
         modify_timestamp = os.path.getmtime(file_path)
@@ -1655,9 +1654,7 @@ class RobotsManageView(View):
 
         dict_data = json.loads(json_data.decode('utf-8'))
         robots = dict_data.get('robots_content')
-        print(robots)
         file_path = os.path.join(settings.BASE_DIR, 'templates', 'robots.txt')
-        print(file_path)
 
         with open(file_path, 'w') as f:
             f.write(robots)
@@ -1804,11 +1801,74 @@ def webuploadImage(request):
 
 
 
-#  商城模块
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import renderers
+
+
+
+# 百度主动推送工具
+class WebSiteUrlsView(APIView):
+    renderer_classes = (renderers.JSONRenderer, renderers.TemplateHTMLRenderer)
+
+    def get(self, request):
+
+        return Response(template_name='admin/webSite/site_active_push.html')
+
+
+
+    def post(self, request):
+
+        from urllib import parse
+        import requests
+        # 提交的链接
+        urls = request.data.get('urls')
+        # 请求的地址
+        url = 'http://data.zz.baidu.com/urls?site=https://www.qmpython.com&token=kB7UZp8IIesqeq2J'
+
+
+        headers = {
+                    'User-Agent': 'curl / 7.12',
+                    'Host': 'data.zz.baidu.com',
+                    'Content-Type': 'text/plain',
+                    'Content-Length': '83'
+                    }  # 设置请求头信息
+
+
+
+        resp = requests.post(url, headers=headers, data=urls)  # urls字符串
+
+        status_code = resp.status_code
+        info = resp.json()
+        #
+        # print(status_code, type(status_code))
+        # print(info, type(info))
+
+        if status_code == 200:
+            return Response(data=info, status=status.HTTP_200_OK)
+
+
+        error_dict = {
+            'site error': '站点未在站长平台验证',
+            'empty content': 'post内容为空',
+            'only 2000 urls are allowed once': '每次最多只能提交2000条链接',
+            'over quota': '超过每日配额了，超配额后再提交都是无效的',
+            'token is not valid': 'token错误',
+            'not found': '接口地址填写错误',
+            'internal error, please try later': '服务器偶然异常，通常重试就会成功'
+        }
+
+        info['message'] = error_dict.get(info.get('message'))
+
+        return Response(data=info, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+# 商城模块
 from shop.models import GoodsCategory, GoodsSPU, GoodsSKU
 from shop.serializers import GoodsCategorySerializer, GoodsSPUSerializer, GoodsSKUSerializer
 

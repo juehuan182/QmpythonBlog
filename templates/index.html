@@ -15,7 +15,7 @@
                 {% for left_advertising in leftAdvertisings %}
                    <li class="banner-left-item">
                        <a href="{{ left_advertising.link_to }}">
-                           <img src="{{ left_advertising.image_url}}" class="banner-left-item-img">
+                           <img src="{{ left_advertising.image_url}}" class="banner-left-item-img" alt="{{ left_advertising.name }}">
                            <div class="banner-left-item-info">
                                 <p class="banner-left-item-title">{{ left_advertising.name }}</p>
                            </div>
@@ -24,7 +24,7 @@
                 {% empty %}
                    <li class="banner-left-item">
                        <a href="#">
-                           <img src="/static/image/qmpython_banner.jpg" class="banner-left-item-img">
+                           <img src="/static/image/qmpython_banner.jpg" class="banner-left-item-img" alt="人生苦短，我用python">
                            <div class="banner-left-item-info">
                                 <p class="banner-left-item-title">人生苦短，我用python</p>
                            </div>
@@ -52,7 +52,7 @@
             {% for right_advertising in rightAdvertisings %}
                 <li class="banner-right-item">
                     <a href="{{ right_advertising.link_to }}" class="banner-right-item-article" target="_blank">
-                           <img class="banner-right-item-img" src="{{ right_advertising.image_url }}"/>
+                           <img class="banner-right-item-img" src="{{ right_advertising.image_url }}" alt="{{ right_advertising.name }}">
                            <div class="banner-right-item-info">
                                <p class="banner-right-item-title">{{ right_advertising.name }}</p>
                            </div>
@@ -62,7 +62,7 @@
                 {% for right_item in  'x'|ljust:'2' %}
                     <li class="banner-right-item">
                         <a href="#" class="banner-right-item-article" target="_blank">
-                               <img class="banner-right-item-img" src="/static/image/qmpython_banner-right.jpg"/>
+                               <img class="banner-right-item-img" src="/static/image/qmpython_banner-right.jpg" alt="人生苦短，我用python">
                                <div class="banner-right-item-info">
                                    <p class="banner-right-item-title">人生苦短，我用python</p>
                                </div>

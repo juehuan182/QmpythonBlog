@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import index, ColumnManageView, ColumnEditView, getColumnList, CategoryManageView, CategoryEditView, TagManageView, \
     AdvertisingManageView, AdvertisingEditView, FriendlinkManageView, FriendlinkEditView, AdvertisingAddView, TagEditView, ArticleManageView, ArticleEditView,\
-    RecommendArticleManageView, RecommendArticleAddView, ShoppingGoodsSKUsViewset,\
+    RecommendArticleManageView, RecommendArticleAddView, ShoppingGoodsSKUsViewset, WebSiteUrlsView, \
     RecommendArticleEditView, ArticlesByCategoryIdView, DocsManageView, DocsEditView, DocsPubView, \
     CommentsManageView, CommentsEditView, GroupManagerView, UserGroupManageView, ArticleAddView, markDownUploadImage, uploadImageToServer, up_token, uploadFileToServer,\
     GroupAddView, GroupEditView, viewGroup, UserGroupEditView, UserGroupAddView, getGroupUser, UserInfoView, UserInfoEditView,\
@@ -106,6 +106,8 @@ urlpatterns = [
     path('website_info/', WebSiteInfoManageView.as_view(), name='website_info'),
     path('website_info/upload_image/', webuploadImage, name='web_uploadImage'),
 
+    # 百度链接提交
+    path('website_urls/', WebSiteUrlsView.as_view(), name='website_urls'),
 
     # 商城模块
     # 商品分类

@@ -214,18 +214,30 @@ function webRunning_time() {
     var seconds = Math.floor((e_minsold - minsold) * 60);
     /*秒*/
     var runTimes = document.querySelector(".site-statistics .runTime");
-    runTimes.innerHTML = "<span>" + yearsold + "年" + monthsold + "月" + daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
+
 
     if (yearsold === 0) {
-        runTimes.innerHTML = "<span>" + monthsold + "月" + daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
+        yearsold = '';
+    }else {
+        yearsold = yearsold + "年";
     }
-    if (monthsold === 0) {
-        runTimes.innerHTML = "<span>" + daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
 
+    if (monthsold === 0) {
+        monthsold = '';
+
+    }else{
+        monthsold = monthsold + "月";
     }
+
     if (daysold === 0) {
-        runTimes.innerHTML = "<span>" + hrsold + "小时" + minsold + "分" + seconds + "秒" + "</span>";
+        daysold = '';
+    }else {
+        daysold = hrsold + "小时";
     }
+
+
+    runTimes.innerHTML = "<span>" + yearsold + monthsold + daysold + hrsold + "小时" + minsold + "分" + seconds + "秒" +  "</span>";
+
 }
 
 webRunning_time();
