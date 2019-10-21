@@ -13,7 +13,7 @@ urlpatterns = [
     path('', article_list, name='article_list'),
 
     # 文章详情（内容）
-    path('<int:article_id>/', ArticleDetailView.as_view(), name='article_detail'),
+    path(r'detail-<int:article_id>.html', ArticleDetailView.as_view(), name='article_detail'),
 
     # 文章点赞
     path(r'<int:article_id>/likes/', article_likes, name='article_likes'),

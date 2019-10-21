@@ -1,0 +1,34 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}
+  数据库备份
+{% endblock %}
+
+
+{% block content_header %}
+  数据库备份
+{% endblock %}
+
+{% block header_option_desc %}
+  数据库备份
+{% endblock %}
+
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+        <div class="box box-primary">
+
+        </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'js/admin/webSite/website_info.js' %}"></script>
+    <script type="text/javascript">
+      $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+    </script>
+{% endblock %}

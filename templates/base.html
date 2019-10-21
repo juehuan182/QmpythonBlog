@@ -5,6 +5,8 @@
 <html>
 <head>
     <meta name="baidu-site-verification" content="yZvQ3Xs0w0" />
+    <meta name="360-site-verification" content="4d7bc6d8c0aec5c4267767391cc5f408" />
+    <meta name="sogou_site_verification" content="Jm0NNdP8UT"/>
     <meta charset="UTF-8">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'image/qmpython_favicon.ico' %}">
     <meta name="viewport"
@@ -35,6 +37,10 @@
 
     {% endblock %}
 
+    {% block top_js %}
+
+    {% endblock %}
+
 </head>
 <body>
 <header class="clearfix">  <!--header是H5新增标签，定义了文档的头部区域 -->
@@ -62,7 +68,7 @@
                             </div>
                             <ul class="user-menu">
                                 {% if request.user.is_staff %}
-                                    <li><a href="{% url 'admin:index' %}">后台管理</a></li>
+                                    <li><a href="{% url 'admin:index' %}" rel="nofollow">后台管理</a></li>
                                 {% endif %}
                                 <li><a href="{% url 'user:profile' %}" rel="nofollow">个人信息</a></li>
                                 <li>
@@ -114,7 +120,7 @@
         </div>
         <div class="m-header-logo fl">
             <a href="/">
-                <img src="{% static 'image/qmpython_logo.png' %}" alt="">
+                <img src="{% static 'image/qmpython_logo.png' %}" alt="全民Python">
             </a>
         </div>
         <div class="triggers fr">
@@ -224,36 +230,47 @@
                     <h3>博客简介</h3>
                     <div class="text-introduction">
                         <p>
-                            全民python博客: www.qmpython.com，一个关注Python开发技术、关注用户体验、坚持更多原创实战教程以及整理互联网有价值资源的个人网站，
-                            愿景：成为宇宙中最具有代表性的python博客，走在科技改变世界与科技服务世界理念中的践行者！期待您的参与,一起走进科技的世界。<a href="#" style="color:#4285f4; display: none" rel="nofollow">了解更多...</a>
+                            全民Python: www.qmpython.com，一个关注Python开发技术、关注Python实际落地、坚持更多原创实战教程以及整理互联网有价值资源的个人网站。
+                            愿景：让菜鸟学会Python，从小白到菜鸟，一起成为大牛。我们需要不断的努力，也需要沟通交流探讨，期待我们的参与,一起走进科技的世界。<a href="#" style="color:#4285f4; display: none" rel="nofollow">了解更多...</a>
                         </p>
                     </div>
+
+                </div>
+                <div class="widget wxgzh">
+                    <h3>
+                        <i class="iconfont icon-weixin"></i>
+                        关注公众号，获取更多知识
+                    </h3>
+                    <ul>
+                        <li><img src="/static/image/qrcode.jpg" alt="Python野路子" style="margin: 0px auto;"></li>
+                    </ul>
+
 
                 </div>
                 <div class="widget attention-us">
                     <ul class="clearfix">
                         <li class="qq">
-                            <a href="http://wpa.qq.com/msgrd?v=3&uin=1328500761&site=qq&menu=yes" title="QQ">
+                            <a href="http://wpa.qq.com/msgrd?v=3&uin=1328500761&site=qq&menu=yes" title="QQ" rel="nofollow">
                                 <i class="icon-qq iconfont"></i>
                             </a>
                         </li>
                         <li class="weixin" style="display: none;">
-                            <a href="#" title="微信">
+                            <a href="#" title="微信" rel="nofollow">
                                 <i class="iconfont icon-weixin"></i>
                             </a>
                         </li>
                         <li class="weibo" style="display: none;">
-                            <a href="#" title="新浪微博">
+                            <a href="#" title="新浪微博" rel="nofollow">
                                 <i class="iconfont icon-weibo"></i>
                             </a>
                         </li>
                         <li class="wxgzh" style="display: none;">
-                            <a href="#" title="公众号" >
+                            <a href="#" title="公众号" rel="nofollow">
                                 <i class="iconfont icon-erweima"></i>
                             </a>
                         </li>
                         <li class="email">
-                            <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=qmpython@qq.com" title="邮件">
+                            <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=qmpython@qq.com" title="邮件" rel="nofollow">
                                 <i class="icon-youxiang1 iconfont"></i>
                             </a>
                         </li>
@@ -265,19 +282,12 @@
                         资讯
                     </h3>
                     <ul>
-                        <li>
-                            <i class=""></i>
-                            <iframe id="tianqi" scrolling="no" frameborder="0" allowtransparency="true"
-                                    src="//i.tianqi.com/index.php?c=code&a=getcode&id=34" width="300" height="25">
-                            </iframe>
-                        </li>
-                        {#                            <li>#}
-                        {#                                <i class=""></i>#}
-                        {#                              历史今天：#}
-                        {#                            <iframe src="http://www.todayonhistory.com/code/6.html?w=250&h=20&bky=dotted&bks=0&fs=14&fc=#565656&hg=14&ie=0&xhx=none&sd=300&px=3&len=0&sk=1&n=0"#}
-                        {#                                    width="250" height="15" scrolling="no" frameborder="0" allowtransparency="true"></iframe>#}
-                        {##}
-                        {#                            </li>#}
+{#                        <li>#}
+{#                            <i class=""></i>#}
+{#                            <iframe id="tianqi" scrolling="no" frameborder="0" allowtransparency="true"#}
+{#                                    src="//i.tianqi.com/index.php?c=code&a=getcode&id=34" width="300" height="25">#}
+{#                            </iframe>#}
+{#                        </li>#}
                     </ul>
                 </div>
                 <div class="widget hot-article">
@@ -367,13 +377,13 @@
     </div>
 </div>
 <footer>
-    <div>&copy;2018<a href="/">全民python</a>&nbsp;|&nbsp;
-        <a href="http://www.miitbeian.gov.cn/">粤ICP备18143893号</a>&nbsp;|&nbsp;
+    <div>&copy;2019<a href="/">全民python</a>&nbsp;|&nbsp;
+        <a href="http://beian.miit.gov.cn" rel="nofollow">粤ICP备18143893号</a>&nbsp;|&nbsp;
         <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44010302000627"
-           style="color: #939393;"><img src="{% static 'image/beian.png' %}">粤公网安备 44010302000627号</a>
+           style="color: #939393;" rel="nofollow"><img src="{% static 'image/beian.png' %}" alt="备案">粤公网安备 44010302000627号</a>
     </div>
     <div>
-        <a href="https://www.djangoproject.com/" title="Django" target="_blank">Powered by Django</a>丨托管于
+        <a href="https://www.djangoproject.com/" title="Django" target="_blank" rel="nofollow">Powered by Django</a>丨托管于
         <a rel="nofollow" target="_blank" href="https://www.aliyun.com/" title="阿里云主机" target="_blank">阿里云主机</a> &
         <a rel="nofollow" target="_blank" href="https://www.qiniu.com/">七牛云存储 </a>丨
         <a href="/sitemap.xml" title="Sitemap" target="_blank">网站地图</a>
@@ -383,18 +393,18 @@
 
 <div class="rollbar">
     <ul>
-        <li class=""><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1328500761&site=qq&menu=yes">
+        <li class=""><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1328500761&site=qq&menu=yes" rel="nofollow">
             <i class="icon-qq iconfont"></i><span>qq咨询</span></a></li>
         <li class="">
-            <a href="#"><i class="iconfont icon-erweima"></i>
+            <a href="#" rel="nofollow"><i class="iconfont icon-erweima"></i>
                 <span>
                     关注公众号
                     <img src="/static/image/qrcode.jpg" style="max-width: 100%" alt="全民python-微信公众号">
                 </span>
             </a>
         </li>
-        <li class=""><a href="#"><i class="iconfont icon-zaixianzixun"></i><span>在线咨询</span></a></li>
-        <li><a href="javascript:;" onclick="goTop();"><i class="iconfont icon-dingbu"></i><span>回顶部</span></a></li>
+        <li class=""><a href="#" rel="nofollow"><i class="iconfont icon-zaixianzixun"></i><span>在线咨询</span></a></li>
+        <li><a href="javascript:;" onclick="goTop();" rel="nofollow"><i class="iconfont icon-dingbu"></i><span>回顶部</span></a></li>
     </ul>
 </div>
 
@@ -472,7 +482,7 @@
                         <input type="checkbox" name="remember" id="remember">&nbsp;记住我
                     </div>
                     <div class="forget">
-                        <a href="/user/resetPwd/">忘记密码</a>
+                        <a href="/user/resetPwd/" rel="nofollow">忘记密码</a>
                     </div>
                     <button class="kr-passport-button active">登 录</button>
                     <div class="switch clearfix">
@@ -487,12 +497,12 @@
                         <span>快速登录</span>
                     </div>
                     <div class="links">
-                        <a href="{% url 'user:qqLogin' %}" title="QQ登录" rel="nofollow"><i class="icon-qq iconfont"></i></a>
+                        <a href="{% url 'user:qqLogin'%}?next={{ request.path }}" title="QQ登录" rel="nofollow"><i class="icon-qq iconfont"></i></a>
                         <a href="" title="微信登录" style="display:none;" rel="nofollow"><i
                                 class="iconfont icon-weixin"></i></a>
-                        <a href="{% url 'user:weiboLogin' %}" title="微博登录" rel="nofollow"><i
+                        <a href="{% url 'user:weiboLogin' %}?next={{ request.path }}" title="微博登录" rel="nofollow"><i
                                 class="iconfont icon-weibo"></i></a>
-                        <a href="{% url 'user:githubLogin' %}" title="GitHub登录" rel="nofollow"><i
+                        <a href="{% url 'user:githubLogin' %}?next={{ request.path }}" title="GitHub登录" rel="nofollow"><i
                                 class="icon-github iconfont"></i></a>
                     </div>
                 </footer>
@@ -523,9 +533,9 @@
         <div class="search-history search-hot">
             <strong>热搜词</strong>
             <ul>
-                <li class="transition"><a href="#">python基础</a></li>
-                <li class="transition"><a href="#">DJANGO</a></li>
-                <li class="transition"><a href="#">咖啡</a></li>
+                <li class="transition"><a href="#">Python基础</a></li>
+                <li class="transition"><a href="#">Python爬虫</a></li>
+                <li class="transition"><a href="#">Python函数</a></li>
 {#                <li class="transition"><a href="/articles/search/?q=天文学">天文学</a></li>#}
 {#                <li class="transition"><a href="/articles/search/?q=高铁">高铁</a></li>#}
 {#                <li class="transition"><a href="/articles/search/?q=中国">中国</a></li>#}
@@ -545,6 +555,16 @@ csrf问题django官方给出的方法都不起作用,可以用以上2种方法�
 这两种方法是一个意思,就是设置请求头中X-CSRFToken为csrf_token的值
 但是单独的js无法在渲染模板时获取{{ csrf_token }}这个模板变量,所以只能从cookie中取值了,就显得代码长了些.
 -->
+{#<script>#}
+{#    var host = window.location.host;  // 获取访问网站域名#}
+{#    var site = "www.qmpython.com"; // 我的网址#}
+{#    if (host != site)  // 如果访问的网站和你的不一样，那么跳转回我的网站#}
+{#    {#}
+{#        alert(window.location.host + ':为非法镜像网站，为了您的安全正在带您回到原网站');#}
+{#        location.href = 'http://' + site + window.location.pathname; // window.location.pathname获取当前访问的URL路径部分#}
+{#    }#}
+{#</script>#}
+
 <script src="/static/js/common/message.js"></script>
 <script src="{% static 'js/common/common.js' %}"></script>
 <script src="{% static 'js/base.js' %}"></script>

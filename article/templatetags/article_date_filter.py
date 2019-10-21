@@ -1,5 +1,5 @@
 from django import template
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 from django.utils import timezone
 
 
@@ -32,6 +32,6 @@ def date_format(val):
     elif 60*60*24 <= sec < 60*60*24*2:
         return '昨天'
     else:
-        return val.strftime('%Y-%m-%d %H:%M')
+        return val.strftime('%Y-%m-%d %H:%M:%S')
 
 

@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="/static/plugins/editor_md/css/editormd.css">
+{#    <link rel="stylesheet" href="/static/plugins/editor_md/css/editormd.css">#}
+      <link rel="stylesheet" href="/static/plugins/editor_md/css/editormd.min.css">
+
 {#    <link rel="stylesheet" href="{% static 'highlight/styles/solarized-dark.css' %}">#}
     <style>
         .add-tag-btn{
@@ -92,24 +94,27 @@
                         </select>
                     </div>
                     <div class="form-group" id="container">
-                        <label for="article-thumbnail-url">封面图(选填，大小约xxx)：&nbsp;&nbsp;</label>
-                        <div class="input-group">
+                        <label for="article-thumbnail-url">封面图(选填，大小约220*155)：&nbsp;&nbsp;</label>
+                        <div class="form-inline">
                             {% if article %}
-                                <input type="text" class="form-control" id="article-thumbnail-url"
-                                       name="article-thumbnail-url"
+                                <input type="text" class="form-control" id="article-thumbnail-url" name="article-thumbnail-url" style="width: 70%"
                                        placeholder="请上传文章封面图或填写封面图引用地址" value="{{ article.cover_img }}">
                             {% else %}
-                                <input type="text" class="form-control" id="article-thumbnail-url"
+                                <input type="text" class="form-control" id="article-thumbnail-url" style="width: 70%"
                                        name="article-thumbnail-url"
                                        placeholder="请上传文章封面图或填写封面图引用地址">
                             {% endif %}
 
-                            <div class="input-group-btn">
-                                <label class="btn btn-default btn-file">
-                                    上传至服务器 <input type="file" id="upload-article-thumbnail">
-                                </label>
-                                <button class="btn btn-info" id="upload-btn">上传至七牛云</button>
+                            <select name="upload-method" id="upload-method" class="form-control">
+                                    <option value="0">请选择上传地址</option>
+                                    <option value="1">本地服务器</option>
+                                    <option value="2">七牛云存储</option>
+                                </select>
+
+                            <div class="btn btn-default btn-file">
+                                    上传图片 <input type="file" id="upload-article-thumbnail">
                             </div>
+
                         </div>
                     </div>
                     <div class="form-group">
@@ -215,6 +220,9 @@
 
               onload: function () { //上传成功之后的回调
                 {#console.log('onload', this);#}
+                {#  this.on('paste', function () {#}
+                {#      console.log(1);#}
+                {#  })#}
 
               }
               {#/** 下面三个选项是设置风格的，每个有什么风格，请看下载插件得examples/themes.html,设置主题颜色 把这些注释去掉主题就是黑色的了*/#}
@@ -226,6 +234,73 @@
         //testEditor.setToolbarAutoFixed(true);
         // 获取Markdown源码
         //    var mdstr=testEditor.getMarkdown();
+
+        $("#article-content").on('paste', function (e) {
+            var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            var file = null;
+            if (items && items.length){
+                // 检索剪切板items
+                for (var i =0; i < items.length; i++){
+                    if (items[i].type.indexOf('image') != -1){
+                        file = items[i].getAsFile();
+                        // 此时file就是剪切板中的图片文件
+                        var title = $('#article-title').val();
+                        var formData = new FormData();
+                        formData.append('editormd-image-file', file, title + '_' + Date.parse(new Date())+".png");
+                        // ajax上传图片
+                        $.ajax({
+                            url: '/admin/markdown/image/',
+                            async: false,
+                            type: 'POST',
+                            data: formData,
+                            // 定义文件的传输
+                            processData: false,     // 必须false才会避开JQ对formdata的默认处理
+                            contentType: false,    // 必须false才会自动加上正确的Content-Type
+                            success: function (res) {
+                                if (res['success'] === 1){
+                                    swal({
+                                        title: res['message'],
+                                        text: '',
+                                        type: 'success',
+                                        showCancelButton: false,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                    // 新一行的图片显示
+                                    testEditor.insertValue("\n![](" + res['url'] + ")");
+                                }else{
+                                    swal({
+                                        title: res["message"],
+                                        text: '',
+                                        type: "error",
+                                        showCancelButton: false,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                }
+                            },
+                            error: function (err) {
+                                swal({
+                                    title: '服务器错误，请重试！',
+                                    text: '',
+                                    type: "error",
+                                    showCancelButton: false,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }
+
+                        });
+
+                        break;
+                    }
+
+
+                }
+            }
+        });
+
+
    </script>
 
     {# 导入七牛云需要的4个js文件 #}

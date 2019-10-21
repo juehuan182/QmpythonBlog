@@ -232,10 +232,11 @@ class LogoutView(View):
         logout(request)  # 当执行完logout，实际就是清除了session中的user信息
         # 它接受一个HttpRequest对象并且没有返回值,所以，因为没有返回值，需要返回一个页面。
         # return render(request, 'login.html')
-        # next_url = request.GET.get('next')
-        # if next_url:
-        #     return redirect(next_url)
-        return redirect(reverse('index'))  # 重定向，url栏目地址跳转
+        next_url = request.GET.get('next', '')
+        if next_url:
+            return redirect(next_url)
+        else:
+            return redirect(reverse('index'))  # 重定向，url栏目地址跳转
 
 
 # 用户信息
@@ -573,7 +574,7 @@ class UserOrderReturnView(View):
 
 
 # alipay 异步通知
-@method_decorator(csrf_exempt,name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
 class UserOrderNotifyView(View):
     def post(self, request):
 
@@ -766,36 +767,6 @@ def bind_success(request):
     return render(request, 'user/bindSuccess.html', context=context)
 
 
-state_uuid = None
-def set_state():
-    global state_uuid   #内部作用域修改外部作用域变量时需要用global声明
-    # UUID生成唯一ID
-    state_uuid = uuid.uuid1()
-    # 保存state值到缓存中
-    state_key = 'state_key_{}'.format(state_uuid)
-    #  建立redis连接，并且将图片验证码保存到redis中
-    conn_redis = get_redis_connection(alias='default')
-    conn_redis.setex(state_key, 1 * 60, str(state_uuid))  # setex key seconds value  设置 key的同时，设置过期时间
-
-    return state_uuid
-
-def get_state():
-    #  建立redis连接，并且将图片验证码保存到redis中
-    conn_redis = get_redis_connection(alias='default')
-    # 获取缓存中state值
-    state_key = 'state_key_{}'.format(state_uuid).encode('utf-8')
-    real_state_value = conn_redis.get(state_key).decode('utf-8') if conn_redis.get(state_key) else None
-
-    return real_state_value
-
-
-def del_state():
-    global state_uuid
-    state_key = 'state_key_{}'.format(state_uuid).encode('utf-8')
-    conn_redis = get_redis_connection(alias='default')
-    conn_redis.delete(state_key)  # 如果存在则删除
-    state_uuid = None
-
 
 class OAuthBase:
     def __init__(self, client_id, client_key, redirect_url, state):
@@ -817,6 +788,7 @@ class OAuthBase:
         # urllib.parse.urlencode 方法，将字典里面所有的键值转化为query-string格式（key=value&key=value）,
         # 多个参数用&分离，并且将中文转码
         url = url.format(urllib.parse.urlencode(params))
+
         return url
 
     # 令牌请求  获取授权过的Access Token，通过Authorization Code获取Access Token
@@ -877,10 +849,16 @@ class OAuth_GITHUB(OAuthBase):
 
 # 用户被重定向以请求他们的GitHub身份
 def github_login(request):
+
+    # 通过request获取查询字符串，next记录从哪里跳转的
+    next = request.GET.get('next', '')
+    if not next:
+        next = "/"
+
     github = OAuth_GITHUB(settings.GITHUB_CLIENT_ID,
                           settings.GITHUB_CLIENT_SECRET,
                           settings.GITHUB_CALLBACK_URL,
-                          set_state()
+                          next
                           )
 
     url = 'https://github.com/login/oauth/authorize?scope=user:email&{0}'
@@ -894,38 +872,34 @@ def github_callback(request):
     state = request.GET.get('state')  # 为上述随机产生的字符串
     loginType = '3'
 
-    if state == get_state():
-        github = OAuth_GITHUB(settings.GITHUB_CLIENT_ID,
-                              settings.GITHUB_CLIENT_SECRET,
-                              settings.GITHUB_CALLBACK_URL,
-                              state
-                              )
+    github = OAuth_GITHUB(settings.GITHUB_CLIENT_ID,
+                          settings.GITHUB_CLIENT_SECRET,
+                          settings.GITHUB_CALLBACK_URL,
+                          state
+                          )
 
-        # 删除缓存中保存的state值
-        del_state()
+    url = 'https://github.com/login/oauth/access_token?code=' + code + '&state=' + state + '&{0}'
+    # 获取access_token的值
+    result = github.get_access_token(url)
 
-        url = 'https://github.com/login/oauth/access_token?code=' + code + '&state=' + state + '&{0}'
-        # 获取access_token的值
-        result = github.get_access_token(url)
+    # 使用access_token获取用户信息
+    params = {'access_token': result['access_token']}
+    url = 'https://api.github.com/user?{0}'.format(urllib.parse.urlencode(params))
 
-        # 使用access_token获取用户信息
-        params = {'access_token': result['access_token']}
-        url = 'https://api.github.com/user?{0}'.format(urllib.parse.urlencode(params))
+    # 获得github授权用户的个人信息
+    someInfo = github.get_user_some_info(url)
+    someInfo['login_type'] = loginType
 
-        # 获得github授权用户的个人信息
-        someInfo = github.get_user_some_info(url)
-        someInfo['login_type'] = loginType
+    # 查询第三方账户是否关联本网站账号
+    github = OAuthEx.objects.filter(openid=someInfo['open_id'], loginType=loginType)
 
-        # 查询第三方账户是否关联本网站账号
-        github = OAuthEx.objects.filter(openid=someInfo['open_id'], loginType=loginType)
+    if github and github[0].user.is_active:  # 若已存在且激活状态，直接登录
+        login(request, github[0].user)
+        return redirect(state)
+    else:  # 如果不存在，则关联新账号或关联已有账号
+        return redirect('/user/bindAccount?{0}'.format(urllib.parse.urlencode(someInfo)))
 
-        if github and github[0].user.is_active:  # 若已存在且激活状态，直接登录
-            login(request, github[0].user)
-            return redirect('/')
-        else:  # 如果不存在，则关联新账号或关联已有账号
-            return redirect('/user/bindAccount?{0}'.format(urllib.parse.urlencode(someInfo)))
-
-    return redirect(reverse('user:login'))
+    #return redirect(reverse('user:login'))
 
 
 class OAuth_QQ(OAuthBase):
@@ -987,14 +961,20 @@ class OAuth_QQ(OAuthBase):
 
 
 def qq_login(request):
+
+    # 通过request获取查询字符串，next记录从哪里跳转的
+    next = request.GET.get('next', '')
+    if not next:
+        next = "/"
+
     qq = OAuth_QQ(settings.QQ_APP_ID,
                   settings.QQ_APP_KEY,
                   settings.QQ_CALLBACK_URL,
-                  set_state())
+                  next)
 
-    url = 'https://graph.qq.com/oauth2.0/show?which=Login&display=pc&scope=get_user_info&{0}'
+    qq_url = 'https://graph.qq.com/oauth2.0/show?which=Login&display=pc&scope=get_user_info&{0}'
 
-    return redirect(qq.get_auth_url(url))
+    return redirect(qq.get_auth_url(qq_url))
 
 
 def qq_callback(request):
@@ -1002,41 +982,39 @@ def qq_callback(request):
     state = request.GET.get('state', '')  # 如果传递参数，会回传该参数。
     loginType = '1'
 
-    if state == get_state():
-        qq = OAuth_QQ(settings.QQ_APP_ID,
-                      settings.QQ_APP_KEY,
-                      settings.QQ_CALLBACK_URL,
-                      state)
+    qq = OAuth_QQ(settings.QQ_APP_ID,
+                  settings.QQ_APP_KEY,
+                  settings.QQ_CALLBACK_URL,
+                  state)
 
-        del_state()
 
-        url = 'https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&code=' + code + '&{0}'
+    url = 'https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&code=' + code + '&{0}'
 
-        # 通过Authorization Code获取Access Token
-        result = qq.get_access_token(url)
-        access_token = result['access_token'][0]
-        # 使用AccessToken来获取用户的OpenID
-        params = {'access_token': access_token}
-        url = 'https://graph.qq.com/oauth2.0/me?{0}'.format(urllib.parse.urlencode(params))
+    # 通过Authorization Code获取Access Token
+    result = qq.get_access_token(url)
+    access_token = result['access_token'][0]
+    # 使用AccessToken来获取用户的OpenID
+    params = {'access_token': access_token}
+    url = 'https://graph.qq.com/oauth2.0/me?{0}'.format(urllib.parse.urlencode(params))
 
-        openid = qq.get_open_id(url)
-        # 获取用户信息
-        params = {'access_token': access_token, 'oauth_consumer_key': qq.client_id, 'openid': openid}
+    openid = qq.get_open_id(url)
+    # 获取用户信息
+    params = {'access_token': access_token, 'oauth_consumer_key': qq.client_id, 'openid': openid}
 
-        url = 'https://graph.qq.com/user/get_user_info?{0}'.format(urllib.parse.urlencode(params))
-        someInfo = qq.get_user_some_info(url)
-        someInfo['login_type'] = loginType
+    url = 'https://graph.qq.com/user/get_user_info?{0}'.format(urllib.parse.urlencode(params))
+    someInfo = qq.get_user_some_info(url)
+    someInfo['login_type'] = loginType
 
-        # 查询第三方账户是否关联本网站账号
-        qq = OAuthEx.objects.filter(openid=openid, loginType=loginType)
+    # 查询第三方账户是否关联本网站账号
+    qq = OAuthEx.objects.filter(openid=openid, loginType=loginType)
 
-        if qq and qq[0].user.is_active:  # 若已存在且激活状态，直接登录
-            login(request, qq[0].user)
-            return redirect('/')
-        else:  # 如果不存在，则关联新账号或关联已有账号
-            return redirect('/user/bindAccount?{0}'.format(urllib.parse.urlencode(someInfo)))
+    if qq and qq[0].user.is_active:  # 若已存在且激活状态，直接登录
+        login(request, qq[0].user)
+        return redirect(state)
+    else:  # 如果不存在，则关联新账号或关联已有账号
+        return redirect('/user/bindAccount?{0}'.format(urllib.parse.urlencode(someInfo)))
 
-    return redirect(reverse('user:login'))
+    #return redirect(reverse('user:login'))
 
 
 class OAuth_WEIBO(OAuthBase):
@@ -1067,10 +1045,16 @@ class OAuth_WEIBO(OAuthBase):
 
 # weibo
 def weibo_login(request):
+
+    # 通过request获取查询字符串，next记录从哪里跳转的
+    next = request.GET.get('next', '')
+    if not next:
+        next = "/"
+
     weibo = OAuth_WEIBO(settings.WEIBO_APP_KEY,
                         settings.WEIBO_APP_SECRET,
                         settings.WEIBO_CALLBACK_URL,
-                        set_state())
+                        next)
     url = 'https://api.weibo.com/oauth2/authorize?scope=email&forcelogin=true&{0}'
 
     return redirect(weibo.get_auth_url(url))
@@ -1080,34 +1064,30 @@ def weibo_callback(request):
     code = request.GET.get('code', '')
     state = request.GET.get('state', '')  # 如果传递参数，会回传该参数。
     loginType = '2'
-    # print(state,get_state())
-    # print(state == get_state())
-    if state == get_state():
-        weibo = OAuth_WEIBO(settings.WEIBO_APP_KEY,
-                            settings.WEIBO_APP_SECRET,
-                            settings.WEIBO_CALLBACK_URL,
-                            '1234@qqcom')
 
-        del_state()
+    weibo = OAuth_WEIBO(settings.WEIBO_APP_KEY,
+                        settings.WEIBO_APP_SECRET,
+                        settings.WEIBO_CALLBACK_URL,
+                        '1234@qqcom')
 
-        url = 'https://api.weibo.com/oauth2/access_token?grant_type=authorization_code&code=' + code + '&{0}'
+    url = 'https://api.weibo.com/oauth2/access_token?grant_type=authorization_code&code=' + code + '&{0}'
 
-        result = weibo.get_access_token(url)
+    result = weibo.get_access_token(url)
 
-        # 使用access_token获取用户信息
-        params = {'access_token': result['access_token'], 'uid': result['uid']}
-        url = 'https://api.weibo.com/2/users/show.json?{0}'.format(urllib.parse.urlencode(params))
-        # 获得github授权用户的个人信息
-        someInfo = weibo.get_user_some_info(url)
-        someInfo['login_type'] = loginType
+    # 使用access_token获取用户信息
+    params = {'access_token': result['access_token'], 'uid': result['uid']}
+    url = 'https://api.weibo.com/2/users/show.json?{0}'.format(urllib.parse.urlencode(params))
+    # 获得github授权用户的个人信息
+    someInfo = weibo.get_user_some_info(url)
+    someInfo['login_type'] = loginType
 
-        # 查询第三方账户是否关联本网站账号
-        weibo = OAuthEx.objects.filter(openid=someInfo['open_id'], loginType=loginType)
+    # 查询第三方账户是否关联本网站账号
+    weibo = OAuthEx.objects.filter(openid=someInfo['open_id'], loginType=loginType)
 
-        if weibo and weibo[0].user.is_active:  # 若已存在且激活状态，直接登录
-            login(request, weibo[0].user)
-            return redirect('/')
-        else:  # 如果不存在，则关联新账号或关联已有账号
-            return redirect('/user/bindAccount?{0}'.format(urllib.parse.urlencode(someInfo)))
+    if weibo and weibo[0].user.is_active:  # 若已存在且激活状态，直接登录
+        login(request, weibo[0].user)
+        return redirect(state)
+    else:  # 如果不存在，则关联新账号或关联已有账号
+        return redirect('/user/bindAccount?{0}'.format(urllib.parse.urlencode(someInfo)))
 
-    return redirect(reverse('user:login'))
+    #return redirect(reverse('user:login'))

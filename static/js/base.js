@@ -119,7 +119,7 @@ function goTop() {
         var oTop = document.body.scrollTop || document.documentElement.scrollTop;
 
         if (oTop > 0) {
-            document.body.scrollTop = document.documentElement.scrollTop = oTop - 50;
+            document.body.scrollTop = document.documentElement.scrollTop = oTop - 200;
 
         } else {
             clearInterval(timer);
@@ -130,9 +130,9 @@ function goTop() {
 
 
 // 值长度范围
-function strLen() {
-
-}
+// function strLen() {
+//
+// }
 
 // js获取url传递参数，js获取url？号后面的参数
 function getQueryString(name) {

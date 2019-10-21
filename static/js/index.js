@@ -138,17 +138,17 @@ moreBtn.onclick =  function () {
                 //遍历
                 articles.forEach(function (one_article) {
                     let articleStr =' <article class="excerpt clearfix">\n' +
-                        '    <a href=\"/articles/{0}/\">\n' +
+                        '    <a href=\"/articles/detail-{0}\.html\">\n' +
                         '        <img src=\"{1}\"/>\n' +
                         '    </a>\n' +
                         '    <div class=\"article-category\">\n' +
-                        '        <a href=\"/categories/{2}/\" target=\"_blank\">\n' +
+                        '        <a href=\"/categories/category-{2}\.html\" target=\"_blank\">\n' +
                         '            {3}\n' +
                         '        </a>\n' +
                         '    </div>\n' +
                         '    <div class=\"right-text\">\n' +
                         '        <div class=\"header\">\n' +
-                        '            <h2><a href=\"/articles/{0}/\">{4}</a></h2>\n' +
+                        '            <h2><a href=\"/articles/detail-{0}\.html\">{4}</a></h2>\n' +
                         '        </div>\n' +
                         '        <p class=\"note\">\n' +
                         '            {5}...\n' +

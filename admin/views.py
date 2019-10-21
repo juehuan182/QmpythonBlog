@@ -23,8 +23,9 @@ from QmpythonBlog import settings
 #  权限相关
 from django.contrib.auth.models import Group, Permission
 
+from qiniu import Auth, put_data
 
-from qiniu import Auth
+
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from urllib.parse import urlencode
@@ -469,6 +470,7 @@ class ArticleManageView(View):
 @csrf_exempt
 def markDownUploadImage(request):
     image_file = request.FILES.get('editormd-image-file')
+    print(image_file)
     if not image_file:
         logger.info('从前端获取图片失败')
         '''
@@ -484,25 +486,32 @@ def markDownUploadImage(request):
     if image_file.content_type not in ('image/jpeg', 'image/png', 'image/gif','image/png', 'image/bmp', 'image/webp'):
         return JsonResponse({'success': 0, 'message': '不能上传非图片文件'})
 
-    try:
-        image_ext_name = image_file.name.split('.')[-1]
-    except Exception as e:
-        logger.error('图片扩展名异常:{}'.format(e))
-        image_ext_name = 'jpg'
+    # 需要填写你的 Access Key 和 Secret Key
+    access_key = settings.QI_NIU_ACCESS_KEY
+    secret_key = settings.QI_NIU_SECRET_KEY
+    # 构建鉴权对象
+    q = Auth(access_key, secret_key)
 
-    try:
-        upload_res = FDFS_Client.upload_by_buffer(image_file.read(), file_ext_name=image_ext_name)
-    except Exception as e:
-        logger.error('图片上传出现异常：{}'.format(e))
-        return JsonResponse({'success': 0, 'message': '图片上传异常'})
-    else:
-        if upload_res.get('Status') != 'Upload successed.':
-            logger.info('图片上传到FastDFS服务器失败')
-            return JsonResponse({'success': 0, 'message': '图片上传到服务器失败'})
-        else:
-            image_name = upload_res.get('Remote file_id')
-            image_url = settings.FASTDFS_SERVER_DOMAIN + image_name
-            return JsonResponse({'success': 1, 'message': '图片上传成功', 'url': image_url})
+    # 要上传的空间
+    bucket_name = settings.QI_NIU_BUCKET_NAME
+
+    # 上传后保存的文件名
+
+    key = image_file.name
+
+    # 生成上传 Token，可以指定过期时间等
+    token = q.upload_token(bucket_name, key, 3600)
+
+    # 要上传文件的本地路径
+    #localfile = './sync/bbb.jpg'
+    #ret, info = put_file(token, key, localfile)
+    ret, info = put_data(token, key, image_file.read())
+
+    filename = ret.get('key')
+    image_url = settings.QI_NIU_DOMAIN + filename
+
+    return JsonResponse({'success': 1, 'message': '图片上传成功', 'url': image_url})
+
 
 
 # 图片上传至FastDFS服务器功能实现
@@ -571,18 +580,42 @@ def uploadImageToServer(request):
 #     return json_status.result(data={"file_url": file_url})
 
 
-# 1. 安装 pip install qiniu
-def up_token(request):
+def upload_to_qiniu(request):
+    image_file = request.FILES.get('image_file')
+
+    if not image_file:
+        logger.info('从前端获取图片失败')
+        return json_status.params_error(message='从前端获取图片失败')
+
+    if image_file.content_type not in ('image/jpeg', 'image/png', 'image/gif', 'image/bmp'):
+        return json_status.params_error(message='不能上传非图片文件')
+
+    # 需要填写你的 Access Key 和 Secret Key
     access_key = settings.QI_NIU_ACCESS_KEY
     secret_key = settings.QI_NIU_SECRET_KEY
-    bucket_name = settings.QI_NIU_BUCKET_NAME
-    # print(request)
     # 构建鉴权对象
     q = Auth(access_key, secret_key)
-    # 3600为token过期时间，秒为单位。3600等于一小时
-    token = q.upload_token(bucket_name)
+    # 要上传的空间
+    bucket_name = settings.QI_NIU_BUCKET_NAME
+    # 上传后保存的文件名
+    key = image_file.name
+    # 生成上传 Token，可以指定过期时间等
+    token = q.upload_token(bucket_name, key, 3600)
 
-    return JsonResponse({"uptoken": token})
+    # 要上传文件的本地路径
+    #localfile = './sync/bbb.jpg'
+    #ret, info = put_file(token, key, localfile)
+    ret, info = put_data(token, key, image_file.read())
+
+    print(ret, info)
+
+    filename = ret.get('key')
+
+    image_url = settings.QI_NIU_DOMAIN + filename
+
+    return json_status.result(data={'image_url': image_url}, message='图片上传成功')
+
+
 
 def uploadFileToServer(request):
     # request.FILES (任何文件都会存在这里面 ) request.POST body(请求体)
@@ -776,6 +809,7 @@ class RecommendArticleAddView(PermissionRequiredMixin, View):
         #print(priority_dict)
 
         return render(request, 'admin/article/recommand_article_add.html', locals())
+
 
     def post(self, request):
         if not request.user.has_perms('article.add_articlerecommend'):
@@ -1073,7 +1107,7 @@ class FriendlinkEditView(PermissionRequiredMixin, View):
 
 
 class DocsManageView(View):
-    @method_decorator(permission_required('doc.view_doc',login_url=None, raise_exception=True))
+    @method_decorator(permission_required('doc.view_doc', login_url=None, raise_exception=True))
     def get(self, request):
          docs = Doc.objects.only('title', 'create_time').filter(is_delete=False)
          return render(request, 'admin/doc/docs_manage.html', locals())
@@ -1864,6 +1898,16 @@ class WebSiteUrlsView(APIView):
         return Response(data=info, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+# 系统设置
+class DbBackupView(View):
+
+    def get(self, request):
+        return render(request, 'admin/system/dbbackup.html')
+
+
+    def post(self, request):
+        pass
 
 
 

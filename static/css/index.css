@@ -150,7 +150,7 @@ div.banner-left-item-info .banner-left-item-title{
 /*}*/
 
 .banner-right-item:nth-of-type(2) {
-    margin-top: 10px;
+    margin-top: 9px;
 }
 
 
@@ -304,7 +304,7 @@ article.excerpt-minic-index {
     /*}*/
 
     .banner-right-item:nth-of-type(2){
-        margin-left: 5px;
+        margin-left: 6px;
         margin-top: 0;
     }
 

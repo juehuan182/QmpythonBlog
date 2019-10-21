@@ -1,18 +1,33 @@
-// 生成富文本编辑器  https://www.kancloud.cn/wangfupeng/wangeditor3/332599
-
 // ================== 上传图片文件至服务器 ================
+
 let $uploadThumbnail=$("#upload-article-thumbnail");
 $uploadThumbnail.change(function () {
     // 获取文件
     let file = this.files[0];
     // 创建一个 FormData
-    let formData = new FormData();
+    let formData = new FormData();   // FormData对象来发送二进制文件
     // 把文件添加进去
-    formData.append("image_file", file);
+    formData.append("image_file", file); // FormData构造函数提供的append()方法
+
+    // 判断文章分类
+    let upload_method = $("#upload-method").val();
+    if (!upload_method || upload_method === '0'){
+        swal({
+          'title': "请选择上传地址!",
+          'text': '',
+          'type': 'error',
+          'showCancelButton': false,
+          'showConfirmButton': false,
+          'timer': 1500
+        });
+        return;
+    }
+
+    url  = upload_method === '1' ? '/admin/uploadImageToServer/' : '/admin/uploadQiniu/';
 
     // 发送请求
     $.ajax({
-        url: "/admin/uploadImageToServer/",
+        url: url,
         type: "POST",
         data: formData,
         // 定义文件的传输
@@ -30,6 +45,7 @@ $uploadThumbnail.change(function () {
                 });
                 // 先清除，再将url填充
                 $("#article-thumbnail-url").val();
+                // console.log(res["data"]["image_url"]);
                 $("#article-thumbnail-url").val(res["data"]["image_url"]);
             }else{
                 swal({
@@ -55,45 +71,8 @@ $uploadThumbnail.change(function () {
 
     });
 
+
 });
-
-
-// ================== 上传至七牛（云存储平台） ================
-let $progressBar = $(".progress-bar");  // 进度条
-QINIU.upload({
-    "domain": "http://cdn.qmpython.com/",  // 七牛空间域名
-    "uptoken_url": "/admin/uploadToken/",	 // 后台返回 token的地址
-    "browse_btn": "upload-btn",		// 按钮
-    "success": function (up, file, info) {	 // 成功
-      let domain = up.getOption('domain');
-      let res = JSON.parse(info);
-      let filePath = domain + res.key;
-      // console.log(filePath);
-      $("#article-thumbnail-url").val('');
-      $("#article-thumbnail-url").val(filePath);
-    },
-    "error": function (up, err, errTip) {
-      // console.log('error');
-      // console.log(up);
-      // console.log(err);
-      // console.log(errTip);
-      // console.log('error');
-      // message.showError(errTip);
-    },
-    // 上传文件的过程中 七牛对于 4M 秒传
-    "progress": function (up, file) {
-      let percent = file.percent;
-      $progressBar.parent().css("display", 'block');
-      $progressBar.css("width", percent + '%');
-      $progressBar.text(parseInt(percent) + '%');
-    },
-    // 完成后 去掉进度条
-    "complete": function () {
-      $progressBar.parent().css("display", 'none');
-      $progressBar.css("width", '0%');
-      $progressBar.text('0%');
-    }
-  });
 
 
 // 自定义标签
@@ -175,6 +154,10 @@ $(".add-tag-btn").click(function () {
         });
     });
 });
+
+
+// ================== 统计输入框实时字数 ================
+
 
 // ================== 发布文章 ================
 $("#btn-add-article").click(function () {

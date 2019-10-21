@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}菜鸟学python-python零基础、菜鸟教程python入门{% endblock %}
+{% block title %}{{ column.name }} - 全民Python{% endblock %}
 
-{% block description %}菜鸟学pythn-记录从零基础到入门的python知识，web前端、web开发框架Django和Tornado等{% endblock %}
-
-{% block keywords %}python入门、python教程、Django、Tornado {% endblock %}
+{#{% block description %}{{ web_desc }}{% endblock %}#}
+{##}
+{#{% block keywords %}{{ web_keywords }} {% endblock %}#}
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/article/article_list.css' %}">
@@ -19,7 +19,7 @@
             <div class="category-title clearfix">
                 <h2>{{ category.name }}</h2>
                 {% if category.article_set.all %}
-                    <a href="{% url 'categories' category.id %}">查看更多>></a>
+                    <a href="{% url 'categories' category.id %}" rel="nofollow">查看更多>></a>
                 {% endif %}
             </div>
             <ul class="category-article-list clearfix">
@@ -47,6 +47,8 @@
 {% endblock %}
 
 {% block js %}
+    <script src="/static/js/base/baidu_js_push.js"></script>
+
     <script type="text/javascript">
         $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
     </script>

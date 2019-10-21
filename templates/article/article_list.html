@@ -1,8 +1,8 @@
 {% load article_date_filter %}
 
 <article class="excerpt clearfix">
-    <a href="/articles/{{ article.id }}/">
-        <img src="{{ article.cover_img }}"/>
+    <a href="{% url 'articles:article_detail' article.id %}">
+        <img src="{{ article.cover_img }}" alt="{{ article.title }}"/>
     </a>
     <div class="article-category">
         <a href="{% url 'categories' article.category.id %}" target="_blank">

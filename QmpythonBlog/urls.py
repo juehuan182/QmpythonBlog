@@ -22,6 +22,7 @@ from django.views.static import serve
 
 from .views import index, column, category, tag
 
+from tool.views import CompileView
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -38,10 +39,16 @@ urlpatterns = [
     path('columns/<int:column_id>/', column, name='columns'),
 
     # 文章分类
-    path('categories/<int:category_id>/', category, name='categories'),
+
+    path(r'categories/category-9.html', CompileView.as_view(), name='compile'),
+
+    path(r'categories/category-<int:category_id>.html', category, name='categories'),
+
+
+
 
     # 文章标签
-    path('tags/<int:tag_id>/', tag, name='tags'),
+    path(r'tags/tag-<int:tag_id>.html', tag, name='tags'),
 
     # 文章
     path('articles/', include('article.urls', namespace='articles')),
@@ -53,6 +60,9 @@ urlpatterns = [
 
     # 文档
     path('docs/', include('doc.urls', namespace='docs')),
+
+    # 工具
+    path('tools/', include('tool.urls', namespace='tools')),
 
     # 店铺
     path('shop/', include('shop.urls', namespace='shop')),

@@ -5,6 +5,10 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.core.cache import cache
 
+from datetime import datetime, timedelta
+from django.utils import timezone
+
+
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 from article.models import Column, Category, Tag, Article, Advertising
@@ -68,7 +72,14 @@ def index(request):
     # 最新发布
     new_articles = articles[0:settings.ONE_PAGE_COUNT]
     # 轮播图
-    Advertisings = Advertising.objects.only('id').filter(is_delete=False)
+    from django.utils import timezone
+    now = timezone.now()
+
+    # 获取当前时间
+    time_now = timezone.now() + timedelta(hours=8)
+    date_now = time_now.date()
+    Advertisings = Advertising.objects.only('id').filter(is_delete=False, end_time__gte=date_now)
+
     leftAdvertisings = Advertisings.filter(position='top_left')
     rightAdvertisings = Advertisings.filter(position='top_right')
 
@@ -100,7 +111,12 @@ def column(request, column_id):
         # categories = column.category_set.all()
         categories = Category.objects.filter(column=column)
 
-        return render(request, 'article/column.html', {'categories': categories})
+        context = {
+            'column': column,
+            'categories': categories
+        }
+
+        return render(request, 'article/column.html', context=context)
 
 
 def category(request, category_id):

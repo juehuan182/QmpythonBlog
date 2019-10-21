@@ -47,11 +47,11 @@
 .history-list .left-info {
     width: 50px;
     position: absolute;
-    top: 10px;
+    top: -10px;
     left: 0;
     border-right: 1px solid #e5e9ef;
     overflow: visible;
-    height: 143px;
+    height: 130px;
 }
 
 

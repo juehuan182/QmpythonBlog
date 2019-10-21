@@ -7,8 +7,8 @@ from rest_framework.routers import DefaultRouter
 from .views import index, ColumnManageView, ColumnEditView, getColumnList, CategoryManageView, CategoryEditView, TagManageView, \
     AdvertisingManageView, AdvertisingEditView, FriendlinkManageView, FriendlinkEditView, AdvertisingAddView, TagEditView, ArticleManageView, ArticleEditView,\
     RecommendArticleManageView, RecommendArticleAddView, ShoppingGoodsSKUsViewset, WebSiteUrlsView, \
-    RecommendArticleEditView, ArticlesByCategoryIdView, DocsManageView, DocsEditView, DocsPubView, \
-    CommentsManageView, CommentsEditView, GroupManagerView, UserGroupManageView, ArticleAddView, markDownUploadImage, uploadImageToServer, up_token, uploadFileToServer,\
+    RecommendArticleEditView, ArticlesByCategoryIdView, DocsManageView, DocsEditView, DocsPubView, DbBackupView, \
+    CommentsManageView, CommentsEditView, GroupManagerView, UserGroupManageView, ArticleAddView, markDownUploadImage, uploadImageToServer, upload_to_qiniu, uploadFileToServer,\
     GroupAddView, GroupEditView, viewGroup, UserGroupEditView, UserGroupAddView, getGroupUser, UserInfoView, UserInfoEditView,\
     ProhibitedWordsManageView, RobotsManageView, WebSiteInfoManageView, webuploadImage, ShoppingCategoriesView, ShoppingGoodsSPUsView
 
@@ -55,7 +55,8 @@ urlpatterns = [
     # 上传图片至服务器
     path('uploadImageToServer/', uploadImageToServer, name='uploadImage'),
     # 上传至七牛云
-    path('uploadToken/', up_token, name='up_token'),
+    # path('uploadToken/', upload_to_qiniu, name='up_token'),
+    path('uploadQiniu/', upload_to_qiniu, name='upload_qi_niu'),
 
     # 上传文件
     path('uploadFileToServer/', uploadFileToServer, name='uploadFile'),
@@ -101,6 +102,9 @@ urlpatterns = [
 
     # Robots设置
     path('robots/', RobotsManageView.as_view(), name='robots'),
+
+    # 数据库备份
+    path('dbbackup/', DbBackupView.as_view(), name='dbbackup'),
 
     # web网站信息
     path('website_info/', WebSiteInfoManageView.as_view(), name='website_info'),

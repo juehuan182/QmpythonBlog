@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load article_date_filter %}
 
-{% block title %}{{ article.title }}{% endblock %}
+
+{% block title %}{{ article.title }} - 全民Python{% endblock %}
 
 {% block keywords %}{{ article.keywords }}{% endblock %}
 
@@ -9,12 +11,46 @@
 
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'css/article/article.css' %}">
+    <link rel="stylesheet" href="/static/css/article/article.css">
+
 {#    <link rel="stylesheet" href="{% static 'css/article/prism.css' %}">#}
-    <link rel="stylesheet" href="{% static 'plugins/editor_md/css/editormd.css' %}">
+{#    <link rel="stylesheet" href="/static/plugins/editor_md/css/editormd.css">#}
+    <link rel="stylesheet" href="/static/plugins/editor_md/css/editormd.preview.css">
+{#    <link rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night-bright.min.css">#}
+
 {#    <link rel="stylesheet" href="{% static 'highlight/styles/tomorrow-night-eighties.css' %}">#}
 
+
+
+
 {% endblock %}
+
+{% block top_js %}
+    <script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+
+    <script>
+        let testEditor;   // plugins中是如emoji表情支持、代码格式化等插件；
+        $(function () { //这个js直接写在在html中好处是，html可以用static， examples文件中是使用PHP做的所有示例(可以在文档编辑器里打开，并查看源代码
+            testEditor = editormd.markdownToHTML("article-content", { //div的值，article-content是html文档的ID
+                htmlDecode: "style,script,iframe",
+                emoji: true,
+                taskList: true,
+                tex: true, // 默认不解析
+                flowChart: true, // 默认不解析
+                sequenceDiagram: true, // 默认不解析
+                codeFold: true,
+                lineNumbers:true
+            });
+
+        $(".markdown-toc-list").before("<div class='article-list'>目录</div>");
+
+        });
+  </script>
+
+
+{% endblock %}
+
+
 
 {% block banner %}
     <div class="current-position">
@@ -36,7 +72,7 @@
             <h1 class="article-title">{{ article.title }}</h1>
             <div class="article-meta">
                 <span class="auth"><i class="icon-yonghu1 iconfont"></i>&nbsp;{{ article.author.nick_name }}</span>
-                <span class="dtime"><i class="icon-shijian iconfont"></i>&nbsp;{{ article.create_time }}</span>
+                <span class="dtime"><i class="icon-shijian iconfont"></i>&nbsp;{{ article.create_time|date_format }}</span>
                 <span class="viewnum"><i class="icon-liulan iconfont"></i>&nbsp;阅读({{ article.read_num }})</span>
                 <span class="like">
                     <i class="icon-xihuan iconfont"></i>&nbsp;(<span>{{ article.like_num }}</span>)</span>
@@ -174,33 +210,22 @@
 
 
 {% block js %}
+{#    <script src="/static/js/base/baidu_js_push.js"></script>#}
 
-    <script src="{% static 'plugins/editor_md/lib/marked.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/lib/prettify.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/lib/raphael.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/lib/underscore.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/lib/sequence-diagram.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/lib/flowchart.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/lib/jquery.flowchart.min.js' %}"></script>
-    <script src="{% static 'plugins/editor_md/editormd.js' %}"></script>
-    <script>
-        let testEditor;   // plugins中是如emoji表情支持、代码格式化等插件；
-        $(function () { //这个js直接写在在html中好处是，html可以用static， examples文件中是使用PHP做的所有示例(可以在文档编辑器里打开，并查看源代码
-            testEditor = editormd.markdownToHTML("article-content", { //div的值
-                htmlDecode: "style,script,iframe",
-                emoji: true,
-                taskList: true,
-                tex: true, // 默认不解析
-                flowChart: true, // 默认不解析
-                sequenceDiagram: true, // 默认不解析
-                codeFold: true,
-                lineNumbers:true
-            });
+    <script src="/static/plugins/editor_md/lib/marked.min.js"></script>
+{#    <script src="/static/plugins/editor_md/lib/prettify.min.js"></script>#}
+    <script src="/static/plugins/editor_md/lib/google-code-prettify/prettify.js"></script>
 
-        $(".markdown-toc-list").before("<div class='article-list'>目录</div>");
+    <script src="/static/plugins/editor_md/lib/raphael.min.js"></script>
+    <script src="/static/plugins/editor_md/lib/underscore.min.js"></script>
+    <script src="/static/plugins/editor_md/lib/sequence-diagram.min.js"></script>
+    <script src="/static/plugins/editor_md/lib/flowchart.min.js"></script>
+    <script src="/static/plugins/editor_md/lib/jquery.flowchart.min.js"></script>
+    <script src="/static/plugins/editor_md/editormd.js"></script>
 
-        });
-  </script>
+{#https://www.liujiajia.me/2019/8/27/editor-md-markdowntohtml-and-customize-source-highlight-style#}
+{#    <script src="https://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>#}
+
 {#    <script src="{% static 'highlight/highlight.pack.js' %}"></script>#}
 {#    <script>hljs.initHighlightingOnLoad();</script>#}
 {#    <script src="//cdn.bootcss.com/highlightjs-line-numbers.js/1.1.0/highlightjs-line-numbers.min.js"></script>#}

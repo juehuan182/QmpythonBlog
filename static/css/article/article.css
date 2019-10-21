@@ -92,14 +92,19 @@
 
 /*!*代码高亮*!*/
 
-.article-content .editormd-html-preview pre.prettyprint{
-    /*background: #282c34;*/
-    /*color: #abb2bf;*/
-    /*line-height: 1.42857;*/
-    overflow-x: auto;
-    border-radius: 4px;
-    white-space: nowrap;
-}
+/*.article-content .editormd-html-preview pre.prettyprint{*/
+/*    !*background: #282c34;*!*/
+/*    !*color: #abb2bf;*!*/
+/*    !*line-height: 1.42857;*!*/
+/*    !*overflow-x: auto;*!*/
+/*    !*border-radius: 4px;*!*/
+/*    !*white-space: pre-wrap;*!*/
+
+/*    !*padding: 10px;*!*/
+/*    !*border: 1px solid #ddd;*!*/
+/*    !*white-space: pre-wrap;*!*/
+/*    !*word-wrap: break-word;*!*/
+/*}*/
 
 /*注释*/
 pre code .com{

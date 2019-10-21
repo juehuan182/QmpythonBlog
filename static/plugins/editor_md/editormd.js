@@ -3928,7 +3928,15 @@
             saveTo        = div.find("textarea");
         }        
         
-        var markdownDoc   = (settings.markdown === "") ? saveTo.val() : settings.markdown; 
+        var markdownDoc   = (settings.markdown === "") ? saveTo.val() : settings.markdown;
+
+        // 为了兼容原纯html文章样式不扭曲
+        if (markdownDoc.startsWith('<') || markdownDoc.endsWith('>'))
+        {
+            $("#" + id).html(markdownDoc)
+        }
+
+
         var markdownToC   = [];
 
         var rendererOptions = {  
@@ -3995,7 +4003,8 @@
             
         if (settings.previewCodeHighlight) 
         {
-            div.find("pre").addClass("prettyprint linenums");
+            // div.find("pre").addClass("prettyprint linenums");
+            div.find("pre").addClass("prettyprint"); // 隐藏行号，注释上面一行，添加这一行
             prettyPrint();
         }
         

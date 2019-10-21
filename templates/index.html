@@ -48,7 +48,7 @@
             </ul>
     </div>
     <div class="home-banner-right">
-        <ul class="banner-right-list">
+        <ul class="banner-right-list clearfix">
             {% for right_advertising in rightAdvertisings %}
                 <li class="banner-right-item">
                     <a href="{{ right_advertising.link_to }}" class="banner-right-item-article" target="_blank">
@@ -88,7 +88,7 @@
             </div>
 
             <div class="pagination loadmore">
-                <a href="javascript:void(0);" class="btn-more" data-page="2">查看更多</a>
+                <a href="javascript:void(0);" class="btn-more" data-page="2" rel="nofollow">查看更多</a>
             </div>
 {% endblock %}
 

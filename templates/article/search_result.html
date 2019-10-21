@@ -60,7 +60,7 @@
                     {% myhighlight item.object.description with query start_head True %}...
                 </p>
                 <div class="meta">
-                    <span class="auth"><i class="icon-yonghu1 iconfont"></i>{{ item.object.author }}</span>
+                    <span class="auth"><i class="icon-yonghu1 iconfont"></i>{{ item.object.author.nick_name }}</span>
                     <span class="dtime"><i
                             class="icon-shijian iconfont"></i>{{ item.object.create_time|date_format }}</span>
                     <span class="viewnum"><i class="icon-liulan iconfont"></i>阅读({{ item.object.read_num }})</span>

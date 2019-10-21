@@ -15,6 +15,9 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from .models import Article, Comment, ArticleLikeDetail, CommentNotification
 
 from haystack.views import SearchView
+import markdown
+
+
 
 logger = logging.getLogger('qmpython')
 def article_list(request):
@@ -66,7 +69,6 @@ class ArticleSearchView(SearchView):
     #         return qs
 
 
-import markdown
 class ArticleDetailView(View):
     def get(self, request, article_id):
         # article = Article.objects.get(id=article_id)
@@ -154,6 +156,7 @@ class ArticleDetailView(View):
         else:
             is_login = 0
 
+
         context = {
                        'comment_list': comment_list,
                        'article': article,
@@ -212,6 +215,7 @@ class ArticleCommentView(View):
                              'comment_id': comment_id,
                              'reply_nickname': request.user.nick_name, 'new_content': result_content,
                              'add_human': add_human})
+
 
 
 def article_likes(request, article_id):

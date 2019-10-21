@@ -17,7 +17,7 @@
 <div class="login">
     <div class="login_title">
         <span>登录界面</span>
-        <a href="{% url 'user:register' %}">前往注册</a>
+        <a href="{% url 'user:register' %}" rel="nofollow">前往注册</a>
     </div>
     <div class="login_fields">
         <form method="post">
@@ -56,7 +56,7 @@
             <div class='login_fields_submit'>
                 <input type="submit" class="login-btn" value="登录">
                 <div class="forgot">
-                  <a href="{% url 'user:resetPwd' %}">忘记密码</a>
+                  <a href="{% url 'user:resetPwd' %}" rel="nofollow">忘记密码</a>
                 </div>
             </div>
         </form>
@@ -66,10 +66,11 @@
     <div class="more-login" style="display: block">
         <h6>快速登录</h6>
         <div class="links">
-            <a href="{% url 'user:qqLogin' %}" title="QQ登录"><i class="icon-qq iconfont"></i></a>
-            <a href="" title="微信登录" style="display:none;"><i class="iconfont icon-weixin"></i></a>
-            <a href="{% url 'user:weiboLogin' %}" title="微博登录"><i class="iconfont icon-weibo"></i></a>
-            <a href="{% url 'user:githubLogin' %}" title="GitHub登录"><i class="icon-github iconfont"></i></a>
+            <a href="{% url 'user:qqLogin' %}" title="QQ登录" rel="nofollow"><i class="icon-qq iconfont"></i></a>
+            <a href="" title="微信登录" style="display:none;" rel="nofollow"><i class="iconfont icon-weixin"></i></a>
+            <a href="{% url 'user:weiboLogin' %}" title="微博登录" rel="nofollow"><i class="iconfont icon-weibo"></i></a>
+            <a href="{% url 'user:githubLogin' %}" title="GitHub登录" rel="nofollow"><i class="icon-github iconfont"></i></a>
+
         </div>
 
     </div>

@@ -130,9 +130,9 @@ if DEBUG:
     DB_PASSWORD = ""
     DB_NAME = "qmpython"
 else:
-    DB_USER = "数据库用户名"
-    DB_PASSWORD = "数据库密码"
-    DB_NAME = "数据库名"
+    DB_USER = "qmpython"
+    DB_PASSWORD = "qmpython@Lei"
+    DB_NAME = "qmpython"
 
 
 
@@ -506,16 +506,16 @@ GITHUB_CALLBACK_URL = 'http://www.qmpython.com/user/githubCallback'  #授权回�
 
 
 #QQ
-QQ_APP_ID = '1017fffff'
-QQ_APP_KEY = 'e712f84e0dddaacb4b1684c'
-QQ_CALLBACK_URL = 'http://域名/user/qqCallback'    #填写你的回调地址
+QQ_APP_ID = '101756410'
+QQ_APP_KEY = 'e712f84e027c53fcf6d8336cb4b1684c'
+QQ_CALLBACK_URL = 'http://www.qmpython.com/user/qqCallback'    #填写你的回调地址
 #https://blog.csdn.net/a992970569/article/details/82107899
 
 
 #新浪微博
-WEIBO_APP_KEY = '3372dddadfff9'
-WEIBO_APP_SECRET = '54daa0b44fffaaddddc1927d80'
-WEIBO_CALLBACK_URL = 'http://域名/user/weiboCallback'    #填写你的回调地址
+WEIBO_APP_KEY = '3372455299'
+WEIBO_APP_SECRET = '54daa0b44a2f346246697f5dc1927d80'
+WEIBO_CALLBACK_URL = 'http://www.qmpython.com/user/weiboCallback'    #填写你的回调地址
 
 
 
@@ -551,20 +551,20 @@ BAIDU_CLOUD_USER_KEY = ''
 
 
 # FastDFS地址
-FASTDFS_SERVER_DOMAIN = 'http://ip:port/'
+FASTDFS_SERVER_DOMAIN = 'http://www.qmpython.com:8888/'
 FASTDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'util/fastdfs/client.conf')
 
 
 
 # 从七牛云"个人中心>密钥管理"中获取自己的 Access Key 和 Secret Key
-QI_NIU_ACCESS_KEY = '你自己七牛云上的AK''    # '你自己七牛云上的AK'
-QI_NIU_SECRET_KEY = '你自己七牛云上的SK'    # '你自己七牛云上的SK'
+QI_NIU_ACCESS_KEY = 'mHXibYhu-xcOahyvizWNWTkAmJPiUm419zOekf70'    # '你自己七牛云上的AK'
+QI_NIU_SECRET_KEY = 'VDm0lXqcRIs-Bguv1-VUdHG4DJoyEFj4N6KfzSMg'    # '你自己七牛云上的SK'
 QI_NIU_BUCKET_NAME = 'qmpython'   # '你自己在七牛云上创建的存储空间名'
-QI_NIU_DOMAIN = '七牛云CDN'
+QI_NIU_DOMAIN = 'http://cdn.qmpython.com/'
 
 
 # 百度主动推送
 BAIDU_PUSH_SITE = 'https://www.qmpython.com'
-BAIDU_PUSH_TOKEN = '推送token'
+BAIDU_PUSH_TOKEN = 'kB7UZp8IIesqeq2J'
 
 

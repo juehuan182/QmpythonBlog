@@ -76,7 +76,7 @@ def produce_html(comment_dict_list):
                             </div>
                             <div class="comment-footer text-muted">
                                 <time class="mr-3" >{4}</time>	
-                                <a href="javascript:void(0);" commentId="{5}" id="reply-{5}" class="reply-btn text-muted" onclick="replayComment(this);">回复</a>			
+                                <a href="javascript:void(0);" commentId="{5}" id="reply-{5}" class="reply-btn text-muted" onclick="replayComment(this);" rel="nofollow">回复</a>			
                             </div>
                         </div>	
                     </div>

@@ -16,7 +16,7 @@ class ArticleSitemap(Sitemap):
         return obj.update_time
 
     def location(self, obj):
-        return '/articles/{0}/'.format(obj.id)
+        return '/articles/detail-{0}.html'.format(obj.id)
 
 # 分类聚类
 class CategorySitemap(Sitemap):
@@ -30,7 +30,7 @@ class CategorySitemap(Sitemap):
         return obj.article_set.first().create_time
 
     def location(self, obj):
-        return '/categories/{0}/'.format(obj.id)
+        return '/categories/category-{0}.html'.format(obj.id)
 
 # 标签聚类
 class TagSitemap(Sitemap):
@@ -44,7 +44,7 @@ class TagSitemap(Sitemap):
         return obj.article_set.first().create_time
 
     def location(self, obj):
-        return '/tags/{0}/'.format(obj.id)
+        return '/tags/tag-{0}.html'.format(obj.id)
 
 '''
 这里从 Sitemap 类继承一个类，实现 items 方法，该方法返回所有要加入 Sitemap 的数据
