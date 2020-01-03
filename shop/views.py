@@ -18,7 +18,7 @@ from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from .models import GoodsCategory, GoodsSKU, OrderGoods, OrderInfo
 from user.models import AccountAddress
 from util import json_status
-from alipay import AliPay
+from alipay import AliPay  # https://github.com/fzlee/alipay
 
 
 

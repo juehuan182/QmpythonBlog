@@ -82,7 +82,7 @@
 /*!*文章段落*!*/
 .article-content p{
     line-height: 0.5rem;
-    font-size: 0.3rem;
+    font-size: 0.32rem;
     color: #3d464d;
     margin-bottom:0.2rem;
     word-wrap: break-word; /*允许长单词换到下一行*/

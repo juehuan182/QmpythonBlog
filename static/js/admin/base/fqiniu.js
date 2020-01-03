@@ -2,7 +2,7 @@
 
 
 function Appendzero(obj){
-  console.log(obj)
+  // console.log(obj)
   if (obj<10){
     return "0" + obj;
   }else{

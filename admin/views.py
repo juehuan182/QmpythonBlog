@@ -30,7 +30,7 @@ from qiniu import Auth, put_data
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from urllib.parse import urlencode
 
-from util.fastdfs.fdfs import FDFS_Client
+# from util.fastdfs.fdfs import FDFS_Client
 
 from article.models import Column, Category, Tag, Article, ArticleRecommend, Advertising, Comment
 from user.models import Account, FriendLink
@@ -109,6 +109,7 @@ class ColumnManageView(LoginRequiredMixin, View):
         Column.objects.create(name=column_name, link_url=column_link_url, index=column_index)
 
         return json_status.result(message="栏目创建成功")
+
 
 
 def getColumnList(request):
@@ -228,6 +229,7 @@ class CategoryManageView(View):
         return json_status.result()
 
 
+
 class CategoryEditView(PermissionRequiredMixin, View):
     permission_required = ('article.change_category', 'article.delete_category')
     raise_exception = True
@@ -315,6 +317,7 @@ class TagManageView(View):
 
         else:
             return json_status.params_error(message="标签名称不能为空")
+
 
 
 class TagEditView(PermissionRequiredMixin, View):
@@ -513,42 +516,42 @@ def markDownUploadImage(request):
     return JsonResponse({'success': 1, 'message': '图片上传成功', 'url': image_url})
 
 
-
-# 图片上传至FastDFS服务器功能实现
-def uploadImageToServer(request):
-    # request.FILES (任何文件都会存在这里面 )
-    # print(request.FILES) # <MultiValueDict: {'image_file': [<InMemoryUploadedFile: head.png (image/png)>]}>
-
-    image_file = request.FILES.get('image_file')
-    # print(image_file) # head.png
-
-    if not image_file:
-        logger.info('从前端获取图片失败')
-        return json_status.params_error(message='从前端获取图片失败')
-
-    if image_file.content_type not in ('image/jpeg', 'image/png', 'image/gif', 'image/bmp'):
-        return json_status.params_error(message='不能上传非图片文件')
-
-    try:
-        image_ext_name = image_file.name.split('.')[-1]
-    except Exception as e:
-        logger.info('图片扩展名异常:{}'.format(e))
-        image_ext_name = 'jpg'
-
-    try:
-        upload_res = FDFS_Client.upload_by_buffer(image_file.read(), file_ext_name=image_ext_name)
-    except Exception as e:
-        logger.error('图片上传出现异常：{}'.format(e))
-        return json_status.params_error(message='图片上传异常')
-    else:  # 如果try里面的语句可以正常执行，那么就执行else里面的语句（相当于程序没有碰到致命性错误）
-        if upload_res.get('Status') != 'Upload successed.':
-            logger.info('图片上传到FastDFS服务器失败')
-            return json_status.params_error(message='图片上传到服务器失败')
-        else:
-            image_name = upload_res.get('Remote file_id')
-            image_url = settings.FASTDFS_SERVER_DOMAIN + image_name
-            return json_status.result(data={'image_url': image_url}, message='图片上传成功')
-
+#
+# # 图片上传至FastDFS服务器功能实现
+# def uploadImageToServer(request):
+#     # request.FILES (任何文件都会存在这里面 )
+#     # print(request.FILES) # <MultiValueDict: {'image_file': [<InMemoryUploadedFile: head.png (image/png)>]}>
+#
+#     image_file = request.FILES.get('image_file')
+#     # print(image_file) # head.png
+#
+#     if not image_file:
+#         logger.info('从前端获取图片失败')
+#         return json_status.params_error(message='从前端获取图片失败')
+#
+#     if image_file.content_type not in ('image/jpeg', 'image/png', 'image/gif', 'image/bmp'):
+#         return json_status.params_error(message='不能上传非图片文件')
+#
+#     try:
+#         image_ext_name = image_file.name.split('.')[-1]
+#     except Exception as e:
+#         logger.info('图片扩展名异常:{}'.format(e))
+#         image_ext_name = 'jpg'
+#
+#     try:
+#         upload_res = FDFS_Client.upload_by_buffer(image_file.read(), file_ext_name=image_ext_name)
+#     except Exception as e:
+#         logger.error('图片上传出现异常：{}'.format(e))
+#         return json_status.params_error(message='图片上传异常')
+#     else:  # 如果try里面的语句可以正常执行，那么就执行else里面的语句（相当于程序没有碰到致命性错误）
+#         if upload_res.get('Status') != 'Upload successed.':
+#             logger.info('图片上传到FastDFS服务器失败')
+#             return json_status.params_error(message='图片上传到服务器失败')
+#         else:
+#             image_name = upload_res.get('Remote file_id')
+#             image_url = settings.FASTDFS_SERVER_DOMAIN + image_name
+#             return json_status.result(data={'image_url': image_url}, message='图片上传成功')
+#
 
 
 # def upload_file(request):
@@ -607,7 +610,7 @@ def upload_to_qiniu(request):
     #ret, info = put_file(token, key, localfile)
     ret, info = put_data(token, key, image_file.read())
 
-    print(ret, info)
+    # print(ret, info)
 
     filename = ret.get('key')
 
@@ -787,6 +790,7 @@ class RecommendArticleManageView(View):
     def get(self, request):
         recommend_articles = ArticleRecommend.objects.only('id')
         return render(request, 'admin/article/recommend_article_manage.html', locals())
+
 
 
 class RecommendArticleAddView(PermissionRequiredMixin, View):

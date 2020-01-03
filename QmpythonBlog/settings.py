@@ -30,13 +30,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'dlnb+jaj$h=f&s5(m$8gky&^tgjobk5b204qvfi)0j#xpnq#-7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # 测试环境中打开调试模式，能够显示详细的报错信息，生产环境改为False避免暴露项目内部信息
+DEBUG = True  # 测试环境中打开调试模式，能够显示详细的报错信息，生产环境改为False避免暴露项目内部信息
 
 #允许访问的客户端的地址, “*”表示的就是任意的ip地址
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ["www.qmpython.com", "47.107.69.21", "127.0.0.1"]  # 在 DEBUG 为 True 时，其值可以为空。当部署到生产环境中时，要把主域名填写到这里，才能通过域名访问到本网站。
+    ALLOWED_HOSTS = ["www.qmpython.com", "127.0.0.1"]  # 在 DEBUG 为 True 时，其值可以为空。当部署到生产环境中时，要把主域名填写到这里，才能通过域名访问到本网站。
 
 
 # 指定用户模型为我们自己创建的Account模型，告诉Django使用users下的Account用户类型，允许通过修改AUTH_USER_MODEL 设置覆盖默认的User模型，其值引用一个自定义的模型。
@@ -125,15 +125,9 @@ WSGI_APPLICATION = 'QmpythonBlog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-if DEBUG:
-    DB_USER = "root"
-    DB_PASSWORD = ""
-    DB_NAME = "qmpython"
-else:
-    DB_USER = "数据库用户名"
-    DB_PASSWORD = "数据库密码"
-    DB_NAME = "数据库名"
-
+DB_USER = "用户名"
+DB_PASSWORD = "密码"
+DB_NAME = "数据库名"
 
 
 DATABASES = {
@@ -301,39 +295,20 @@ CONFIRM_DAYS = 7
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # 生产环境下通常需要使用真实的邮件发送服务器
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"  # 确保使用的是smtp
-# 使用新浪来发送邮件
-# EMAIL_HOST = "smtp.sina.com"
-# EMAIL_PORT = 25
-# EMAIL_HOST_USER = "juehuan182@sina.com"
-# EMAIL_HOST_PASSWORD = "5724826lei"
-# EMAIL_USE_TIS = False
-# EMAIL_FROM = "juehuan182@sina.com"
 
-# #
 # 使用QQ来发送邮件
 EMAIL_HOST = "smtp.qq.com"  # SMTP服务器/发送务服务器
 EMAIL_PORT = 465  # SSL # 第三种配置方式
 # EMAIL_PORT = 587 # TSL # 第二种配置方式
 # EMAIL_PORT = 25 #第一种配置方式
-EMAIL_HOST_USER = "1328500761@qq.com"
+EMAIL_HOST_USER = "qq邮箱地址"  # 修改成你的
 # 授权码
-EMAIL_HOST_PASSWORD = "ktxduqebuirngfif"
+EMAIL_HOST_PASSWORD = "授权码"  # 修改成你的，需要参考QQ邮箱怎么获取
 # EMAIL_USE_TLS = True #第一种配置方式 # 第二种配置方式
 EMAIL_USE_SSL = True  # 第三种配置方式
 EMAIL_FROM = "qmpython@qq.com"
 
-#
-# # 163 SMTP 配置 要用ssl方式
-# EMAIL_HOST = "smtp.163.com"
-# EMAIL_PORT = 465  # 端口号
-# #发送邮件的邮箱
-# EMAIL_HOST_USER = "juehua182@163.com"
-# #在邮箱中设置的客户端授权密码
-# EMAIL_HOST_PASSWORD = "5724826lei"
-# EMAIL_USE_SSL = True
-# EMAIL_USE_TLS = False
-# #收件人看到的发件人
-# EMAIL_FROM = EMAIL_HOST_USER
+
 
 # 一页显示多少条记录
 ONE_PAGE_COUNT = 15
@@ -440,7 +415,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler', #  保存到文件，自动切
-            'filename': os.path.join(os.path.dirname(BASE_DIR), "logback/blog.log"),  # 日志文件的位置
+            'filename': "/root/src/logback/blog.log",  # 日志文件的位置
             'maxBytes': 300 * 1024 * 1024,  # 日志大小300M
             'backupCount': 3,  # 最多备份几个
             'formatter': 'standard',
@@ -457,10 +432,6 @@ LOGGING = {
         },
     }
 }
-
-
-
-
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -496,27 +467,21 @@ JWT_AUTH = {
 #Oauth
 
 #github
-GITHUB_CLIENT_ID = 'cd1a29b306bdfa43cbbc'
-GITHUB_CLIENT_SECRET = 'a1043edfdaa7bbff196541dd21795db949320431'
-GITHUB_CALLBACK_URL = 'http://www.qmpython.com/user/githubCallback'  #授权回调地址
-
-# 入口重定向 :https://github.com/login/oauth/authorize?client_id=yourclientid&redirect_uri=yourredirect_uri
-
-#回调页面中处理,根据code返回获取access_token接口：https://github.com/login/oauth/access_token
-
+GITHUB_CLIENT_ID = '你的'
+GITHUB_CLIENT_SECRET = '你的'
+GITHUB_CALLBACK_URL = '你的'  #授权回调地址
 
 #QQ
-QQ_APP_ID = '1017fffff'
-QQ_APP_KEY = 'e712f84e0dddaacb4b1684c'
-QQ_CALLBACK_URL = 'http://域名/user/qqCallback'    #填写你的回调地址
+QQ_APP_ID = '你的'
+QQ_APP_KEY = '你的'
+QQ_CALLBACK_URL = '你的'    #填写你的回调地址
 #https://blog.csdn.net/a992970569/article/details/82107899
 
 
 #新浪微博
-WEIBO_APP_KEY = '3372dddadfff9'
-WEIBO_APP_SECRET = '54daa0b44fffaaddddc1927d80'
-WEIBO_CALLBACK_URL = 'http://域名/user/weiboCallback'    #填写你的回调地址
-
+WEIBO_APP_KEY = '你的'
+WEIBO_APP_SECRET = '你的'
+WEIBO_CALLBACK_URL = '你的'    #填写你的回调地址
 
 
 ELASTICSEARCH_DSL = {
@@ -551,20 +516,20 @@ BAIDU_CLOUD_USER_KEY = ''
 
 
 # FastDFS地址
-FASTDFS_SERVER_DOMAIN = 'http://ip:port/'
-FASTDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'util/fastdfs/client.conf')
+#FASTDFS_SERVER_DOMAIN = 'http://www.qmpython.com:8888/'
+#FASTDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'util/fastdfs/client.conf')
 
 
 
 # 从七牛云"个人中心>密钥管理"中获取自己的 Access Key 和 Secret Key
-QI_NIU_ACCESS_KEY = '你自己七牛云上的AK''    # '你自己七牛云上的AK'
-QI_NIU_SECRET_KEY = '你自己七牛云上的SK'    # '你自己七牛云上的SK'
-QI_NIU_BUCKET_NAME = 'qmpython'   # '你自己在七牛云上创建的存储空间名'
-QI_NIU_DOMAIN = '七牛云CDN'
+QI_NIU_ACCESS_KEY = '你自己七牛云上的AK'
+QI_NIU_SECRET_KEY = '你自己七牛云上的SK'
+QI_NIU_BUCKET_NAME = '你自己在七牛云上创建的存储空间名'
+QI_NIU_DOMAIN = '存储空间域名'
 
 
 # 百度主动推送
-BAIDU_PUSH_SITE = 'https://www.qmpython.com'
-BAIDU_PUSH_TOKEN = '推送token'
+BAIDU_PUSH_SITE = '您的域名'
+BAIDU_PUSH_TOKEN = 'token'
 
 

@@ -8,7 +8,7 @@ from .views import index, ColumnManageView, ColumnEditView, getColumnList, Categ
     AdvertisingManageView, AdvertisingEditView, FriendlinkManageView, FriendlinkEditView, AdvertisingAddView, TagEditView, ArticleManageView, ArticleEditView,\
     RecommendArticleManageView, RecommendArticleAddView, ShoppingGoodsSKUsViewset, WebSiteUrlsView, \
     RecommendArticleEditView, ArticlesByCategoryIdView, DocsManageView, DocsEditView, DocsPubView, DbBackupView, \
-    CommentsManageView, CommentsEditView, GroupManagerView, UserGroupManageView, ArticleAddView, markDownUploadImage, uploadImageToServer, upload_to_qiniu, uploadFileToServer,\
+    CommentsManageView, CommentsEditView, GroupManagerView, UserGroupManageView, ArticleAddView, markDownUploadImage, upload_to_qiniu, uploadFileToServer,\
     GroupAddView, GroupEditView, viewGroup, UserGroupEditView, UserGroupAddView, getGroupUser, UserInfoView, UserInfoEditView,\
     ProhibitedWordsManageView, RobotsManageView, WebSiteInfoManageView, webuploadImage, ShoppingCategoriesView, ShoppingGoodsSPUsView
 
@@ -53,7 +53,7 @@ urlpatterns = [
     path('markdown/image/', markDownUploadImage, name='markdown_image_upload'),
 
     # 上传图片至服务器
-    path('uploadImageToServer/', uploadImageToServer, name='uploadImage'),
+    # path('uploadImageToServer/', uploadImageToServer, name='uploadImage'),
     # 上传至七牛云
     # path('uploadToken/', upload_to_qiniu, name='up_token'),
     path('uploadQiniu/', upload_to_qiniu, name='upload_qi_niu'),
